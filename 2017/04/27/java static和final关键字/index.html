@@ -1,0 +1,768 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="java static和final关键字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java static和final关键字">
+<meta property="og:url" content="http://guilongyue.github.io/2017/04/27/java static和final关键字/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="java static和final关键字">
+<meta property="og:updated_time" content="2017-04-27T03:58:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java static和final关键字">
+<meta name="twitter:description" content="java static和final关键字">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/04/27/java static和final关键字/"/>
+
+
+
+
+
+  <title> java static和final关键字 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/04/27/java static和final关键字/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java static和final关键字
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-27T09:56:45+08:00">
+                2017-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/27/java static和final关键字/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/27/java static和final关键字/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="java-static和final关键字"><a href="#java-static和final关键字" class="headerlink" title="java static和final关键字"></a>java static和final关键字</h2><a id="more"></a>
+<h3 id="final"><a href="#final" class="headerlink" title="final"></a>final</h3><p>　根据程序上下文环境，Java关键字final有“这是无法改变的”或者“终态的”含义，它可以修饰非抽象类、非抽象类成员方法和变量。你可能出于两种理解而需要阻止改变：设计或效率。<br>final类不能被继承，没有子类，final类中的方法默认是final的。<br>final方法不能被子类的方法覆盖，但可以被继承。<br>final成员变量表示常量，只能被赋值一次，赋值后值不再改变。<br>final不能用于修饰构造方法。<br>注意：父类的private成员方法是不能被子类方法覆盖的，因此private类型的方法默认是final类型的。</p>
+<ol>
+<li>final类<br>　final类不能被继承，因此final类的成员方法没有机会被覆盖，默认都是final的。在设计类时候，如果这个类不需要有子类，类的实现细节不允许改变，并且确信这个类不会载被扩展，那么就设计为final类。</li>
+<li>final方法<br>如果一个类不允许其子类覆盖某个方法，则可以把这个方法声明为final方法。<br>使用final方法的原因有二：<br>第一、把方法锁定，防止任何继承类修改它的意义和实现。<br>第二、高效。编译器在遇到调用final方法时候会转入内嵌机制，大大提高执行效率。</li>
+<li>final变量（常量）<br>　用final修饰的成员变量表示常量，值一旦给定就无法改变！<br>　final修饰的变量有三种：静态变量、实例变量和局部变量，分别表示三种类型的常量。<br>　从下面的例子中可以看出，一旦给final变量初值后，值就不能再改变了。<br>　另外，final变量定义的时候，可以先声明，而不给初值，这中变量也称为final空白，无论什么情况，编译器都确保空白final在使用之前必须被初始化。但是，final空白在final关键字final的使用上提供了更大的灵活性，为此，一个类中的final数据成员就可以实现依对象而有所不同，却有保持其恒定不变的特征。</li>
+<li>final参数<br>当函数参数为final类型时，你可以读取使用该参数，但是无法改变该参数的值。<h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3>static表示“全局”或者“静态”的意思，用来修饰成员变量和成员方法，也可以形成静态static代码块，但是Java语言中没有全局变量的概念。<br>被static修饰的成员变量和成员方法独立于该类的任何对象。也就是说，它不依赖类特定的实例，被类的所有实例共享。只要这个类被加载，Java虚拟机就能根据类名在运行时数据区的方法区内定找到他们。因此，static对象可以在它的任何对象创建之前访问，无需引用任何对象。<br>用public修饰的static成员变量和成员方法本质是全局变量和全局方法，当声明它类的对象市，不生成static变量的副本，而是类的所有实例共享同一个static变量。<br>static 变量前可以有private修饰，表示这个变量可以在类的静态代码块中，或者类的其他静态成员方法中使用（当然也可以在非静态成员方法中使用–废话），<strong>但是不能在其他类中通过类名来直接引用，这一点很重要。</strong>实际上你需要搞明白，private是访问权限限定，static表示不要实例化就可以使用，这样就容易理解多了。static前面加上其它访问权限关键字的效果也以此类推。</li>
+</ol>
+<p>static修饰的成员变量和成员方法习惯上称为静态变量和静态方法，可以直接通过类名来访问，访问语法为：<br>类名.静态方法名(参数列表…)<br>类名.静态变量名</p>
+<p>用static修饰的代码块表示静态代码块，当Java虚拟机（JVM）加载类时，就会执行该代码块（用处非常大，呵呵）。</p>
+<ol>
+<li>static变量<br>　按照是否静态的对类成员变量进行分类可分两种：一种是被static修饰的变量，叫静态变量或类变量；另一种是没有被static修饰的变量，叫实例变量。两者的区别是：<br>　对于静态变量在内存中只有一个拷贝（节省内存），JVM只为静态分配一次内存，在加载类的过程中完成静态变量的内存分配，可用类名直接访问（方便），当然也可以通过对象来访问（但是这是不推荐的）。<br>　对于实例变量，没创建一个实例，就会为实例变量分配一次内存，实例变量可以在内存中有多个拷贝，互不影响（灵活）。</li>
+<li>静态方法<br>　静态方法可以直接通过类名调用，任何的实例也都可以调用，因此静态方法中不能用this和super关键字，不能直接访问所属类的实例变量和实例方法(就是不带static的成员变量和成员成员方法)，只能访问所属类的静态成员变量和成员方法。因为实例成员与特定的对象关联！这个需要去理解，想明白其中的道理，不是记忆！！！<br>　因为static方法独立于任何实例，因此static方法必须被实现，而不能是抽象的abstract。</li>
+<li>static代码块<br>　static 代码块也叫静态代码块，是在类中独立于类成员的static语句块，可以有多个，位置可以随便放，它不在任何的方法体内，JVM加载类时会执行这些静态的代码块，如果static代码块有多个，JVM将按照它们在类中出现的先后顺序依次执行它们，每个代码块只会被执行一次。例如：<br>4、static和final一块用表示什么<br>static final用来修饰成员变量和成员方法，可简单理解为“全局常量”！<br>对于变量，表示一旦给值就不可修改，并且通过类名可以访问。<br>对于方法，表示不可覆盖，并且可以通过类名直接访问。<blockquote>
+<p>final修饰的变量有三种：静态变量、实例变量和局部变量，分别表示三种类型的常量。<br>注意：final变量定义的时候，可以先声明，而不给初值，这中变量也称为final空白，无论什么情况，编译器都确保空白final在使用之前必须被初始化。<br>被static修饰的成员变量和成员方法独立于该类的任何对象。也就是说，它不依赖类特定的实例，被类的所有实例共享。只要这个类被加载，Java虚拟机就能根据类名在运行时数据区的方法区内定找到他们。因此，static对象可以在它的任何对象创建之前访问，无需引用任何对象。<br>用public修饰的static成员变量和成员方法本质是全局变量和全局方法，当声明它类的对象市，不生成static变量的副本，而是类的所有实例共享同一个static变量。<br>注意：<br>对于被static和final修饰过的实例常量，实例本身不能再改变了，但对于一些容器类型（比如，ArrayList、HashMap）的实例变量，不可以改变容器变量本身，但可以修改容器中存放的对象。</p>
+</blockquote>
+</li>
+</ol>
+<p>我们知道，在 Java 中 可以通过在子类中声明具有相同名字相同签名的方法来覆盖掉父类中的相应方法。具体讨论私有方法的继承问题，如果说子类是可以继承父类的私有方法的话，那么 子类也就能够覆盖掉父类中的私有方法；反之，如果子类覆盖不了父类中的私有方法的话，也就是说子类不能从父类继承其私有方法。在实验结果中，我们看到了子类是不能覆盖掉父类中的私有方法的，也就意味着子类没有从父类继承私有方法，但是子类可以继承父类的非私有方法。最后引述一段 Java Programming Language 中的话：“方 法只有在它可以被访问的时候才能被覆盖。如果一个方法不能被访问的话，也就是说这个方法不能被继承，它既然不能被继承的话那么也就不能被覆盖。例如，私有 方法在它所在类之外是不能被访问的。如果子类中碰巧定义了一个方法和父类中的私有方法具有完全相同名字、签名和返回值类型，那么这两个方法是完全没有任何 联系的——子类中的方法将不会覆盖父类中的方法”。</p>
+<h2 id="Java类成员-成员变量和方法-的覆盖与隐藏归纳"><a href="#Java类成员-成员变量和方法-的覆盖与隐藏归纳" class="headerlink" title="Java类成员(成员变量和方法)的覆盖与隐藏归纳"></a>Java类成员(成员变量和方法)的覆盖与隐藏归纳</h2><p>从全局来看，Java只有重写、隐藏、重载3种，具体归纳如下：<br>方法签名：方法名+参数列表（参数类型、个数、顺序）。</p>
+<h3 id="只有实例方法可以被重写！重写后的方法必须仍为实例方法！-实例方法——重写——-gt-实例方法"><a href="#只有实例方法可以被重写！重写后的方法必须仍为实例方法！-实例方法——重写——-gt-实例方法" class="headerlink" title="只有实例方法可以被重写！重写后的方法必须仍为实例方法！(实例方法——重写——&gt;实例方法)"></a>只有实例方法可以被重写！重写后的方法必须仍为实例方法！(实例方法——重写——&gt;实例方法)</h3><p><strong>成员变量和静态方法都不能被重写，只能被隐藏。</strong><br>重写实例方法：超类Parent中有实例方法A，子类child定义了与A“相同签名和子集返回类型”的实例方法B，子类对象ChildObj只能调用自己的实例方法B。<br> 即使将子类对象ChildObj转换为超类对象ParentObj，ParentObj依然只能调用重写后的实例方法B！<br>(超类对象ParentObj中的实例方法A已经被实例方法B覆盖了)<br>重写的语法规则如下：<br>(1)方法签名必须相同(参数类型、个数、顺序);<br>(2)对返回类型有要求，分2种情况：<br> a.被重写方法的返回类型是基本类型：重写方法的返回类型必须“相同”。<br>  基本类型包括了(byte,short,int,long,float,double,char,boolean，其实还包括一个void类型)，但要注意返回类型是封装类时属于下面的情况b。<br> b.被重写方法的返回类型是引用类型：重写方法的返回类型应“相同”或是其“子类型”；<br>   引用类型包括了数组、string等一切非基本类型的类型(即类类型)。<br>(3)重写方法的访问权限不能小于被重写方法的访问权限，可以更广泛。如被重写方法是包访问权限，重写方法是public访问权限。<br> 重写方法可以改变其它的方法修饰符，如final、synchronized、native、strictfp。<br> 不管被重写方法中有无final修饰的参数，重写方法都可以增加、保留、去掉这个参数的final修饰符(参数修饰符不属于方法签名)。<br>(4)重写方法抛出的异常范围不能大于被重写方法抛出的异常的范围（也可以不抛出异常）。<br>(5)不能重写final方法。(final修饰符存在的意义就是防止任何子类重写该方法)<br>(6)不能重写static静态方法。(形式上可以写，但本质上不是重写，属于下面要讲的隐藏)<br>(7)如果一个方法不能被继承，则不能重写它。或者说：只有当方法可以被访问时才可以被重写。<br>典型的就是超类的private方法。<br>对于(3)需要注意：<br>1.重写override对返回类型有要求，而重载overload对返回类型没有要求。<br>   重载可以改变返回类型。因为编译器通过对方法签名的识别即可静态编译出不同的方法。这也是java中重载与重写的区别之一。<br>2.严格来说，重写属于多态，因为是动态绑定（或称为动态联编），而重载是静态绑定，编译时即可确定。</p>
+<h3 id="隐藏与覆盖在形式上极其类似-语法规则-，但有着本质的区别。"><a href="#隐藏与覆盖在形式上极其类似-语法规则-，但有着本质的区别。" class="headerlink" title="隐藏与覆盖在形式上极其类似(语法规则)，但有着本质的区别。"></a>隐藏与覆盖在形式上极其类似(语法规则)，但有着本质的区别。</h3><p>只有成员变量(不管是不是静态)和静态方法可以被隐藏。<br>隐藏成员变量：超类Parent中有成员变量A，子类Child定义了与A同名的成员变量B，子类对象ChildObj调用的是自己的成员变量B。<br>如果把子类对象ChildObj转换为超类对象ParentObj，ParentObj调用的是超类的成员变量A！<br>注：1.隐藏成员变量时，只要同名即可，可以更改变量类型(无论基本类型还是隐藏类型)<br>2.不能隐藏超类中的private成员变量，换句话说，只能隐藏可以访问的成员变量。<br>3.隐藏超类成员变量A时，可以降低或提高子类成员变量B的访问权限，只要A不是private<br>4.隐藏成员变量与是否静态无关！静态变量可以隐藏实例变量，实例变量也可以隐藏静态变量。<br>5.可以隐藏超类中的final成员变量。</p>
+<h4 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h4><p>隐藏后的方法必须仍为静态方法！(静态方法——隐藏——&gt;静态方法)<br>隐藏静态方法：超类Parent有静态方法A，子类Child定义了与A“相同签名和子集返回类型”的静态方法B，子类对象ChildObj调用的是自己的静态方法B。<br>如果把子类对象ChildObj转换为超类对象ParentObj，ParentObj调用的是超类的静态方法A！<br>隐藏超类静态方法的语法规则与重写实例方法的规则几乎完全相同，只需要修改第(6)条为：(6)不能隐藏实例方法。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/26/java 资源文件获取/" rel="next" title="java 资源文件获取">
+                <i class="fa fa-chevron-left"></i> java 资源文件获取
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/02/java AOP动态代理/" rel="prev" title="java AOP">
+                java AOP <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/27/java static和final关键字/"
+           data-title="java static和final关键字" data-url="http://guilongyue.github.io/2017/04/27/java static和final关键字/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java-static和final关键字"><span class="nav-number">1.</span> <span class="nav-text">java static和final关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#final"><span class="nav-number">1.1.</span> <span class="nav-text">final</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static"><span class="nav-number">1.2.</span> <span class="nav-text">static</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java类成员-成员变量和方法-的覆盖与隐藏归纳"><span class="nav-number">2.</span> <span class="nav-text">Java类成员(成员变量和方法)的覆盖与隐藏归纳</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#只有实例方法可以被重写！重写后的方法必须仍为实例方法！-实例方法——重写——-gt-实例方法"><span class="nav-number">2.1.</span> <span class="nav-text">只有实例方法可以被重写！重写后的方法必须仍为实例方法！(实例方法——重写——>实例方法)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐藏与覆盖在形式上极其类似-语法规则-，但有着本质的区别。"><span class="nav-number">2.2.</span> <span class="nav-text">隐藏与覆盖在形式上极其类似(语法规则)，但有着本质的区别。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态方法"><span class="nav-number">2.2.1.</span> <span class="nav-text">静态方法</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

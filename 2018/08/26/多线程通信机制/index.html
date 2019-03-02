@@ -1,0 +1,867 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="多线程,通信机制," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="多线程通信机制
+多个线程并发执行时, 在默认情况下CPU是随机切换线程的，当我们需要多个线程来共同完成一件任务，并且我们希望他们有规律的执行, 那么多线程之间需要一些协调通信，以此来帮我们达到多线程共同操作一份数据。
+
+当然如果我们没有使用线程通信来使用多线程共同操作同一份数据的话，虽然可以实现，但是在很大程度会造成多线程之间对同一共享变量的争夺，那样的话势必为造成很多错误和损失！
+
+所以，我们才">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多线程通信机制">
+<meta property="og:url" content="http://guilongyue.github.io/2018/08/26/多线程通信机制/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="多线程通信机制
+多个线程并发执行时, 在默认情况下CPU是随机切换线程的，当我们需要多个线程来共同完成一件任务，并且我们希望他们有规律的执行, 那么多线程之间需要一些协调通信，以此来帮我们达到多线程共同操作一份数据。
+
+当然如果我们没有使用线程通信来使用多线程共同操作同一份数据的话，虽然可以实现，但是在很大程度会造成多线程之间对同一共享变量的争夺，那样的话势必为造成很多错误和损失！
+
+所以，我们才">
+<meta property="og:updated_time" content="2018-08-27T01:42:00.886Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多线程通信机制">
+<meta name="twitter:description" content="多线程通信机制
+多个线程并发执行时, 在默认情况下CPU是随机切换线程的，当我们需要多个线程来共同完成一件任务，并且我们希望他们有规律的执行, 那么多线程之间需要一些协调通信，以此来帮我们达到多线程共同操作一份数据。
+
+当然如果我们没有使用线程通信来使用多线程共同操作同一份数据的话，虽然可以实现，但是在很大程度会造成多线程之间对同一共享变量的争夺，那样的话势必为造成很多错误和损失！
+
+所以，我们才">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2018/08/26/多线程通信机制/"/>
+
+
+
+
+
+  <title> 多线程通信机制 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2018/08/26/多线程通信机制/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                多线程通信机制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-26T19:13:18+08:00">
+                2018-08-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/26/多线程通信机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/26/多线程通信机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="多线程通信机制"><a href="#多线程通信机制" class="headerlink" title="多线程通信机制"></a>多线程通信机制</h1><ol>
+<li><p>多个线程并发执行时, 在默认情况下CPU是随机切换线程的，当我们需要多个线程来共同完成一件任务，<br>并且我们希望他们有规律的执行, 那么多线程之间需要一些协调通信，以此来帮我们达到多线程共同操作一份数据。</p>
+</li>
+<li><p>当然如果我们没有使用线程通信来使用多线程共同操作同一份数据的话，虽然可以实现，<br>但是在很大程度会造成多线程之间对同一共享变量的争夺，那样的话势必为造成很多错误和损失！</p>
+</li>
+<li><p>所以，我们才引出了线程之间的通信，多线程之间的通信能够避免对同一共享变量的争夺。</p>
+<a id="more"></a>
+<p>可以通过以下几种方式实现：<br>　　  在其他线程调用此对象的 notify() 方法或 notifyAll() 方法前，导致当前线程等待。</p>
+</li>
+</ol>
+<p>　　  线程调用wait()方法，释放它对锁的拥有权，然后等待另外的线程来通知它（通知的方式是notify()或者notifyAll()方法），这样它才能重新获得锁的拥有权和恢复执行。</p>
+<p>　　  要确保调用wait()方法的时候拥有锁，即，wait()方法的调用必须放在synchronized方法或synchronized块中。</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>await/wait</th>
+<th>Sleep</th>
+<th>Yield</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否释放持有的锁</td>
+<td>释放</td>
+<td>不释放</td>
+<td>不释放</td>
+</tr>
+<tr>
+<td>调用后何时恢复</td>
+<td>唤醒后进入就绪态</td>
+<td>指定时间后</td>
+<td>立刻进入就绪态</td>
+</tr>
+<tr>
+<td>谁的方法</td>
+<td>Condition /Object</td>
+<td>Thread</td>
+<td>Thread</td>
+</tr>
+<tr>
+<td>执行环境</td>
+<td>同步代码块</td>
+<td>任意</td>
+<td>任意</td>
+</tr>
+</tbody>
+</table>
+<h3 id="等待通知机制"><a href="#等待通知机制" class="headerlink" title="等待通知机制"></a>等待通知机制</h3><p>等待通知模式是 Java 中比较经典的线程通信方式。</p>
+<blockquote>
+<p>两个线程通过对同一对象调用等待 wait() 和通知 notify() 方法来进行通讯。<br>　wait()方法 在其他线程调用此对象的 notify() 方法或 notifyAll() 方法前，导致当前线程等待。<br>  线程调用wait()方法，释放它对锁的拥有权，然后等待另外的线程来通知它（通知的方式是notify()或者notifyAll()方法），这样它才能重新获得锁的拥有权和恢复执行。<br>  要确保调用wait()方法的时候拥有锁，即，wait()方法的调用必须放在synchronized方法或synchronized块中。<br>  notify()方法会唤醒一个等待当前对象的锁的线程。唤醒在此对象监视器上等待的单个线程。<br>  notifyAll（）方法会唤醒在此对象监视器上等待的所有线程。<br>如两个线程交替打印奇数、偶数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">public class TwoThreadWaitNotify &#123;</div><div class="line">    private int start = 1;</div><div class="line">    private boolean flag = false;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        TwoThreadWaitNotify twoThread = new TwoThreadWaitNotify();</div><div class="line">        Thread t1 = new Thread(new OuNum(twoThread));</div><div class="line">        t1.setName(&quot;A&quot;);</div><div class="line">        Thread t2 = new Thread(new JiNum(twoThread));</div><div class="line">        t2.setName(&quot;B&quot;);</div><div class="line">        t1.start();</div><div class="line">        t2.start();</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 偶数线程</div><div class="line">     */</div><div class="line">    public static class OuNum implements Runnable &#123;</div><div class="line">        private TwoThreadWaitNotify number;</div><div class="line">        public OuNum(TwoThreadWaitNotify number) &#123;</div><div class="line">            this.number = number;</div><div class="line">        &#125;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            while (number.start &lt;= 100) &#123;</div><div class="line">                synchronized (TwoThreadWaitNotify.class) &#123;</div><div class="line">                    System.out.println(&quot;偶数线程抢到锁了&quot;);</div><div class="line">                    if (number.flag) &#123;</div><div class="line">                        System.out.println(Thread.currentThread().getName() + &quot;+-+偶数&quot; + number.start);</div><div class="line">                        number.start++;</div><div class="line">                        number.flag = false;</div><div class="line">                        TwoThreadWaitNotify.class.notify();</div><div class="line">                    &#125;else &#123;</div><div class="line">                        try &#123;</div><div class="line">                            TwoThreadWaitNotify.class.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                            e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * 奇数线程</div><div class="line">     */</div><div class="line">    public static class JiNum implements Runnable &#123;</div><div class="line">        private TwoThreadWaitNotify number;</div><div class="line">        public JiNum(TwoThreadWaitNotify number) &#123;</div><div class="line">            this.number = number;</div><div class="line">        &#125;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            while (number.start &lt;= 100) &#123;</div><div class="line">                synchronized (TwoThreadWaitNotify.class) &#123;</div><div class="line">                    System.out.println(&quot;奇数线程抢到锁了&quot;);</div><div class="line">                    if (!number.flag) &#123;</div><div class="line">                        System.out.println(Thread.currentThread().getName() + &quot;+-+奇数&quot; + number.start);</div><div class="line">                        number.start++;</div><div class="line">                        number.flag = true;</div><div class="line">                        TwoThreadWaitNotify.class.notify();</div><div class="line">                    &#125;else &#123;</div><div class="line">                        try &#123;</div><div class="line">                            TwoThreadWaitNotify.class.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                            e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">输出结果：</div><div class="line"></div><div class="line">t2+-+奇数93</div><div class="line">t1+-+偶数94</div><div class="line">t2+-+奇数95</div><div class="line">t1+-+偶数96</div><div class="line">t2+-+奇数97</div><div class="line">t1+-+偶数98</div><div class="line">t2+-+奇数99</div><div class="line">t1+-+偶数100</div></pre></td></tr></table></figure>
+<p>这里的线程 A 和线程 B 都对同一个对象 TwoThreadWaitNotify.class 获取锁，A 线程调用了同步对象的 wait() 方法释放了锁并进入 WAITING 状态。</p>
+<p>B 线程调用了 notify() 方法，这样 A 线程收到通知之后就可以从 wait() 方法中返回。</p>
+<p>这里利用了 TwoThreadWaitNotify.class 对象完成了通信。</p>
+<p>有一些需要注意:</p>
+<blockquote>
+<p>wait() 、nofify() 、nofityAll() 调用的前提都是获得了对象的锁(也可称为对象监视器)。<br>调用 wait() 方法后线程会释放锁，进入WAITING状态，该线程也会被移动到等待队列中。<br>调用notify() 方法会将等待队列中的线程移动到同步队列中，线程状态也会更新为 BLOCKED<br>从 wait() 方法返回的前提是调用 notify() 方法的线程释放锁，wait() 方法的线程获得锁。<br>等待通知有着一个经典范式：</p>
+</blockquote>
+<p>线程 A 作为消费者：</p>
+<ol>
+<li>获取对象的锁。</li>
+<li>进入 while(判断条件)，并调用 wait() 方法。</li>
+<li>当条件满足跳出循环执行具体处理逻辑。</li>
+</ol>
+<p>线程 B 作为生产者:</p>
+<ol>
+<li>获取对象锁。</li>
+<li>更改与线程 A 共用的判断条件。</li>
+<li>调用 notify() 方法。</li>
+</ol>
+<h3 id="join-方法"><a href="#join-方法" class="headerlink" title="join()方法"></a>join()方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">private static void join() throws InterruptedException &#123;</div><div class="line">    Thread t1 = new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;running&quot;);</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(3000);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;) ;</div><div class="line">    Thread t2 = new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;running2&quot;);</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(4000);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;) ;</div><div class="line">    t1.start();</div><div class="line">    t2.start();</div><div class="line">    //等待线程1终止</div><div class="line">    t1.join();</div><div class="line">    //等待线程2终止</div><div class="line">    t2.join();</div><div class="line">    LOGGER.info(&quot;main over&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在 t1.join() 时会一直阻塞到 t1 执行完毕，所以最终主线程会等待 t1 和 t2 线程执行完毕。<br>其实从源码可以看出，join() 也是利用的等待通知机制：</p>
+<p>核心逻辑:<br>while (isAlive()) {<br>    wait(0);<br>}<br>在 join 线程完成后会调用 notifyAll() 方法，是在 JVM 实现中调用，所以这里看不出来。</p>
+<h3 id="volatile-共享内存"><a href="#volatile-共享内存" class="headerlink" title="volatile 共享内存"></a>volatile 共享内存</h3><p>因为Java 是采用共享内存的方式进行线程通信的，所以可以采用以下方式用主线程关闭 A 线程:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class Volatile implements Runnable&#123;</div><div class="line">    private static volatile boolean flag = true ;</div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        while (flag)&#123;</div><div class="line">            System.out.println(Thread.currentThread().getName() + &quot;正在运行。。。&quot;);</div><div class="line">        &#125;</div><div class="line">        System.out.println(Thread.currentThread().getName() +&quot;执行完毕&quot;);</div><div class="line">    &#125;</div><div class="line">    public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">        Volatile aVolatile = new Volatile();</div><div class="line">        new Thread(aVolatile,&quot;thread A&quot;).start();</div><div class="line">        System.out.println(&quot;main 线程正在运行&quot;) ;</div><div class="line">        TimeUnit.MILLISECONDS.sleep(100) ;</div><div class="line">        aVolatile.stopThread();</div><div class="line">    &#125;</div><div class="line">    private void stopThread()&#123;</div><div class="line">        flag = false ;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">thread A正在运行。。。</div><div class="line">thread A正在运行。。。</div><div class="line">thread A正在运行。。。</div><div class="line">thread A正在运行。。。</div><div class="line">thread A执行完毕</div></pre></td></tr></table></figure></p>
+<p>这里的 flag 存放于主内存中，所以主线程和线程 A 都可以看到。<br>flag 采用 volatile 修饰主要是为了内存可见性，更多内容可以查看这里。</p>
+<h3 id="CountDownLatch-并发工具"><a href="#CountDownLatch-并发工具" class="headerlink" title="CountDownLatch 并发工具"></a>CountDownLatch 并发工具</h3><p>CountDownLatch 可以实现 join 相同的功能，但是更加的灵活。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">private static void countDownLatch() throws Exception&#123;</div><div class="line">    int thread = 3 ;</div><div class="line">    long start = System.currentTimeMillis();</div><div class="line">    final CountDownLatch countDown = new CountDownLatch(thread);</div><div class="line">    for (int i= 0 ;i&lt;thread ; i++)&#123;</div><div class="line">        new Thread(new Runnable() &#123;</div><div class="line">            @Override</div><div class="line">            public void run() &#123;</div><div class="line">                LOGGER.info(&quot;thread run&quot;);</div><div class="line">                try &#123;</div><div class="line">                    Thread.sleep(2000);</div><div class="line">                    countDown.countDown();</div><div class="line">                    LOGGER.info(&quot;thread end&quot;);</div><div class="line">                &#125; catch (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;).start();</div><div class="line">    &#125;</div><div class="line">    countDown.await();</div><div class="line">    long stop = System.currentTimeMillis();</div><div class="line">    LOGGER.info(&quot;main over total time=&#123;&#125;&quot;,stop-start);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">2018-03-16 20:19:44.126 [Thread-0] INFO  c.c.actual.ThreadCommunication - thread run</div><div class="line">2018-03-16 20:19:44.126 [Thread-2] INFO  c.c.actual.ThreadCommunication - thread run</div><div class="line">2018-03-16 20:19:44.126 [Thread-1] INFO  c.c.actual.ThreadCommunication - thread run</div><div class="line">2018-03-16 20:19:46.136 [Thread-2] INFO  c.c.actual.ThreadCommunication - thread end</div><div class="line">2018-03-16 20:19:46.136 [Thread-1] INFO  c.c.actual.ThreadCommunication - thread end</div><div class="line">2018-03-16 20:19:46.136 [Thread-0] INFO  c.c.actual.ThreadCommunication - thread end</div><div class="line">2018-03-16 20:19:46.136 [main] INFO  c.c.actual.ThreadCommunication - main over total time=2012</div></pre></td></tr></table></figure></p>
+<p>CountDownLatch 也是基于 AQS(AbstractQueuedSynchronizer) 实现的，更多实现参考 ReentrantLock 实现原理</p>
+<p>初始化一个 CountDownLatch 时告诉并发的线程，然后在每个线程处理完毕之后调用 countDown() 方法。<br>该方法会将 AQS 内置的一个 state 状态 -1 。<br>最终在主线程调用 await() 方法，它会阻塞直到 state == 0 的时候返回。</p>
+<h3 id="CyclicBarrier-并发工具"><a href="#CyclicBarrier-并发工具" class="headerlink" title="CyclicBarrier 并发工具"></a>CyclicBarrier 并发工具</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">private static void cyclicBarrier() throws Exception &#123;</div><div class="line">    CyclicBarrier cyclicBarrier = new CyclicBarrier(3) ;</div><div class="line">    new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;thread run&quot;);</div><div class="line">            try &#123;</div><div class="line">                cyclicBarrier.await() ;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            LOGGER.info(&quot;thread end do something&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;).start();</div><div class="line">    new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;thread run&quot;);</div><div class="line">            try &#123;</div><div class="line">                cyclicBarrier.await() ;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            LOGGER.info(&quot;thread end do something&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;).start();</div><div class="line">    new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;thread run&quot;);</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(5000);</div><div class="line">                cyclicBarrier.await() ;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            LOGGER.info(&quot;thread end do something&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;).start();</div><div class="line">    LOGGER.info(&quot;main thread&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>CyclicBarrier 中文名叫做屏障或者是栅栏，也可以用于线程间通信。</p>
+<p>它可以等待 N 个线程都达到某个状态后继续运行的效果。</p>
+<ol>
+<li>首先初始化线程参与者。</li>
+<li>调用 await() 将会在所有参与者线程都调用之前等待。</li>
+<li>直到所有参与者都调用了 await() 后，所有线程从 await() 返回继续后续逻辑。<br>运行结果:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">2018-03-18 22:40:00.731 [Thread-0] INFO  c.c.actual.ThreadCommunication - thread run</div><div class="line">2018-03-18 22:40:00.731 [Thread-1] INFO  c.c.actual.ThreadCommunication - thread run</div><div class="line">2018-03-18 22:40:00.731 [Thread-2] INFO  c.c.actual.ThreadCommunication - thread run</div><div class="line">2018-03-18 22:40:00.731 [main] INFO  c.c.actual.ThreadCommunication - main thread</div><div class="line">2018-03-18 22:40:05.741 [Thread-0] INFO  c.c.actual.ThreadCommunication - thread end do something</div><div class="line">2018-03-18 22:40:05.741 [Thread-1] INFO  c.c.actual.ThreadCommunication - thread end do something</div><div class="line">2018-03-18 22:40:05.741 [Thread-2] INFO  c.c.actual.ThreadCommunication - thread end do something</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>可以看出由于其中一个线程休眠了五秒，所有其余所有的线程都得等待这个线程调用 await() 。<br>该工具可以实现 CountDownLatch 同样的功能，但是要更加灵活。甚至可以调用 reset() 方法重置 CyclicBarrier (需要自行捕获 BrokenBarrierException 处理) 然后重新执行。</p>
+<h3 id="线程响应中断"><a href="#线程响应中断" class="headerlink" title="线程响应中断"></a>线程响应中断</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line"> public void run() &#123;</div><div class="line">     while ( !Thread.currentThread().isInterrupted()) &#123;</div><div class="line">         // 线程执行具体逻辑</div><div class="line">         System.out.println(Thread.currentThread().getName() + &quot;运行中。。&quot;);</div><div class="line">     &#125;</div><div class="line">     System.out.println(Thread.currentThread().getName() + &quot;退出。。&quot;);</div><div class="line"> &#125;</div><div class="line"> public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">     Thread thread = new Thread(new StopThread(), &quot;thread A&quot;);</div><div class="line">     thread.start();</div><div class="line">     System.out.println(&quot;main 线程正在运行&quot;) ;</div><div class="line">     TimeUnit.MILLISECONDS.sleep(10) ;</div><div class="line">     thread.interrupt();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>输出结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">thread A运行中。。</div><div class="line">thread A运行中。。</div><div class="line">thread A退出。。</div></pre></td></tr></table></figure></p>
+<p>可以采用中断线程的方式来通信，调用了 thread.interrupt() 方法其实就是将 thread 中的一个标志属性置为了 true。</p>
+<p>并不是说调用了该方法就可以中断线程，如果不对这个标志进行响应其实是没有什么作用(这里对这个标志进行了判断)。</p>
+<p>但是如果抛出了InterruptedException异常，该标志就会被 JVM 重置为 false。</p>
+<h3 id="线程池-awaitTermination-方法"><a href="#线程池-awaitTermination-方法" class="headerlink" title="线程池 awaitTermination() 方法"></a>线程池 awaitTermination() 方法</h3><p>如果是用线程池来管理线程，可以使用以下方式来让主线程等待线程池中所有任务执行完毕:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">private static void executorService() throws Exception&#123;</div><div class="line">    BlockingQueue&lt;Runnable&gt; queue = new LinkedBlockingQueue&lt;&gt;(10) ;</div><div class="line">    ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(5,5,1, TimeUnit.MILLISECONDS,queue) ;</div><div class="line">    poolExecutor.execute(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;running&quot;);</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(3000);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    poolExecutor.execute(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;running2&quot;);</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(2000);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    poolExecutor.shutdown();</div><div class="line">    while (!poolExecutor.awaitTermination(1,TimeUnit.SECONDS))&#123;</div><div class="line">        LOGGER.info(&quot;线程还在执行。。。&quot;);</div><div class="line">    &#125;</div><div class="line">    LOGGER.info(&quot;main over&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">2018-03-16 20:18:01.273 [pool-1-thread-2] INFO  c.c.actual.ThreadCommunication - running2</div><div class="line">2018-03-16 20:18:01.273 [pool-1-thread-1] INFO  c.c.actual.ThreadCommunication - running</div><div class="line">2018-03-16 20:18:02.273 [main] INFO  c.c.actual.ThreadCommunication - 线程还在执行。。。</div><div class="line">2018-03-16 20:18:03.278 [main] INFO  c.c.actual.ThreadCommunication - 线程还在执行。。。</div><div class="line">2018-03-16 20:18:04.278 [main] INFO  c.c.actual.ThreadCommunication - main over</div></pre></td></tr></table></figure></p>
+<p>使用这个 awaitTermination() 方法的前提需要关闭线程池，如调用了 shutdown() 方法。</p>
+<p>调用了 shutdown() 之后线程池会停止接受新任务，并且会平滑的关闭线程池中现有的任务。</p>
+<h3 id="管道通信"><a href="#管道通信" class="headerlink" title="管道通信"></a>管道通信</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">public static void piped() throws IOException &#123;</div><div class="line">    //面向于字符 PipedInputStream 面向于字节</div><div class="line">    PipedWriter writer = new PipedWriter();</div><div class="line">    PipedReader reader = new PipedReader();</div><div class="line">    //输入输出流建立连接</div><div class="line">    writer.connect(reader);</div><div class="line">    Thread t1 = new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;running&quot;);</div><div class="line">            try &#123;</div><div class="line">                for (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">                    writer.write(i+&quot;&quot;);</div><div class="line">                    Thread.sleep(10);</div><div class="line">                &#125;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">            &#125; finally &#123;</div><div class="line">                try &#123;</div><div class="line">                    writer.close();</div><div class="line">                &#125; catch (IOException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    Thread t2 = new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            LOGGER.info(&quot;running2&quot;);</div><div class="line">            int msg = 0;</div><div class="line">            try &#123;</div><div class="line">                while ((msg = reader.read()) != -1) &#123;</div><div class="line">                    LOGGER.info(&quot;msg=&#123;&#125;&quot;, (char) msg);</div><div class="line">                &#125;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    t1.start();</div><div class="line">    t2.start();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Java 虽说是基于内存通信的，但也可以使用管道通信。</p>
+<p>需要注意的是，输入流和输出流需要首先建立连接。这样线程 B 就可以收到线程 A 发出的消息了。</p>
+<p>实际开发中可以灵活根据需求选择最适合的线程通信方式。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+            <a href="/tags/通信机制/" rel="tag"># 通信机制</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/25/synchronized 关键字原理/" rel="next" title="synchronized 关键字原理解析">
+                <i class="fa fa-chevron-left"></i> synchronized 关键字原理解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/27/Mybatis 关键/" rel="prev" title="Mybatis 问题">
+                Mybatis 问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/08/26/多线程通信机制/"
+           data-title="多线程通信机制" data-url="http://guilongyue.github.io/2018/08/26/多线程通信机制/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#多线程通信机制"><span class="nav-number">1.</span> <span class="nav-text">多线程通信机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#等待通知机制"><span class="nav-number">1.0.1.</span> <span class="nav-text">等待通知机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join-方法"><span class="nav-number">1.0.2.</span> <span class="nav-text">join()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile-共享内存"><span class="nav-number">1.0.3.</span> <span class="nav-text">volatile 共享内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CountDownLatch-并发工具"><span class="nav-number">1.0.4.</span> <span class="nav-text">CountDownLatch 并发工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CyclicBarrier-并发工具"><span class="nav-number">1.0.5.</span> <span class="nav-text">CyclicBarrier 并发工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程响应中断"><span class="nav-number">1.0.6.</span> <span class="nav-text">线程响应中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程池-awaitTermination-方法"><span class="nav-number">1.0.7.</span> <span class="nav-text">线程池 awaitTermination() 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道通信"><span class="nav-number">1.0.8.</span> <span class="nav-text">管道通信</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

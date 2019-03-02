@@ -1,0 +1,784 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="工作,单一用户登录," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="单一用户登录之前做过类似的需求，同一ip 的用户可以登录，多个浏览器。当时是webLogic 集群，用了session 监听器，修改了用户登录逻辑，增加了一个类Context，Map属性，存所有Session。 存了用户的登录ip.当时在集群环境下，session 没有共享。有问题，但是没有解决，没有用redis 之类的中间件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Session单用户登录">
+<meta property="og:url" content="http://guilongyue.github.io/2019/02/04/单用户登录session /index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="单一用户登录之前做过类似的需求，同一ip 的用户可以登录，多个浏览器。当时是webLogic 集群，用了session 监听器，修改了用户登录逻辑，增加了一个类Context，Map属性，存所有Session。 存了用户的登录ip.当时在集群环境下，session 没有共享。有问题，但是没有解决，没有用redis 之类的中间件。">
+<meta property="og:updated_time" content="2019-02-21T11:58:49.558Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Session单用户登录">
+<meta name="twitter:description" content="单一用户登录之前做过类似的需求，同一ip 的用户可以登录，多个浏览器。当时是webLogic 集群，用了session 监听器，修改了用户登录逻辑，增加了一个类Context，Map属性，存所有Session。 存了用户的登录ip.当时在集群环境下，session 没有共享。有问题，但是没有解决，没有用redis 之类的中间件。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2019/02/04/单用户登录session /"/>
+
+
+
+
+
+  <title> Session单用户登录 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2019/02/04/单用户登录session /">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Session单用户登录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-04T21:11:08+08:00">
+                2019-02-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作/" itemprop="url" rel="index">
+                    <span itemprop="name">工作</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/04/单用户登录session /#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/02/04/单用户登录session /" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="单一用户登录"><a href="#单一用户登录" class="headerlink" title="单一用户登录"></a>单一用户登录</h1><p>之前做过类似的需求，同一ip 的用户可以登录，多个浏览器。<br>当时是webLogic 集群，用了session 监听器，修改了用户登录逻辑，增加了一个类Context，Map属性，存所有Session。 存了用户的登录ip.当时在集群环境下，session 没有共享。有问题，但是没有解决，没有用redis 之类的中间件。<br><a id="more"></a></p>
+<h2 id="1-参考实现"><a href="#1-参考实现" class="headerlink" title="1.参考实现"></a>1.参考实现</h2><p><a href="https://blog.csdn.net/qq_33422712/article/details/79168625" title="csdn " target="_blank" rel="external">https://blog.csdn.net/qq_33422712/article/details/79168625 </a></p>
+<blockquote>
+<p>登录成功，判断用户用户是否在线。是 -》 获取上次的sessionId ,将对应的session销毁。修改用户的sessionId 为本次的sessionId . 否-》 将用户的登录状态改为在线，把这次回话的sessionId 与用户绑定。<br>怎么通过sessionId销毁session。因为Servlet2.1之后不支持SessionContext里面getSession(String id)方法。我们可以自己实现一个SessionContext。然后通过sessionId获取session,再通过session.invalidate();</p>
+</blockquote>
+<ul>
+<li>实现SessionContext </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public class MySessionContext &#123;</div><div class="line">	private static MySessionContext context;</div><div class="line">	private Map&lt;String, HttpSession&gt; map;</div><div class="line">	private MySessionContext() &#123;</div><div class="line">		map = new HashMap&lt;&gt;();</div><div class="line">	&#125;</div><div class="line">	public static MySessionContext getSessionContext() &#123;</div><div class="line">		if(context == null) &#123;</div><div class="line">			context = new MySessionContext();</div><div class="line">		&#125;</div><div class="line">		return context;</div><div class="line">	&#125;</div><div class="line">	//添加</div><div class="line">	public synchronized void addSession(HttpSession session) &#123;</div><div class="line">		if(session!= null)</div><div class="line">			map.put(session.getId(), session);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	//获取</div><div class="line">	public synchronized HttpSession getSession(String sessionId) &#123;</div><div class="line">		if(sessionId == null)</div><div class="line">			return null;</div><div class="line">		return map.get(sessionId);</div><div class="line">	&#125;</div><div class="line">	//删除</div><div class="line">	public synchronized void delSession(HttpSession session) &#123;</div><div class="line">		if(session!= null)</div><div class="line">			map.remove(session.getId());</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>配置session 监听器</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;!-- session监听 类实现 HttpSessionListener 接口方法 --&gt;</div><div class="line">&lt;listener&gt;  </div><div class="line">	&lt;listener-class&gt;com.it.listeners.SessionListener&lt;/listener-class&gt;  </div><div class="line">&lt;/listener&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>编写SessionListener</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">public class SessionListener implements HttpSessionListener &#123;</div><div class="line">	private MySessionContext context = MySessionContext.getSessionContext();</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void sessionCreated(HttpSessionEvent e) &#123;</div><div class="line">		context.addSession(e.getSession());</div><div class="line">	&#125;</div><div class="line"> </div><div class="line">	@Override</div><div class="line">	public void sessionDestroyed(HttpSessionEvent e) &#123;</div><div class="line">		User user = (User)e.getSession().getAttribute(&quot;user&quot;);</div><div class="line">		</div><div class="line">		//获取service</div><div class="line">		UserServies userServies =(UserServies) getObjectFromApplication(e.getSession().getServletContext(),&quot;userServies&quot;);</div><div class="line">		</div><div class="line">		//获取用户的sessionId和用户在线状态</div><div class="line">		User tempUser = userServies.selectUserByKey(user.getId());</div><div class="line">		</div><div class="line">		//如果用户在线且sessionId和e.getSession().getId()相同说明下线，不是更替。</div><div class="line">		//则修改用户的在线状态和session设置null。</div><div class="line">		if(tempUser.getOnlinestatus() == 1 &amp;&amp; e.getSession().getId().equals(tempUser.getSessionid())) &#123;</div><div class="line">			tempUser.setOnlinestatus(0);</div><div class="line">			tempUser.setSessionid(null);</div><div class="line">			userServies.updateByPrimaryKey(tempUser);</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		context.delSession(e.getSession());		</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	private Object getObjectFromApplication(ServletContext servletContext,String beanName)&#123;  </div><div class="line">	        //通过WebApplicationContextUtils 得到Spring容器的实例。  </div><div class="line">	        ApplicationContext application=WebApplicationContextUtils.getWebApplicationContext(servletContext);  </div><div class="line">	        //返回Bean的实例。  </div><div class="line">	        return application.getBean(beanName);  </div><div class="line">	    &#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>配置拦截器，在springmvc.xm配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;!--拦截器 --&gt;</div><div class="line"> 	&lt;mvc:interceptors&gt;</div><div class="line"> 		&lt;mvc:interceptor&gt;</div><div class="line"> 			&lt;mvc:mapping path=&quot;/**&quot;/&gt;</div><div class="line"> 			&lt;mvc:exclude-mapping path=&quot;/login**&quot;/&gt;</div><div class="line"> 			&lt;bean class=&quot;com.it.interceptor.LoginInterceptor&quot;&gt;&lt;/bean&gt;</div><div class="line"> 		&lt;/mvc:interceptor&gt;</div><div class="line"> 	&lt;/mvc:interceptors&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>拦截器 该类实现HandlerInterceptor接口</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class LoginInterceptor implements HandlerInterceptor&#123;</div><div class="line"> </div><div class="line">	Logger logger = LoggerFactory.getLogger(getClass());</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)</div><div class="line">			throws Exception &#123;</div><div class="line">		logger.info(&quot;在 登录拦截器。 &quot;);</div><div class="line">		HttpSession session = request.getSession();		</div><div class="line">		if(session.getAttribute(&quot;user&quot;) != null) &#123;			</div><div class="line">			return true;</div><div class="line">		&#125;		</div><div class="line">		request.getRequestDispatcher(&quot;/WEB-INF/web/login.jsp&quot;).forward(request, response);</div><div class="line">		return false;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>登录逻辑</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">@Controller</div><div class="line">public class LoginController &#123;</div><div class="line">	</div><div class="line">	@Autowired</div><div class="line">	private UserServies userServies ;</div><div class="line">	</div><div class="line">	private MySessionContext context = MySessionContext.getSessionContext();</div><div class="line">	//处理登录请求</div><div class="line">	@PostMapping(&quot;/login&quot;)</div><div class="line">	public String login(HttpServletRequest request, HttpSession session,Model model,@RequestParam(required=true) String id,@RequestParam(required=true)String password) &#123;</div><div class="line">		User user = userServies.selectUserByKey(id);</div><div class="line">		//密码和id匹配</div><div class="line">		if(user != null &amp;&amp; password.equals(user.getPassword())) &#123;</div><div class="line">			</div><div class="line">			session.setAttribute(&quot;user&quot;,user);</div><div class="line">			</div><div class="line">			User tempuser = new User();</div><div class="line">			tempuser.setOnlinestatus(1);</div><div class="line">			tempuser.setSessionid(session.getId());</div><div class="line">			tempuser.setId(id);</div><div class="line">			userServies.updateByPrimaryKeySelective(tempuser);</div><div class="line">			</div><div class="line">			//删除上一个登录的session</div><div class="line">			if(user.getOnlinestatus() == 1 &amp;&amp; user.getSessionid() != null) &#123;</div><div class="line">				HttpSession oldSession = context.getSession(user.getSessionid());</div><div class="line">				if(oldSession != null)</div><div class="line">					oldSession.invalidate();</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			return &quot;redirect:index&quot;;</div><div class="line">		&#125;else &#123;</div><div class="line">			model.addAttribute(&quot;msg&quot;, &quot;用户名或密码不正确&quot;);</div><div class="line">			return &quot;login&quot;;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	//去登陆</div><div class="line">	@GetMapping(&quot;/login&quot;)</div><div class="line">	public String login(HttpSession session) &#123;</div><div class="line">		if(session.getAttribute(&quot;user&quot;) != null)</div><div class="line">			return &quot;redirect:index&quot;;</div><div class="line">		return &quot;login&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>数据库修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">user 表增加 session_id 、onlinestatus 字段。</div></pre></td></tr></table></figure>
+</li>
+<li><p>问题<br>第一个登录的用户被挤掉时，不能立即给出提示，可以用WebSocket 处理。</p>
+</li>
+</ul>
+<h2 id="2-实际实现"><a href="#2-实际实现" class="headerlink" title="2. 实际实现"></a>2. 实际实现</h2><p>通过token 实现类似逻辑， 通过websocket 进行处理。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/工作/" rel="tag"># 工作</a>
+          
+            <a href="/tags/单一用户登录/" rel="tag"># 单一用户登录</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/03/工作常用的SQL/" rel="next" title="开发中常用到的Sql">
+                <i class="fa fa-chevron-left"></i> 开发中常用到的Sql
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/05/Session 与Token 前后端分离/" rel="prev" title="Session 与Token 前后端分离">
+                Session 与Token 前后端分离 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/02/04/单用户登录session /"
+           data-title="Session单用户登录" data-url="http://guilongyue.github.io/2019/02/04/单用户登录session /">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#单一用户登录"><span class="nav-number">1.</span> <span class="nav-text">单一用户登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-参考实现"><span class="nav-number">1.1.</span> <span class="nav-text">1.参考实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-实际实现"><span class="nav-number">1.2.</span> <span class="nav-text">2. 实际实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

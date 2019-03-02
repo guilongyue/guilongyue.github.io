@@ -1,0 +1,762 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="生产者消费者模型,app接口," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="工作总结20180907最近分析了一些问题，感觉自己在对框架的底层原理，实现的细节上有欠缺的地方，还有对项目的全面认识，关键的细节缺乏充分的认识。需要好好的沉淀积累，沉下心学习技术。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工作总结20180907">
+<meta property="og:url" content="http://guilongyue.github.io/2018/08/12/最近的总结/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="工作总结20180907最近分析了一些问题，感觉自己在对框架的底层原理，实现的细节上有欠缺的地方，还有对项目的全面认识，关键的细节缺乏充分的认识。需要好好的沉淀积累，沉下心学习技术。">
+<meta property="og:updated_time" content="2018-09-12T07:09:11.804Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="工作总结20180907">
+<meta name="twitter:description" content="工作总结20180907最近分析了一些问题，感觉自己在对框架的底层原理，实现的细节上有欠缺的地方，还有对项目的全面认识，关键的细节缺乏充分的认识。需要好好的沉淀积累，沉下心学习技术。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2018/08/12/最近的总结/"/>
+
+
+
+
+
+  <title> 工作总结20180907 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2018/08/12/最近的总结/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                工作总结20180907
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-12T17:13:18+08:00">
+                2018-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/总结/" itemprop="url" rel="index">
+                    <span itemprop="name">总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/12/最近的总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/12/最近的总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="工作总结20180907"><a href="#工作总结20180907" class="headerlink" title="工作总结20180907"></a>工作总结20180907</h1><p>最近分析了一些问题，感觉自己在对框架的底层原理，实现的细节上有欠缺的地方，还有对项目的全面认识，关键的细节缺乏充分的认识。需要好好的沉淀积累，沉下心学习技术。</p>
+<a id="more"></a>
+<h2 id="app-接口访问的认证"><a href="#app-接口访问的认证" class="headerlink" title="app 接口访问的认证"></a>app 接口访问的认证</h2><p>实现一个过滤器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public class RequestFilter implements Filter</div></pre></td></tr></table></figure></p>
+<p>实现doFilter 接口方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@SuppressWarnings(&#123; &quot;rawtypes&quot; &#125;)</div><div class="line">List paramNames = Collections.list(request.getParameterNames());</div><div class="line"></div><div class="line">Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();</div><div class="line">for (Object pName : paramNames) &#123;</div><div class="line">	String paramName = pName.toString();</div><div class="line">	map.put(paramName, request.getParameter(paramName));</div><div class="line">&#125;</div><div class="line">map.remove(PublicParam.SIGN.value());//排除sign字段</div><div class="line">String reqSign = Signature.getSign(map);//根据参数生成SIGN</div><div class="line">if (!reqSign.equalsIgnoreCase(sign)) &#123;//验签</div><div class="line">	writeError(ReturnStateEnum.REQUEST_SIGN_ERROR, response.getWriter(), buff);</div><div class="line">	return;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>根据参数得到签名方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">public static String getSign(Map&lt;String, Object&gt; map)&#123;</div><div class="line">	String key = PropertiesUtil.getString(&quot;sign.key&quot;);</div><div class="line">	List&lt;String&gt; keyToSort = new ArrayList&lt;String&gt;();</div><div class="line">	Iterator&lt;String&gt; it = map.keySet().iterator();</div><div class="line">	//空值不进行拼接</div><div class="line">	while (it.hasNext())&#123;</div><div class="line">	    String mapKey = it.next();</div><div class="line">	    if(StringUtils.isNotBlank(map.get(mapKey) + &quot;&quot;))&#123;</div><div class="line">            keyToSort.add(mapKey);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    Collections.sort(keyToSort);</div><div class="line">   /* ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();</div><div class="line">    for(Map.Entry&lt;String, Object&gt; entry : map.entrySet())&#123;</div><div class="line">        if(entry.getValue()!=&quot;&quot;)&#123;</div><div class="line">            list.add(entry.getKey() + &quot;=&quot; + entry.getValue() + &quot;&amp;&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    int size = list.size();</div><div class="line">    String [] arrayToSort = list.toArray(new String[size]);</div><div class="line">    Arrays.sort(arrayToSort, String.CASE_INSENSITIVE_ORDER);*/</div><div class="line">    StringBuilder sb = new StringBuilder();</div><div class="line">    for (String mapKey : keyToSort) &#123;</div><div class="line">    	sb.append(mapKey).append(&quot;=&quot;).append(map.get(mapKey)).append(&quot;&amp;&quot;);</div><div class="line">    &#125;</div><div class="line">    String result = sb.toString();</div><div class="line">    result += &quot;key=&quot; + key;</div><div class="line">         </div><div class="line">    _LOG.info(&quot;Sign Before MD5:&quot; + result);</div><div class="line">    result = MD5Util.md5(result).toUpperCase();</div><div class="line">    _LOG.info(&quot;Sign Result:&quot; + result);</div><div class="line">    </div><div class="line">    return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>验证userId对应手机号的当前skey与传入的skey是否一致，不一致，也不允许访问<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">	String userIdStr = request.getParameter(PublicParam.USERID.value());</div><div class="line">	int userId = Integer.parseInt(userIdStr);</div><div class="line">	if(userId &gt; 0) &#123;</div><div class="line">		// 检查用户状态</div><div class="line">		CommonReturn checkReturn = this.checkRenterState(request, response, buff, userId);</div><div class="line">		if(checkReturn.getResultCode()!=ReturnStateEnum.SUCCESS.getCode())&#123;</div><div class="line">			return;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	else &#123;</div><div class="line">		if(!checkNotForceLoginUrl(servletPath))&#123;</div><div class="line">			writeError(ReturnStateEnum.UNLOGIN, response.getWriter(), buff);</div><div class="line">			return;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">private CommonReturn checkRenterState(HttpServletRequest request, HttpServletResponse response, StringBuffer buff, int userId) throws IOException &#123;</div><div class="line">		CommonReturn commonReturn = new CommonReturn(ReturnStateEnum.SUCCESS);</div><div class="line">		String skey = request.getParameter(PublicParam.SKEY.value());//参数中传入的skey</div><div class="line">		String currentSkey = loginService.getCurrentSkey(userId);//用户最后一次登录的skey</div><div class="line">		if(currentSkey == null || !skey.equals(currentSkey))&#123;</div><div class="line">			writeError(ReturnStateEnum.REQUEST_SKEY_ERROR, response.getWriter(), buff);</div><div class="line">			commonReturn = new CommonReturn(ReturnStateEnum.REQUEST_SKEY_ERROR);</div><div class="line">		&#125;else&#123;</div><div class="line">			//增加验证用户状态验证   被删除、被锁定</div><div class="line">			RenterInfo renterInfo = renterInfoService.getById(userId);</div><div class="line">			if (renterInfo == null || renterInfo.getDelState() == CommonConst.DEL_STATE_DELETE)&#123;</div><div class="line">				writeError(ReturnStateEnum.RENTER_UNKNOW, response.getWriter(), buff);</div><div class="line">				commonReturn = new CommonReturn(ReturnStateEnum.RENTER_UNKNOW);</div><div class="line">			&#125;</div><div class="line">			//黑名单</div><div class="line">			if (renterInfo.getBlackState() == CommonConst.RENTER_BLACK)&#123;</div><div class="line">				writeError(ReturnStateEnum.RENTER_BLACK, response.getWriter(), buff);</div><div class="line">				commonReturn = new CommonReturn(ReturnStateEnum.RENTER_BLACK);</div><div class="line">			&#125;</div><div class="line">			//锁定</div><div class="line">			if (renterInfo.getLockState() == CommonConst.RENTER_LOCKED)&#123;</div><div class="line">				writeError(ReturnStateEnum.RENTER_LOCK, response.getWriter(), buff);</div><div class="line">				commonReturn = new CommonReturn(ReturnStateEnum.RENTER_LOCK);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		return commonReturn;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="对数据库链接池的认识"><a href="#对数据库链接池的认识" class="headerlink" title="对数据库链接池的认识"></a>对数据库链接池的认识</h2><h2 id="生产者消费者模型"><a href="#生产者消费者模型" class="headerlink" title="生产者消费者模型"></a>生产者消费者模型</h2><p>在Java 中可以用wait、notify和notifyAll 来实现线程间的通信。如果你的java 程序中有两个线程-即生产者和消费者，那么生产者可以通知消费者，让消费者开始消耗数据，因为队列缓冲区中有内容待消费（不为空）。相应的，消费者可以通知生产者可以开始生成更多的数据。</p>
+<h3 id="永远在loop-里调用wait-和-notify-不是在if-语句"><a href="#永远在loop-里调用wait-和-notify-不是在if-语句" class="headerlink" title="永远在loop 里调用wait 和 notify, 不是在if 语句"></a>永远在loop 里调用wait 和 notify, 不是在if 语句</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">synchronized (sharedObject)&#123;</div><div class="line">  while(condition)&#123;</div><div class="line">		shareObject.wait();</div><div class="line">		// Releases lock,and reacquires on wakeup)</div><div class="line"></div><div class="line">	&#125;</div><div class="line">	// do action based upon condition e.g. take or put into queue</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Java-wait-notify-notifyAll-范例"><a href="#Java-wait-notify-notifyAll-范例" class="headerlink" title="Java wait(), notify(), notifyAll() 范例"></a>Java wait(), notify(), notifyAll() 范例</h3><p>Producer 和Consumer ，他们分别继承了Thread 类。代码逻辑在run() 函数内。Main线程 开始了生产者和消费者线程，并声明了一个LinkedList.生产者在无限循环中持续往Linkedlist 里插入所及证书知道LinkedList满。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line">package com.yiyi.pool;</div><div class="line"></div><div class="line">import java.util.LinkedList;</div><div class="line">import java.util.Queue;</div><div class="line">import java.util.Random;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by Administrator on 2018/9/12.</div><div class="line"> */</div><div class="line">public class ProducerConsumer &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        System.out.println(&quot;How to use wait and notify method in Java&quot;);</div><div class="line">        System.out.println(&quot;Solving Producer Consumper Problem&quot;);</div><div class="line">        Queue buffer = new LinkedList();</div><div class="line">        int maxSize = 10;</div><div class="line">        Thread producer = new Producer(buffer, maxSize, &quot;PRODUCER&quot;);</div><div class="line">        Thread consumer = new Consumner(buffer, maxSize, &quot;CONSUMER&quot;);</div><div class="line">        producer.start();</div><div class="line">        consumer.start();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    static class Producer extends Thread&#123;</div><div class="line">        private Queue queue;</div><div class="line">        private int maxSize;</div><div class="line">        public Producer(Queue queue,int maxSize,String name)&#123;</div><div class="line">            super(name);</div><div class="line">            this.queue = queue;</div><div class="line">            this.maxSize = maxSize;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            while(true)&#123;</div><div class="line">            synchronized (queue) &#123;</div><div class="line">                while (queue.size() == maxSize) &#123;</div><div class="line">                    try &#123;</div><div class="line">                        System.out.println(&quot;Queue is full, &quot; + &quot;Producer thread waiting for &quot; + &quot;consumer to take something from queue&quot;);</div><div class="line">                        queue.wait();</div><div class="line">                    &#125; catch (InterruptedException e) &#123;</div><div class="line">                        e.printStackTrace();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                Random random = new Random();</div><div class="line">                int i = random.nextInt(100);</div><div class="line">                System.out.println(&quot;Producing value : &quot; + i);</div><div class="line">                queue.add(i);</div><div class="line">                queue.notifyAll();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    static class Consumner extends Thread&#123;</div><div class="line">        private Queue queue;</div><div class="line">        private int maxSize;</div><div class="line"></div><div class="line">        public Consumner(Queue queue,int maxSize,String name)&#123;</div><div class="line">            super(name);</div><div class="line">            this.queue = queue;</div><div class="line">            this.maxSize = maxSize;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public void run() &#123;</div><div class="line">            while (true)&#123;</div><div class="line">                synchronized (queue)&#123;</div><div class="line">                    while (queue.isEmpty())&#123;</div><div class="line">                        System.out.println(&quot;Queue is empty,&quot; + &quot;Consumer thread is waiting&quot; + &quot; for producer thread to put something in queue&quot;);</div><div class="line">                        try &#123;</div><div class="line">                            queue.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                            e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    System.out.println(&quot;Consuming value : &quot; + queue.remove());</div><div class="line">                    queue.notifyAll();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这是关于Java里如何使用wait, notify和notifyAll的所有重点啦。你应该只在你知道自己要做什么的情况下使用这些函数，不然Java里还有很多其它的用来解决同步问题的方案。例如，如果你想使用生产者消费者模型的话，你也可以使用BlockingQueue，它会帮你处理所有的线程安全问题和流程控制。如果你想要某一个线程等待另一个线程做出反馈再继续运行，你也可以使用CycliBarrier或者CountDownLatch。如果你只是想保护某一个资源的话，你也可以使用Semaphore。</p>
+</blockquote>
+<h2 id="多线程处理"><a href="#多线程处理" class="headerlink" title="多线程处理"></a>多线程处理</h2><blockquote>
+<p>CountDownLatch的用法<br>CountDownLatch典型用法1：某一线程在开始运行前等待n个线程执行完毕。将CountDownLatch的计数器初始化为n new CountDownLatch(n) ，每当一个任务线程执行完毕，就将计数器减1 countdownlatch.countDown()，当计数器的值变为0时，在CountDownLatch上 await() 的线程就会被唤醒。一个典型应用场景就是启动一个服务时，主线程需要等待多个组件加载完毕，之后再继续执行。<br>CountDownLatch典型用法2：实现多个线程开始执行任务的最大并行性。注意是并行性，不是并发，强调的是多个线程在某一时刻同时开始执行。类似于赛跑，将多个线程放到起点，等待发令枪响，然后同时开跑。做法是初始化一个共享的CountDownLatch(1)，将其计数器初始化为1，多个线程在开始执行任务前首先 coundownlatch.await()，当主线程调用 countDown() 时，计数器变为0，多个线程同时被唤醒。<br>CountDownLatch CountDown = new CountDownLatch (2);<br>三个线程，线程一等其他执行完再执行<br>线程一：CountDown.await();<br>线程二：CountDown.countDown();<br>线程三：CountDown.countDown();<br>线程一等到二、三执行完再继续执行。<br>这个2表示有几个线程执行完再放开await();</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/生产者消费者模型/" rel="tag"># 生产者消费者模型</a>
+          
+            <a href="/tags/app接口/" rel="tag"># app接口</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/12/Java 容器/" rel="next" title="Java 容器分析">
+                <i class="fa fa-chevron-left"></i> Java 容器分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/18/Mysql 分析/" rel="prev" title="Mysql分析">
+                Mysql分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/08/12/最近的总结/"
+           data-title="工作总结20180907" data-url="http://guilongyue.github.io/2018/08/12/最近的总结/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#工作总结20180907"><span class="nav-number">1.</span> <span class="nav-text">工作总结20180907</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#app-接口访问的认证"><span class="nav-number">1.1.</span> <span class="nav-text">app 接口访问的认证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对数据库链接池的认识"><span class="nav-number">1.2.</span> <span class="nav-text">对数据库链接池的认识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产者消费者模型"><span class="nav-number">1.3.</span> <span class="nav-text">生产者消费者模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#永远在loop-里调用wait-和-notify-不是在if-语句"><span class="nav-number">1.3.1.</span> <span class="nav-text">永远在loop 里调用wait 和 notify, 不是在if 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-wait-notify-notifyAll-范例"><span class="nav-number">1.3.2.</span> <span class="nav-text">Java wait(), notify(), notifyAll() 范例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程处理"><span class="nav-number">1.4.</span> <span class="nav-text">多线程处理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

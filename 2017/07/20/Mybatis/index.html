@@ -1,0 +1,773 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="框架,Mybatis," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Mybatis 复习MyBatis是一个支持普通SQL查询，存储过程和高级映射的优秀持久层框架。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装。MyBatis可以使用简单的XML或注解用于配置和原始映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis">
+<meta property="og:url" content="http://guilongyue.github.io/2017/07/20/Mybatis/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Mybatis 复习MyBatis是一个支持普通SQL查询，存储过程和高级映射的优秀持久层框架。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装。MyBatis可以使用简单的XML或注解用于配置和原始映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录。">
+<meta property="og:updated_time" content="2017-07-21T01:56:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mybatis">
+<meta name="twitter:description" content="Mybatis 复习MyBatis是一个支持普通SQL查询，存储过程和高级映射的优秀持久层框架。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装。MyBatis可以使用简单的XML或注解用于配置和原始映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/07/20/Mybatis/"/>
+
+
+
+
+
+  <title> Mybatis | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/07/20/Mybatis/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mybatis
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-20T10:38:05+08:00">
+                2017-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/20/Mybatis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/20/Mybatis/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Mybatis-复习"><a href="#Mybatis-复习" class="headerlink" title="Mybatis 复习"></a>Mybatis 复习</h1><p>MyBatis是一个支持普通SQL查询，存储过程和高级映射的优秀持久层框架。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装。MyBatis可以使用简单的XML或注解用于配置和原始映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录。<br><a id="more"></a></p>
+<h3 id="Mybatis-体系架构"><a href="#Mybatis-体系架构" class="headerlink" title="Mybatis 体系架构"></a>Mybatis 体系架构</h3><ul>
+<li>加载配置<br>配置有两种方式，一种是注解，一种是xml配置文件，Mybatis将sql的配置信息记载成MappedStatement对象（包括传入参数配置、sql语句、结果映射配置），并将其存储在内存中。</li>
+<li>SQL解析<br>当API接口层收到收到调用请求，会接受传入的SQL的ID和传入对象（可以是Map、javabean和原始类型，），Mybatis根据SQl的id找到对应的MappedStatement，然后根据传入的参数对象对MappedStatement进行解析。解析后可以得到最终要执行的sql和参数。</li>
+<li>SQL执行<br>将最终得到的sql和参数，拿到数据执行。得到操作数据库的结果。</li>
+<li>结果映射<br>将操作数据库的结果按照映射的配置进行转换，可以转换成HashMap、JavaBean、基础类型，并将最终结果返回。<h3 id="Mybatis配置文件"><a href="#Mybatis配置文件" class="headerlink" title="Mybatis配置文件"></a>Mybatis配置文件</h3></li>
+</ul>
+<ol>
+<li><p>SqlMapConfig.xml 1个<br>主配置文件，用于指定数据库参数和连接参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  </div><div class="line">&lt;!DOCTYPE configuration PUBLIC &quot;-//ibatis.apache.org//DTD Config 3.0//EN&quot; </div><div class="line">    &quot;http://ibatis.apache.org/dtd/ibatis-3-config.dtd&quot;&gt;</div><div class="line">&lt;configuration&gt;</div><div class="line">    &lt;environments default=&quot;environment&quot;&gt;</div><div class="line">        &lt;environment id=&quot;environment&quot;&gt;</div><div class="line">            &lt;transactionManager type=&quot;JDBC&quot; /&gt;</div><div class="line">            &lt;dataSource type=&quot;POOLED&quot;&gt;</div><div class="line">                &lt;property name=&quot;driver&quot; value=&quot;oracle.jdbc.OracleDriver&quot; /&gt;</div><div class="line">                &lt;property name=&quot;url&quot;</div><div class="line">                    value=&quot;jdbc:oracle:thin:@localhost:1521:xe&quot; /&gt;</div><div class="line">                &lt;property name=&quot;username&quot; value=&quot;lhh&quot; /&gt;</div><div class="line">                &lt;property name=&quot;password&quot; value=&quot;123456&quot; /&gt;</div><div class="line">            &lt;/dataSource&gt;</div><div class="line">        &lt;/environment&gt;</div><div class="line">    &lt;/environments&gt;</div><div class="line">    &lt;mappers&gt;</div><div class="line">        &lt;mapper resource=&quot;com/tarena/dao/EmpMapper.xml&quot; /&gt;</div><div class="line">    &lt;/mappers&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>SqlMap.xml n个<br>映射定义文件，用于定义SQL语句和映射信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  </div><div class="line">&lt;!DOCTYPE mapper PUBLIC &quot;-//ibatis.apache.org//DTD Mapper 3.0//EN&quot;      </div><div class="line"> &quot;http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd&quot;&gt;</div><div class="line">&lt;mapper namespace=&quot;com.tarena.dao.EmpMapper&quot;&gt;</div><div class="line">    &lt;select id=&quot;findAll&quot; </div><div class="line">        resultType=&quot;com.tarena.entity.Emp&quot;&gt;</div><div class="line">        select * from t_emp</div><div class="line">    &lt;/select&gt;</div><div class="line">    &lt;select id=&quot;findById&quot;</div><div class="line">        parameterType=&quot;integer&quot;</div><div class="line">        resultType=&quot;com.tarena.entity.Emp&quot;&gt;</div><div class="line">        select * from t_emp where empno=#&#123;id&#125;</div><div class="line">    &lt;/select&gt;</div><div class="line">    &lt;insert id=&quot;save&quot; </div><div class="line">        parameterType=&quot;com.tarena.entity.Emp&quot;&gt;</div><div class="line">        insert into t_emp values(</div><div class="line">            emp_seq.nextval,</div><div class="line">            #&#123;ename&#125;,</div><div class="line">            #&#123;job&#125;,</div><div class="line">            #&#123;mgr&#125;,</div><div class="line">            #&#123;hiredate&#125;,</div><div class="line">            #&#123;sal&#125;,</div><div class="line">            #&#123;comm&#125;,</div><div class="line">            #&#123;deptno&#125;</div><div class="line">        )</div><div class="line">    &lt;/insert&gt;</div><div class="line">    &lt;update id=&quot;update&quot;</div><div class="line">        parameterType=&quot;com.tarena.entity.Emp&quot;&gt;</div><div class="line">        update t_emp set</div><div class="line">            ename=#&#123;ename&#125;,</div><div class="line">            job=#&#123;job&#125;,</div><div class="line">            mgr=#&#123;mgr&#125;,</div><div class="line">            hiredate=#&#123;hiredate&#125;,</div><div class="line">            sal=#&#123;sal&#125;,</div><div class="line">            comm=#&#123;comm&#125;,</div><div class="line">            deptno=#&#123;deptno&#125;</div><div class="line">        where empno=#&#123;empno&#125;</div><div class="line">    &lt;/update&gt;</div><div class="line">    &lt;delete id=&quot;delete&quot;</div><div class="line">        parameterType=&quot;integer&quot;&gt;</div><div class="line">        delete from t_emp where empno=#&#123;id&#125;</div><div class="line">    &lt;/delete&gt;</div><div class="line">&lt;/mapper&gt;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>1、namespace必须与对应的接口全类名一致。<br>2、id必须与对应接口的某个对应的方法名一致即必须要和UserMapper.java接口中的方法同名。 
+</strong></p>
+<h3 id="框架API简介"><a href="#框架API简介" class="headerlink" title="框架API简介"></a>框架API简介</h3><ul>
+<li>SqlSessionFactoryBuilder<br>该对象负责根据MyBatis配置文件SqlMapConfig.xml创建SqlSessionFactory</li>
+<li>SqlSessionFactory<br>Mybatis应用的核心。用于创建SQLSession</li>
+<li><p>SqlSession  包含了所有执行sql操作的方法，用于执行已映射的sql语句。</p>
+</li>
+<li><p>工具类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public class MyBatisUtil &#123;</div><div class="line">    private static SqlSessionFactory sf;</div><div class="line">    static &#123;</div><div class="line">        //加载配置文件</div><div class="line">        SqlSessionFactoryBuilder builder =</div><div class="line">            new SqlSessionFactoryBuilder();</div><div class="line">        sf = builder.build(TestCase.class.getClassLoader()</div><div class="line">                .getResourceAsStream(&quot;SqlMapConfig.xml&quot;));</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     *    创建连接</div><div class="line">     */</div><div class="line">    public static SqlSession getSession() &#123;</div><div class="line">        return sf.openSession();</div><div class="line">    &#125;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SqlSession session = MyBatisUtil.getSession();</div><div class="line">        System.out.println(session);</div><div class="line">        session.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="返回map类型树据。"><a href="#返回map类型树据。" class="headerlink" title="返回map类型树据。"></a>返回map类型树据。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;select id=&quot;findByDeptNo&quot;</div><div class="line">       parameterType=&quot;int&quot;</div><div class="line">       resultType=&quot;map&quot;&gt;</div><div class="line">       select * from t_emp where deptno=#&#123;deptno&#125;</div><div class="line">   &lt;/select&gt;</div><div class="line">public List&lt;Map&lt;String,Object&gt;&gt; findByDeptNo(int deptno) &#123;</div><div class="line">       SqlSession session = MyBatisUtil.getSession();</div><div class="line">       List&lt;Map&lt;String,Object&gt;&gt; list = </div><div class="line">           session.selectList(&quot;com.tarena.dao.EmpMapper.findByDeptNo&quot;, deptno);</div><div class="line">       session.close();</div><div class="line">       return list;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h3 id="mapper映射器。"><a href="#mapper映射器。" class="headerlink" title="mapper映射器。"></a>mapper映射器。</h3><p>Mapper映射器使用注意事项：<br><strong><br>Mapper接口名和对应的映射文件中的namespace必须一致<br>Mapper接口中的方法必须和映射文件中的对应的SQL元素ID一致
+</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public interface EmpMapper &#123;</div><div class="line">    List&lt;Emp&gt; findAll();</div><div class="line">    Emp findById(int id);</div><div class="line">    void save(Emp e);</div><div class="line">    void update(Emp e);</div><div class="line">    void delete(int id);</div><div class="line">    List&lt;Map&lt;String, Object&gt;&gt; findByDeptNo(int deptno);</div><div class="line">&#125;</div><div class="line">测试</div><div class="line">@Test</div><div class="line">public void test8() &#123;</div><div class="line">    SqlSession session = MyBatisUtil.getSession();</div><div class="line">    EmpMapper mapper = session.getMapper(EmpMapper.class);</div><div class="line">    List&lt;Emp&gt; list = mapper.findAll();</div><div class="line">    for(Emp e : list) &#123;</div><div class="line">        System.out.println(</div><div class="line">            e.getEmpno() + &quot; &quot; + e.getEname());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="使用ResultMap映射结果"><a href="#使用ResultMap映射结果" class="headerlink" title="使用ResultMap映射结果"></a>使用ResultMap映射结果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&lt;mapper namespace=&quot;com.tarena.dao.DeptMapper&quot;&gt;</div><div class="line">    &lt;select id=&quot;findAll&quot; </div><div class="line">        resultMap=&quot;deptMap&quot;&gt;</div><div class="line">        select * from t_dept</div><div class="line">    &lt;/select&gt;</div><div class="line">    &lt;resultMap type=&quot;com.tarena.entity.Dept&quot; id=&quot;deptMap&quot;&gt;</div><div class="line">        &lt;result property=&quot;id&quot; column=&quot;deptno&quot;/&gt;</div><div class="line">        &lt;result property=&quot;name&quot; column=&quot;dname&quot;/&gt;</div><div class="line">        &lt;result property=&quot;loc&quot; column=&quot;loc&quot;/&gt;</div><div class="line">    &lt;/resultMap&gt;</div><div class="line">&lt;/mapper&gt;</div><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  </div><div class="line">&lt;!DOCTYPE configuration PUBLIC &quot;-//ibatis.apache.org//DTD Config 3.0//EN&quot; </div><div class="line">    &quot;http://ibatis.apache.org/dtd/ibatis-3-config.dtd&quot;&gt;</div><div class="line">&lt;configuration&gt;</div><div class="line">    &lt;environments default=&quot;environment&quot;&gt;</div><div class="line">        &lt;environment id=&quot;environment&quot;&gt;</div><div class="line">            &lt;transactionManager type=&quot;JDBC&quot; /&gt;</div><div class="line">            &lt;dataSource type=&quot;POOLED&quot;&gt;</div><div class="line">                &lt;property name=&quot;driver&quot; value=&quot;oracle.jdbc.OracleDriver&quot; /&gt;</div><div class="line">                &lt;property name=&quot;url&quot;</div><div class="line">            value=&quot;jdbc:oracle:thin:@localhost:1521:xe&quot; /&gt;</div><div class="line">                &lt;property name=&quot;username&quot; value=&quot;lhh&quot; /&gt;</div><div class="line">                &lt;property name=&quot;password&quot; value=&quot;123456&quot; /&gt;</div><div class="line">            &lt;/dataSource&gt;</div><div class="line">        &lt;/environment&gt;</div><div class="line">    &lt;/environments&gt;</div><div class="line">    &lt;mappers&gt;</div><div class="line">        &lt;mapper resource=&quot;com/tarena/dao/EmpMapper.xml&quot; /&gt;</div><div class="line">        &lt;mapper resource=&quot;com/tarena/dao/DeptMapper.xml&quot; /&gt;</div><div class="line">    &lt;/mappers&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h3 id="Spring与Mybatis整合"><a href="#Spring与Mybatis整合" class="headerlink" title="Spring与Mybatis整合"></a>Spring与Mybatis整合</h3><p>mybatis-spring.jar 提供了几个API</p>
+<ul>
+<li>SqlSessionFactoryBean<ul>
+<li>dataSource属性数据源</li>
+<li>mapperLocations指定mapper文件存放的位置。<br>为整合应用提供SqlSession对象。</li>
+</ul>
+</li>
+<li>MapperFactoryBean<br>根据指定Mapper接口生成Bean实例。</li>
+<li>MapperScannerConfigurer<br>根据指定包批量扫描Mapper接口并生成实例。<br>在定义MapperScannerConfigurer，是需要指定一个basePackage即可。basePackage用于指定mapper接口所在的包，在这个包及其子包下面的mapper接口，都将被搜索到，并把他们注册成一个个MapperFactoryBean。<br>如果指定的包下，不完全是我们定义的Mapper接口，此时可用MapperScannerConfigurer的两个属性。一个是annotationClass,一个是markerInterface。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 数据源 --&gt;</div><div class="line">    &lt;bean id=&quot;ds&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&gt;</div><div class="line">        &lt;property name=&quot;url&quot; value=&quot;jdbc:oracle:thin:@localhost:1521:xe&quot;/&gt;</div><div class="line">        &lt;property name=&quot;driverClassName&quot; value=&quot;oracle.jdbc.OracleDriver&quot;/&gt;</div><div class="line">        &lt;property name=&quot;username&quot; value=&quot;lhh&quot;/&gt;</div><div class="line">        &lt;property name=&quot;password&quot; value=&quot;123456&quot;/&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    &lt;!-- session工厂 --&gt;</div><div class="line">    &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;</div><div class="line">        &lt;property name=&quot;dataSource&quot; ref=&quot;ds&quot; /&gt;</div><div class="line">        &lt;property name=&quot;mapperLocations&quot;</div><div class="line">            value=&quot;classpath:com/tarena/dao/*.xml&quot; /&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    &lt;!-- 扫描指定包下所有的接口 --&gt;    </div><div class="line">    &lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;</div><div class="line">        &lt;property name=&quot;basePackage&quot; value=&quot;com.tarena.dao&quot; /&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="整合的例子"><a href="#整合的例子" class="headerlink" title="整合的例子"></a>整合的例子</h3><p>web.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;web-app xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot; xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot; version=&quot;2.5&quot;&gt;</div><div class="line">  &lt;display-name&gt;Web004&lt;/display-name&gt;</div><div class="line">  &lt;welcome-file-list&gt;</div><div class="line">    &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;</div><div class="line">    &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;</div><div class="line">    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;</div><div class="line">    &lt;welcome-file&gt;default.html&lt;/welcome-file&gt;</div><div class="line">    &lt;welcome-file&gt;default.htm&lt;/welcome-file&gt;</div><div class="line">    &lt;welcome-file&gt;default.jsp&lt;/welcome-file&gt;</div><div class="line">  &lt;/welcome-file-list&gt;</div><div class="line">  &lt;servlet&gt;</div><div class="line">  	&lt;servlet-name&gt;mvc&lt;/servlet-name&gt;</div><div class="line">  	&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;</div><div class="line">  	&lt;init-param&gt;</div><div class="line">  		&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">  		&lt;param-value&gt;classpath:applicationContext.xml&lt;/param-value&gt;</div><div class="line">  	&lt;/init-param&gt;</div><div class="line">  &lt;/servlet&gt;</div><div class="line">  &lt;servlet-mapping&gt;</div><div class="line">  	&lt;servlet-name&gt;mvc&lt;/servlet-name&gt;</div><div class="line">  	&lt;url-pattern&gt;*.do&lt;/url-pattern&gt;</div><div class="line">  &lt;/servlet-mapping&gt;</div><div class="line">  &lt;filter&gt;</div><div class="line">  	&lt;filter-name&gt;char&lt;/filter-name&gt;</div><div class="line">  	&lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;</div><div class="line">  	&lt;init-param&gt;</div><div class="line">  		&lt;param-name&gt;encoding&lt;/param-name&gt;</div><div class="line">  		&lt;param-value&gt;UTF-8&lt;/param-value&gt;</div><div class="line">  	&lt;/init-param&gt;</div><div class="line">  &lt;/filter&gt;</div><div class="line">  &lt;filter-mapping&gt;</div><div class="line">  	&lt;filter-name&gt;char&lt;/filter-name&gt;</div><div class="line">  	&lt;url-pattern&gt;*.do&lt;/url-pattern&gt;</div><div class="line">  &lt;/filter-mapping&gt;</div><div class="line">&lt;/web-app&gt;</div></pre></td></tr></table></figure></p>
+<p>applicationContext.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; </div><div class="line">    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">    xmlns:context=&quot;http://www.springframework.org/schema/context&quot; </div><div class="line">    xmlns:jdbc=&quot;http://www.springframework.org/schema/jdbc&quot;  </div><div class="line">    xmlns:jee=&quot;http://www.springframework.org/schema/jee&quot; </div><div class="line">    xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;</div><div class="line">    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; </div><div class="line">    xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;</div><div class="line">    xmlns:jpa=&quot;http://www.springframework.org/schema/data/jpa&quot;</div><div class="line">    xsi:schemaLocation=&quot;</div><div class="line">        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd</div><div class="line">        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd&quot;&gt;</div><div class="line">   </div><div class="line">    &lt;!-- 配置数据源 --&gt;</div><div class="line">   &lt;bean id=&quot;ds&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;</div><div class="line">		&lt;property name=&quot;driverClass&quot; value=&quot;com.mysql.jdbc.Driver&quot;&gt;&lt;/property&gt;</div><div class="line">		  &lt;property name=&quot;jdbcUrl&quot; </div><div class="line">        value=&quot;jdbc:mysql://localhost:3306/test?useUnicode=true&amp;amp;characterEncoding=UTF-8&quot; /&gt;</div><div class="line">    &lt;property name=&quot;user&quot; value=&quot;root&quot;/&gt;</div><div class="line">    &lt;property name=&quot;password&quot; value=&quot;123456&quot; /&gt;</div><div class="line">    &lt;property name=&quot;maxPoolSize&quot; value=&quot;10&quot; /&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">    &lt;!-- 配置SqlSessionFactory --&gt;</div><div class="line">    &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;</div><div class="line">        &lt;property name=&quot;dataSource&quot; ref=&quot;ds&quot; /&gt;</div><div class="line">        &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:com/jty/entity/*.xml&quot; /&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    &lt;!-- 配置MyBatis注解 --&gt;</div><div class="line">    &lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;</div><div class="line">        &lt;property name=&quot;basePackage&quot; value=&quot;com.jty.dao&quot; /&gt;</div><div class="line">        &lt;property name=&quot;annotationClass&quot; value=&quot;com.jty.dao.MyBatisRepository&quot; /&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">    &lt;context:component-scan base-package=&quot;com.jty&quot;&gt;&lt;/context:component-scan&gt;</div><div class="line">    &lt;mvc:annotation-driven&gt;&lt;/mvc:annotation-driven&gt;</div><div class="line">    &lt;mvc:default-servlet-handler/&gt;</div><div class="line">    &lt;context:annotation-config&gt;&lt;/context:annotation-config&gt;</div><div class="line">    &lt;bean id= &quot;vr&quot; class =&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;</div><div class="line">    	&lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot;&gt;&lt;/property&gt;</div><div class="line">    	&lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;&gt;&lt;/property&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure></p>
+<p>controller<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">package com.jty.controller;</div><div class="line">import java.util.HashMap;</div><div class="line">import java.util.List;</div><div class="line">import javax.annotation.Resource;</div><div class="line">import org.springframework.stereotype.Controller;</div><div class="line">import org.springframework.web.bind.annotation.RequestMapping;</div><div class="line">import org.springframework.web.servlet.ModelAndView;</div><div class="line">import com.jty.dao.EmpDao;</div><div class="line">import com.jty.entity.Emp;</div><div class="line">@Controller</div><div class="line">public class EmpController &#123;</div><div class="line">	@Resource</div><div class="line">	private EmpDao empDao;</div><div class="line">	</div><div class="line">	@RequestMapping(&quot;/listEmp.do&quot;)</div><div class="line">	public ModelAndView listEmp()&#123;</div><div class="line">		List&lt;Emp&gt; l = empDao.findAll();</div><div class="line">		HashMap&lt;String,Object&gt; map = new HashMap&lt;String,Object&gt;();</div><div class="line">		map.put(&quot;listEmp&quot;, l);</div><div class="line">		ModelAndView model = new ModelAndView(&quot;list&quot;,map);</div><div class="line">		return model;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Dao 只是1个接口,加一个注解，只扫描有注解的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">package com.jty.dao;</div><div class="line">import java.util.List;</div><div class="line">import com.jty.entity.Emp;</div><div class="line">@MyBatisRepository</div><div class="line">public interface EmpDao &#123;</div><div class="line">	    List&lt;Emp&gt; findAll();</div><div class="line">&#125;</div><div class="line">package com.jty.dao;</div><div class="line">public @interface MyBatisRepository &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>entity<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">package com.jty.entity;</div><div class="line">import java.util.Date;</div><div class="line">import org.springframework.stereotype.Repository;</div><div class="line">public class Emp &#123;</div><div class="line">	    private Integer empno;</div><div class="line">	    private String ename;</div><div class="line">	    private String job;</div><div class="line">	    private Integer mgr;</div><div class="line">	    private Date hiredate;</div><div class="line">	    private Integer sal;</div><div class="line">	    private Integer comm;</div><div class="line">	    private Integer deptno;</div><div class="line">		public Integer getEmpno() &#123;</div><div class="line">			return empno;</div><div class="line">		&#125;</div><div class="line">		public void setEmpno(Integer empno) &#123;</div><div class="line">			this.empno = empno;</div><div class="line">		&#125;</div><div class="line">		public String getEname() &#123;</div><div class="line">			return ename;</div><div class="line">		&#125;</div><div class="line">		public void setEname(String ename) &#123;</div><div class="line">			this.ename = ename;</div><div class="line">		&#125;</div><div class="line">		public String getJob() &#123;</div><div class="line">			return job;</div><div class="line">		&#125;</div><div class="line">		public void setJob(String job) &#123;</div><div class="line">			this.job = job;</div><div class="line">		&#125;</div><div class="line">		public Integer getMgr() &#123;</div><div class="line">			return mgr;</div><div class="line">		&#125;</div><div class="line">		public void setMgr(Integer mgr) &#123;</div><div class="line">			this.mgr = mgr;</div><div class="line">		&#125;</div><div class="line">		public Date getHiredate() &#123;</div><div class="line">			return hiredate;</div><div class="line">		&#125;</div><div class="line">		public void setHiredate(Date hiredate) &#123;</div><div class="line">			this.hiredate = hiredate;</div><div class="line">		&#125;</div><div class="line">		public Integer getSal() &#123;</div><div class="line">			return sal;</div><div class="line">		&#125;</div><div class="line">		public void setSal(Integer sal) &#123;</div><div class="line">			this.sal = sal;</div><div class="line">		&#125;</div><div class="line">		public Integer getComm() &#123;</div><div class="line">			return comm;</div><div class="line">		&#125;</div><div class="line">		public void setComm(Integer comm) &#123;</div><div class="line">			this.comm = comm;</div><div class="line">		&#125;</div><div class="line">		public Integer getDeptno() &#123;</div><div class="line">			return deptno;</div><div class="line">		&#125;</div><div class="line">		public void setDeptno(Integer deptno) &#123;</div><div class="line">			this.deptno = deptno;</div><div class="line">		&#125;</div><div class="line">		public Emp() &#123;</div><div class="line">			// TODO Auto-generated constructor stub</div><div class="line">		&#125;</div><div class="line">		@Override</div><div class="line">		public String toString() &#123;</div><div class="line">			return &quot;Emp [empno=&quot; + empno + &quot;, ename=&quot; + ename + &quot;, job=&quot; + job + &quot;, mgr=&quot; + mgr + &quot;, hiredate=&quot;</div><div class="line">					+ hiredate + &quot;, sal=&quot; + sal + &quot;, comm=&quot; + comm + &quot;, deptno=&quot; + deptno + &quot;]&quot;;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  </div><div class="line">&lt;!DOCTYPE mapper PUBLIC &quot;-//ibatis.apache.org//DTD Mapper 3.0//EN&quot;      </div><div class="line"> &quot;http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd&quot;&gt;</div><div class="line">&lt;mapper namespace=&quot;com.jty.dao.EmpDao&quot;&gt;</div><div class="line">    &lt;!-- 查询全部的员工 --&gt;</div><div class="line">    &lt;select id=&quot;findAll&quot; </div><div class="line">        resultType=&quot;com.jty.entity.Emp&quot;&gt;</div><div class="line">        select * from t_emp</div><div class="line">    &lt;/select&gt;</div><div class="line">&lt;/mapper&gt;</div></pre></td></tr></table></figure></p>
+<p>单元测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">package com.test;</div><div class="line">import java.util.List;</div><div class="line">import org.junit.Test;</div><div class="line">import org.springframework.context.ApplicationContext;</div><div class="line">import org.springframework.context.support.ClassPathXmlApplicationContext;</div><div class="line">import com.jty.dao.EmpDao;</div><div class="line">import com.jty.entity.Emp;</div><div class="line">public class Test1 &#123;</div><div class="line">	@Test</div><div class="line">    public void testFindAll() &#123;</div><div class="line">        ApplicationContext ctx = </div><div class="line">            new ClassPathXmlApplicationContext(</div><div class="line">                    &quot;applicationContext.xml&quot;);</div><div class="line">        EmpDao dao = ctx.getBean(EmpDao.class);</div><div class="line">        List&lt;Emp&gt; list = dao.findAll();</div><div class="line">//        System.out.println(dao.toString());</div><div class="line">//        System.out.println(dao.getClass());</div><div class="line">        for(Emp e : list) &#123;</div><div class="line">//            System.out.println(</div><div class="line">//                e.getEmpno() + &quot; &quot; +</div><div class="line">//                e.getEname() + &quot; &quot; +</div><div class="line">//                e.getJob()</div><div class="line">//            );</div><div class="line">            System.out.println(e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/框架/" rel="tag"># 框架</a>
+          
+            <a href="/tags/Mybatis/" rel="tag"># Mybatis</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/19/文件上传/" rel="next" title="Java IO">
+                <i class="fa fa-chevron-left"></i> Java IO
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/31/javascript运动框架/" rel="prev" title="javascript 运动框架">
+                javascript 运动框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/07/20/Mybatis/"
+           data-title="Mybatis" data-url="http://guilongyue.github.io/2017/07/20/Mybatis/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mybatis-复习"><span class="nav-number">1.</span> <span class="nav-text">Mybatis 复习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mybatis-体系架构"><span class="nav-number">1.0.1.</span> <span class="nav-text">Mybatis 体系架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mybatis配置文件"><span class="nav-number">1.0.2.</span> <span class="nav-text">Mybatis配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#框架API简介"><span class="nav-number">1.0.3.</span> <span class="nav-text">框架API简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回map类型树据。"><span class="nav-number">1.0.4.</span> <span class="nav-text">返回map类型树据。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mapper映射器。"><span class="nav-number">1.0.5.</span> <span class="nav-text">mapper映射器。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用ResultMap映射结果"><span class="nav-number">1.0.6.</span> <span class="nav-text">使用ResultMap映射结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring与Mybatis整合"><span class="nav-number">1.0.7.</span> <span class="nav-text">Spring与Mybatis整合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整合的例子"><span class="nav-number">1.0.8.</span> <span class="nav-text">整合的例子</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,762 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前后端分离,session,token,工作," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Session 与Token 前后端分离最近的项目用到了前后端分离，需要了解下相关内容">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Session 与Token 前后端分离">
+<meta property="og:url" content="http://guilongyue.github.io/2019/02/05/Session 与Token 前后端分离/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Session 与Token 前后端分离最近的项目用到了前后端分离，需要了解下相关内容">
+<meta property="og:updated_time" content="2019-02-22T06:04:03.676Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Session 与Token 前后端分离">
+<meta name="twitter:description" content="Session 与Token 前后端分离最近的项目用到了前后端分离，需要了解下相关内容">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2019/02/05/Session 与Token 前后端分离/"/>
+
+
+
+
+
+  <title> Session 与Token 前后端分离 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2019/02/05/Session 与Token 前后端分离/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Session 与Token 前后端分离
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-05T21:11:08+08:00">
+                2019-02-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作/" itemprop="url" rel="index">
+                    <span itemprop="name">工作</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/05/Session 与Token 前后端分离/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/02/05/Session 与Token 前后端分离/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Session-与Token-前后端分离"><a href="#Session-与Token-前后端分离" class="headerlink" title="Session 与Token 前后端分离"></a>Session 与Token 前后端分离</h1><p>最近的项目用到了前后端分离，需要了解下相关内容<br><a id="more"></a></p>
+<h2 id="涉及概念"><a href="#涉及概念" class="headerlink" title="涉及概念"></a>涉及概念</h2><h3 id="HTTP无状态性"><a href="#HTTP无状态性" class="headerlink" title="HTTP无状态性"></a>HTTP无状态性</h3><blockquote>
+<p>HTTP是无状态的，一次请求结束，连接断开，下次服务器再收到请求，它就不知道这个请求是哪个用户发过来的。当然它知道是哪个客户端地址发过来的，但是对于我们的应用来说，我们是靠用户来管理，而不是靠客户端。所以对我们的应用而言，它是需要有状态管理的，以便服务端能够准确的知道http请求是哪个用户发起的，从而判断该用户是否有权限继续这个请求。这个过程就是常说的会话管理。</p>
+</blockquote>
+<h3 id="登录流程"><a href="#登录流程" class="headerlink" title="登录流程"></a>登录流程</h3><h2 id="目前大多数Web应用采用前后端分离方式进行开发。所以前端网站或应用都属于SPA（Single-Page-Application）。如果前端，后台API部署在同域下，不存在跨域的情况，登录方式相对简单。"><a href="#目前大多数Web应用采用前后端分离方式进行开发。所以前端网站或应用都属于SPA（Single-Page-Application）。如果前端，后台API部署在同域下，不存在跨域的情况，登录方式相对简单。" class="headerlink" title="目前大多数Web应用采用前后端分离方式进行开发。所以前端网站或应用都属于SPA（Single Page Application）。如果前端，后台API部署在同域下，不存在跨域的情况，登录方式相对简单。"></a>目前大多数Web应用采用前后端分离方式进行开发。所以前端网站或应用都属于SPA（Single Page Application）。如果前端，后台API部署在同域下，不存在跨域的情况，登录方式相对简单。</h2><h4 id="基于Session登录"><a href="#基于Session登录" class="headerlink" title="基于Session登录"></a>基于Session登录</h4><p>服务器端使用Session技术，浏览器端使用Cookie技术。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1.服务端session是用户第一次访问应用时，服务器就会创建的对象，代表用户的一次会话过程，可以用来存放数据。服务器为每一个session都分配一个唯一的sessionid，以保证每个用户都有一个不同的session对象。</div><div class="line">2.服务器在创建完session后，会把sessionid通过cookie返回给用户所在的浏览器，这样当用户第二次及以后向服务器发送请求的时候，就会通过cookie把sessionid传回给服务器，以便服务器能够根据sessionid找到与该用户对应的session对象。</div><div class="line">3.session通常有失效时间的设定，比如2个小时。当失效时间到，服务器会销毁之前的session，并创建新的session返回给用户。但是只要用户在失效时间内，有发送新的请求给服务器，通常服务器都会把他对应的session的失效时间根据当前的请求时间再延长2个小时。</div><div class="line">4.session在一开始并不具备会话管理的作用。它只有在用户登录认证成功之后，并且往sesssion对象里面放入了用户登录成功的凭证，才能用来管理会话。管理会话的逻辑也很简单，只要拿到用户的session对象，看它里面有没有登录成功的凭证，就能判断这个用户是否已经登录。当用户主动退出的时候，会把它的session对象里的登录凭证清掉。所以在用户登录前或退出后或者session对象失效时，肯定都是拿不到需要的登录凭证的。</div></pre></td></tr></table></figure></p>
+<h4 id="基于token登录"><a href="#基于token登录" class="headerlink" title="基于token登录"></a>基于token登录</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1.用户在浏览器中输入用户和密码，后台服务器通过加密或者其他逻辑，生成一个Token。</div><div class="line">2.前端获取到Token，存储到cookie或者localStorage中，在接下来的请求中，将token通过url参数或者HTTP Header头部传入到服务器</div><div class="line">3.服务器获取token值，通过查找数据库判断当前token是否有效</div></pre></td></tr></table></figure>
+<h4 id="Cookie的传输"><a href="#Cookie的传输" class="headerlink" title="Cookie的传输"></a>Cookie的传输</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">简单地说，cookie 就是浏览器储存在用户电脑上的一小段文本文件。cookie 是纯文本格式，不包含任何可执行的代码。一个 Web 页面或服务器告知浏览器按照一定规范来储存这些信息，并在随后的请求中将这些信息发送至服务器，Web 服务器就可以使用这些信息来识别不同的用户。大多数需要登录的网站在用户验证成功之后都会设置一个 cookie，只要这个 cookie 存在并可以，用户就可以自由浏览这个网站的任意页面。再次说明，cookie 只包含数据，就其本身而言并不有害。</div><div class="line">同域情况下，Cookie会在随后的请求中携带</div></pre></td></tr></table></figure>
+<h4 id="跨域登录"><a href="#跨域登录" class="headerlink" title="跨域登录"></a>跨域登录</h4><p>跨越定义 :由于浏览器同源策略，凡是发送请求的url的协议(http和https)、域名（www.example.com,about.example.com）、端口(8010和8020)三者之间任意一个与当前页面地址不同则视为跨域。 </p>
+<h5 id="解决同源策略"><a href="#解决同源策略" class="headerlink" title="解决同源策略"></a>解决同源策略</h5><p>基于Session和Token登录都要解决。</p>
+<p>如果使用同域的方法，那么浏览器会抛出如下错误。demo示例，前端运行在<a href="http://localhost:8010/login.html，后台运行在http://localhost:8020/api/login.php" target="_blank" rel="external">http://localhost:8010/login.html，后台运行在http://localhost:8020/api/login.php</a></p>
+<p>需要在服务器端设置Header，以PHP为例：</p>
+<p>header(‘Access-Control-Allow-Origin: <a href="http://localhost:8010" target="_blank" rel="external">http://localhost:8010</a>‘);<br>设置完成之后，可以发送请求了，登录成功之后跳转到home.html还是显示未登录，会跳转到login.html页面</p>
+<h5 id="解决请求带上Cookie信息"><a href="#解决请求带上Cookie信息" class="headerlink" title="解决请求带上Cookie信息"></a>解决请求带上Cookie信息</h5><p>基于Session登录才需要，因为相关信息是通过Cookie传入，如果是通过url传入，也不需要解决这个。基于Token，后续请求携带token都是通过header里面的字段，所以也不需要解决这个。</p>
+<p>跨越情况下，浏览器此时不会默认在后续请求里面携带上Cookie信息，这个时候前后端都需要设置。以jQuery和PHP为列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">前端jQuery代码</div><div class="line">Ajax请求中药设置xhrFields</div><div class="line"></div><div class="line">xhrFields: &#123;        withCredentials: true</div><div class="line">    &#125;</div><div class="line"></div><div class="line">完整代码如下：</div><div class="line">$.ajax(&#123;</div><div class="line">    url: &quot;http://localhost:8020/api/login.php&quot;,</div><div class="line">    type: &quot;POST&quot;,</div><div class="line">    data: &#123;</div><div class="line">        username: $(&quot;#username&quot;).val(),</div><div class="line">        password: $(&quot;#password&quot;).val()</div><div class="line">    &#125;,</div><div class="line">    dataType: &quot;json&quot;,</div><div class="line">    xhrFields: &#123;</div><div class="line">        withCredentials: true</div><div class="line">    &#125;</div><div class="line">&#125;).done(function (response) &#123;    debugger;</div><div class="line">    $(&quot;#log&quot;).html(response.message);    window.location.href = &quot;home.html&quot;;</div><div class="line">&#125;).fail(function (jqXHR, textStatus) &#123;    console.log(&quot;Request failed: &quot; + textStatus);</div><div class="line">&#125;);</div><div class="line">后端php代码</div><div class="line"></div><div class="line">/*需要设置这一行，接收传入Credentials字段*/header(&apos;Access-Control-Allow-Credentials: true&apos;);  </div><div class="line">header(&apos;Access-Control-Allow-Origin: http://localhost:8010&apos;);</div></pre></td></tr></table></figure></p>
+<p>参考  <a href="http://www.cnblogs.com/boboooo/p/9779355.html" title="前后端分离" target="_blank" rel="external">前后端分离</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前后端分离/" rel="tag"># 前后端分离</a>
+          
+            <a href="/tags/session/" rel="tag"># session</a>
+          
+            <a href="/tags/token/" rel="tag"># token</a>
+          
+            <a href="/tags/工作/" rel="tag"># 工作</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/04/单用户登录session /" rel="next" title="Session单用户登录">
+                <i class="fa fa-chevron-left"></i> Session单用户登录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/02/05/Session 与Token 前后端分离/"
+           data-title="Session 与Token 前后端分离" data-url="http://guilongyue.github.io/2019/02/05/Session 与Token 前后端分离/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Session-与Token-前后端分离"><span class="nav-number">1.</span> <span class="nav-text">Session 与Token 前后端分离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#涉及概念"><span class="nav-number">1.1.</span> <span class="nav-text">涉及概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP无状态性"><span class="nav-number">1.1.1.</span> <span class="nav-text">HTTP无状态性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#登录流程"><span class="nav-number">1.1.2.</span> <span class="nav-text">登录流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目前大多数Web应用采用前后端分离方式进行开发。所以前端网站或应用都属于SPA（Single-Page-Application）。如果前端，后台API部署在同域下，不存在跨域的情况，登录方式相对简单。"><span class="nav-number">1.2.</span> <span class="nav-text">目前大多数Web应用采用前后端分离方式进行开发。所以前端网站或应用都属于SPA（Single Page Application）。如果前端，后台API部署在同域下，不存在跨域的情况，登录方式相对简单。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于Session登录"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">基于Session登录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于token登录"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">基于token登录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie的传输"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">Cookie的传输</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域登录"><span class="nav-number">1.2.0.4.</span> <span class="nav-text">跨域登录</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#解决同源策略"><span class="nav-number">1.2.0.4.1.</span> <span class="nav-text">解决同源策略</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决请求带上Cookie信息"><span class="nav-number">1.2.0.4.2.</span> <span class="nav-text">解决请求带上Cookie信息</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

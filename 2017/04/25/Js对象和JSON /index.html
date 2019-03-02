@@ -1,0 +1,777 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Js对象,JSON," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Js对象和JSONJSON(JavaScript Object Notation)，指JavaScript的对象表示法，它本身是个字符串，是一种数据交换格式，并非对象。通常所提的JSON对象实际是JSON字符串解析成对象的结果，或是浏览器window对象下的JSON对象。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Js对象和JSON">
+<meta property="og:url" content="http://guilongyue.github.io/2017/04/25/Js对象和JSON /index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Js对象和JSONJSON(JavaScript Object Notation)，指JavaScript的对象表示法，它本身是个字符串，是一种数据交换格式，并非对象。通常所提的JSON对象实际是JSON字符串解析成对象的结果，或是浏览器window对象下的JSON对象。">
+<meta property="og:updated_time" content="2017-04-26T07:53:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Js对象和JSON">
+<meta name="twitter:description" content="Js对象和JSONJSON(JavaScript Object Notation)，指JavaScript的对象表示法，它本身是个字符串，是一种数据交换格式，并非对象。通常所提的JSON对象实际是JSON字符串解析成对象的结果，或是浏览器window对象下的JSON对象。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/04/25/Js对象和JSON /"/>
+
+
+
+
+
+  <title> Js对象和JSON | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/04/25/Js对象和JSON /">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Js对象和JSON
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-25T10:45:56+08:00">
+                2017-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/25/Js对象和JSON /#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/25/Js对象和JSON /" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Js对象和JSON"><a href="#Js对象和JSON" class="headerlink" title="Js对象和JSON"></a>Js对象和JSON</h1><p>JSON(JavaScript Object Notation)，指JavaScript的对象表示法，它本身是个字符串，是一种数据交换格式，并非对象。通常所提的JSON对象实际是JSON字符串解析成对象的结果，或是浏览器window对象下的JSON对象。<a id="more"></a></p>
+<h3 id="JSON和JavaScript对象"><a href="#JSON和JavaScript对象" class="headerlink" title="JSON和JavaScript对象"></a>JSON和JavaScript对象</h3><p>两者非常的相似，所不同的是就是JavaScript对象中属性名，也就是对象的key值是可以没有引号的，其值为字符串时，使用’’和””包裹均可。 因此我们很多人将第一段代码块里所写的JSON称为JSON对象，实际上，它并不是一个对象，只是一个单纯的字符串而已，但是它符合JSON的语法规则，可以很方便地转化为JavaScript对象，或者方便地用于数据交换。</p>
+<h3 id="JSON语法"><a href="#JSON语法" class="headerlink" title="JSON语法"></a>JSON语法</h3><p>JSON 语法是 JavaScript 对象表示语法的子集，其基本原则如下:<br>数据在键值对中<br>数据由逗号分隔<br>花括号保存对象<br>方括号保存数组<br>JSON的值</p>
+<ol>
+<li>数字（整数或浮点数）</li>
+<li>字符串（在双引号中）</li>
+<li>逻辑值（true 或 false）</li>
+<li>数组（在方括号中[]）</li>
+<li>对象（在花括号中{}）</li>
+<li>null</li>
+</ol>
+<blockquote>
+<p>JSON作为一种数据交换格式，为了保证其能被正确方便的解析，其格式有严格的要求，必须遵循以下规则:<br>复合类型的值只能是数组或对象，不能是函数、正则表达式对象、日期对象。<br>简单类型的值只有四种：字符串、数值（必须以十进制表示）、布尔值和null（不能使用NaN, Infinity, -Infinity和undefined）。<br>字符串必须使用双引号表示，不能使用单引号。<br>对象的键名必须放在双引号里面。<br>数组或对象最后一个成员的后面，不能有逗号。<br>数值前不能加0。</p>
+</blockquote>
+<h3 id="以下是合法的JSON格式示例"><a href="#以下是合法的JSON格式示例" class="headerlink" title="以下是合法的JSON格式示例:"></a>以下是合法的JSON格式示例:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">&#123;</div><div class="line">    &quot;one&quot;: 1,</div><div class="line">    &quot;two&quot;: 2,</div><div class="line">    &quot;three&quot;: 3</div><div class="line">&#125;</div><div class="line">&#123;</div><div class="line">    &quot;names&quot;: [</div><div class="line">        &quot;张三&quot;,</div><div class="line">        &quot;李四&quot;</div><div class="line">    ]</div><div class="line">&#125;</div><div class="line">[</div><div class="line">    &#123; &quot;name&quot;: &quot;张三&quot; &#125;,</div><div class="line">    &#123; &quot;name&quot;: &quot;李四&quot; &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>以上代码中为了指出错误所在，使用了JavaScript的注释法，实际JSON中是不能有注释的。<br>不合法的JSON会在解析成JavaScript对象时，出现错误。</p>
+<h3 id="JSON和JavaScript对象的转化"><a href="#JSON和JavaScript对象的转化" class="headerlink" title="JSON和JavaScript对象的转化"></a>JSON和JavaScript对象的转化</h3><p>window.JSON<br>JSON作为一种数据交换格式，被写入了ECMAScript 5，在IE8及之后的浏览器都提供了一个JSON对象，用于对JSON进行解析和序列化。</p>
+<h4 id="JSON-parse"><a href="#JSON-parse" class="headerlink" title="JSON.parse()"></a>JSON.parse()</h4><p>此方法接收一个JSON字符串，返回解析后的JavaScript对象，通常为Object或Array。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// JSON数据</div><div class="line">var humansData = &apos;[&#123;&quot;name&quot;:&quot;zs&quot;,&quot;age&quot;:28&#125;,&#123;&quot;name&quot;:&quot;ls&quot;,&quot;age&quot;:26&#125;]&apos;;</div><div class="line">// 解析为JavaScript对象</div><div class="line">var humans = JSON.parse(humansData);</div><div class="line">// 之后就可以访问其元素或属性了</div><div class="line">humans[1].name; // ls</div><div class="line">humans[1].age; // 26</div></pre></td></tr></table></figure></p>
+<p>如果传入不合法的JSON，则会在JSON.parse时报错。<br>为什么我们在ajax请求中，即使请求的数据为JSON，我们不用解析就能直接使用呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">// test.text内容</div><div class="line">/*</div><div class="line">[&#123;</div><div class="line">    &quot;name&quot;:&quot;zs&quot;,</div><div class="line">    &quot;age&quot;:28</div><div class="line">&#125;,&#123;</div><div class="line">    &quot;name&quot;:&quot;ls&quot;,</div><div class="line">    &quot;age&quot;:26</div><div class="line">&#125;]</div><div class="line">*/</div><div class="line">$.ajax(&#123;</div><div class="line">    url: &apos;./test/test.text&apos;,</div><div class="line">    dataType: &apos;JSON&apos;</div><div class="line">&#125;).done(function(data)&#123;</div><div class="line">    console.dir(data); // Array[2]</div><div class="line">    console.log(data[0].name); // zs</div><div class="line">    // 这里没有转化为js对象就能访问其属性？！    </div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>这里实际是因为指定了dataType为JSON，从而进行了自动转化，所以能直接在成功回调中使用其属性。如果去掉dataType的指定，就不能直接访问其属性了，因为未转化时，其本身是一个字符串。第一行输出为test.text的内容，第二行输出undefined。</p>
+<h4 id="JSON-stringify"><a href="#JSON-stringify" class="headerlink" title="JSON.stringify()"></a>JSON.stringify()</h4><p>此方法可接收一个JavaScript值将转化为JSON字符串，此字符串可被JSON.parse还原。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var humans = [&#123;</div><div class="line">    &quot;name&quot;: &quot;zs&quot;,</div><div class="line">    &quot;age&quot;: 28,</div><div class="line">    &quot;birth&quot;: new Date()</div><div class="line">&#125;, &#123;</div><div class="line">    &quot;name&quot;: &quot;ls&quot;,</div><div class="line">    &quot;age&quot;: 26,</div><div class="line">    &quot;birth&quot;: new Date()</div><div class="line">&#125;];</div><div class="line">// 转化为JSON字符串</div><div class="line">JSON.stringify(humans);</div><div class="line">// &quot;[&#123;&quot;name&quot;:&quot;zs&quot;,&quot;age&quot;:28,&quot;birth&quot;:&quot;2016-10-25T07:24:11.701Z&quot;&#125;,&#123;&quot;name&quot;:&quot;ls&quot;,&quot;age&quot;:26,&quot;birth&quot;:&quot;2016-10-25T07:24:11.701Z&quot;&#125;]&quot;</div></pre></td></tr></table></figure></p>
+<p>我们还发现，JSON中是不支持Date对象的，而上述转化为字符串的结果中正确包含了birth的值，其为一个日期格式的字符串。这是因为在Date对象上有一个名为toJSON的方法，JSON.stringify在序列化时，实际是调用了这个方法来输出结果的。</p>
+<blockquote>
+<p>如果一个被序列化的对象拥有 toJSON 方法，那么该 toJSON 方法就会覆盖该对象默认的序列化行为：不是那个对象被序列化，而是调用 toJSON 方法后的返回值会被序列化，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var obj = &#123;</div><div class="line">    foo: &apos;foo&apos;,</div><div class="line">    toJSON: function() &#123;</div><div class="line">        return &apos;bar&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">JSON.stringify(obj); // &apos;&quot;bar&quot;&apos; </div><div class="line">JSON.stringify(&#123;x: obj&#125;); // &apos;&#123;&quot;x&quot;:&quot;bar&quot;&#125;&apos;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>我们可能经常看到的是JSON.stringify( obj , null , 4)，这样是什么意思呢？<br>对于上例，替换最后一句，结果如下所示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">JSON.stringify(humans, null, 4);</div><div class="line">// &quot;[</div><div class="line">//     &#123;</div><div class="line">//         &quot;name&quot;: &quot;zs&quot;,</div><div class="line">//         &quot;age&quot;: 28,</div><div class="line">//         &quot;birth&quot;: &quot;2016-10-25T07:24:11.701Z&quot;</div><div class="line">//     &#125;,</div><div class="line">//     &#123;</div><div class="line">//         &quot;name&quot;: &quot;ls&quot;,</div><div class="line">//         &quot;age&quot;: 26,</div><div class="line">//         &quot;birth&quot;: &quot;2016-10-25T07:24:11.701Z&quot;</div><div class="line">//     &#125;</div><div class="line">// ]&quot;</div></pre></td></tr></table></figure></p>
+<p>其实没什么变化，不过是加上了空格缩进，使得可读性更高了。<br>其余两个参数的说明如下:<br>第二个参数可指定序列化时的操作。<br>如果该参数是一个函数，则在序列化过程中，被序列化的值的每个属性都会经过该函数的转换和处理；<br>如果该参数是一个数组，则只有包含在这个数组中的属性名才会被序列化到最终的 JSON 字符串中；<br>如果该参数为null或者未提供，则对象所有的属性都会被序列化；<br>第三个参数用于指定缩进用的空白字符串，用于美化输出（pretty-print）；<br>如果参数是个数字，它代表有多少的空格；上限为10。该值若小于1，则意味着没有空格；<br>如果该参数为字符串(字符串的前十个字母)，该字符串将被作为空格；<br>如果该参数没有提供（或者为null）将没有空格。</p>
+<h3 id="替代方法"><a href="#替代方法" class="headerlink" title="替代方法"></a>替代方法</h3><blockquote>
+<p>window.JSON对象下虽然提供了完整的JSON字符串和JavaScript对象的转换方法。但是在IE8(兼容模式)以及更低版本的IE下没有提供这个对象，因此我们需要一些替代方案。<br>jQuery中提供了parseJSON这样一个方法来替代JSON.parse,它接收一个标准格式的JSON字符串，返回一个解析后的JavaScript对象。<br>使用<a href="http://www.json.org/提供了一个json.js,这样ie8(兼容模式),ie7和ie6就可以支持JSON对象以及其stringify()和parse()方法；" target="_blank" rel="external">http://www.json.org/提供了一个json.js,这样ie8(兼容模式),ie7和ie6就可以支持JSON对象以及其stringify()和parse()方法；</a> 可以在<a href="https://github.com/douglascrockford/JSON-js上获取到这个js，一般现在用json2.js。" target="_blank" rel="external">https://github.com/douglascrockford/JSON-js上获取到这个js，一般现在用json2.js。</a><br>还可以使用 eval(‘(‘ + jsonstr + ‘)’) ; 来将json字符串转换成json对象,注意需要在json字符外包裹一对小括号。但最好不要使用这种方式，因为这种方式不安全，eval会将JSON字符串作为JavaScript语句来执行，JSON中的风险代码将被执行。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Js对象/" rel="tag"># Js对象</a>
+          
+            <a href="/tags/JSON/" rel="tag"># JSON</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/20/java callback回调机制/" rel="next" title="Java callback回调机制">
+                <i class="fa fa-chevron-left"></i> Java callback回调机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/26/java 资源文件获取/" rel="prev" title="java 资源文件获取">
+                java 资源文件获取 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/25/Js对象和JSON /"
+           data-title="Js对象和JSON" data-url="http://guilongyue.github.io/2017/04/25/Js对象和JSON /">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Js对象和JSON"><span class="nav-number">1.</span> <span class="nav-text">Js对象和JSON</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON和JavaScript对象"><span class="nav-number">1.0.1.</span> <span class="nav-text">JSON和JavaScript对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON语法"><span class="nav-number">1.0.2.</span> <span class="nav-text">JSON语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以下是合法的JSON格式示例"><span class="nav-number">1.0.3.</span> <span class="nav-text">以下是合法的JSON格式示例:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON和JavaScript对象的转化"><span class="nav-number">1.0.4.</span> <span class="nav-text">JSON和JavaScript对象的转化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JSON-parse"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">JSON.parse()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JSON-stringify"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">JSON.stringify()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#替代方法"><span class="nav-number">1.0.5.</span> <span class="nav-text">替代方法</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,953 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Spring,webMVC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Spring 学习2首先让我们了解下MVC（Model-View-Controller）三元组的概念M-Model模型负责业务逻辑，业务数据和业务处理逻辑。V-View 视图C-Controller 桥梁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring 学习2">
+<meta property="og:url" content="http://guilongyue.github.io/2017/07/04/Spring学习2/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Spring 学习2首先让我们了解下MVC（Model-View-Controller）三元组的概念M-Model模型负责业务逻辑，业务数据和业务处理逻辑。V-View 视图C-Controller 桥梁">
+<meta property="og:updated_time" content="2017-07-10T03:16:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring 学习2">
+<meta name="twitter:description" content="Spring 学习2首先让我们了解下MVC（Model-View-Controller）三元组的概念M-Model模型负责业务逻辑，业务数据和业务处理逻辑。V-View 视图C-Controller 桥梁">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/07/04/Spring学习2/"/>
+
+
+
+
+
+  <title> Spring 学习2 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/07/04/Spring学习2/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Spring 学习2
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-04T15:35:51+08:00">
+                2017-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/04/Spring学习2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/04/Spring学习2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Spring-学习2"><a href="#Spring-学习2" class="headerlink" title="Spring 学习2"></a>Spring 学习2</h1><h3 id="首先让我们了解下MVC（Model-View-Controller）三元组的概念"><a href="#首先让我们了解下MVC（Model-View-Controller）三元组的概念" class="headerlink" title="首先让我们了解下MVC（Model-View-Controller）三元组的概念"></a>首先让我们了解下MVC（Model-View-Controller）三元组的概念</h3><p>M-Model模型负责业务逻辑，业务数据和业务处理逻辑。<br>V-View 视图<br>C-Controller 桥梁<br><a id="more"></a></p>
+<h3 id="Spring-Web-MVC核心组件"><a href="#Spring-Web-MVC核心组件" class="headerlink" title="Spring Web MVC核心组件"></a>Spring Web MVC核心组件</h3><ul>
+<li>DispatcherServlet 控制器，请求入口</li>
+<li>HandlerMapping 控制器请求派发</li>
+<li>Controller 控制器，请求处理流程</li>
+<li>ModelAndView 模型 封装业务处理结果和视图</li>
+<li>ViewResolver 视图，视图显示处理器</li>
+</ul>
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>浏览器向Spring发出请求，请求交给前端控制器DispatcherServlet处理。<br>控制器通过HandlerMapping找到相应的Controller组件处理请求。<br>执行Controller组件约定方法处理请求，在约定方法调用模型组件完成业务处理。约定方法可以返回一个ModelAndView对象，封装了处理结果数据，和视图名称信息。<br>控制器接收ModelAndView之后，调用ViewResolver组件，定位View（JSP）并传递数据信息，生成相应界面结果。<br>参考：<a href="http://jinnianshilongnian.iteye.com/blog/1594806" target="_blank" rel="external">http://jinnianshilongnian.iteye.com/blog/1594806</a></p>
+<blockquote>
+<p>1、  首先用户发送请求——&gt;DispatcherServlet，前端控制器收到请求后自己不进行处理，而是委托给其他的解析器进行处理，作为统一访问点，进行全局的流程控制；<br>2、  DispatcherServlet——&gt;HandlerMapping， HandlerMapping将会把请求映射为HandlerExecutionChain对象（包含一个Handler处理器（页面控制器）对象、多个HandlerInterceptor拦截器）对象，通过这种策略模式，很容易添加新的映射策略；<br>3、  DispatcherServlet——&gt;HandlerAdapter，HandlerAdapter将会把处理器包装为适配器，从而支持多种类型的处理器，即适配器设计模式的应用，从而很容易支持很多类型的处理器；<br>4、  HandlerAdapter——&gt;处理器功能处理方法的调用，HandlerAdapter将会根据适配的结果调用真正的处理器的功能处理方法，完成功能处理；并返回一个ModelAndView对象（包含模型数据、逻辑视图名）；<br>5、  ModelAndView的逻辑视图名——&gt; ViewResolver， ViewResolver将把逻辑视图名解析为具体的View，通过这种策略模式，很容易更换其他视图技术；<br>6、  View——&gt;渲染，View会根据传进来的Model模型数据进行渲染，此处的Model实际是一个Map数据结构，因此很容易支持其他视图技术；<br>7、返回控制权给DispatcherServlet，由DispatcherServlet返回响应给用户，到此一个流程结束。</p>
+<p>1、  DispatcherServlet在web.xml中的部署描述，从而拦截请求到Spring Web MVC<br>2、  HandlerMapping的配置，从而将请求映射到处理器<br>3、  HandlerAdapter的配置，从而支持多种类型的处理器<br>4、  ViewResolver的配置，从而将逻辑视图名解析为具体视图技术<br>5、处理器（页面控制器）的配置，从而进行功能处理<br>Spring3.1新特性<br>@Controller：用于标识是处理器类；<br>@RequestMapping：请求到处理器功能方法的映射规则；<br>@RequestParam：请求参数到处理器功能处理方法的方法参数上的绑定；<br>@ModelAttribute：请求参数到命令对象的绑定；<br>@SessionAttributes：用于声明session级别存储的属性，放置在处理器类上，通常列出模型属性（如@ModelAttribute）对应的名称，则这些属性会透明的保存到session中；<br>@InitBinder：自定义数据绑定注册支持，用于将请求参数转换到命令对象属性的对应类型；<br>三、Spring3.0引入RESTful架构风格支持(通过@PathVariable注解和一些其他特性支持),且又引入了更多的注解支持：<br>@CookieValue：cookie数据到处理器功能处理方法的方法参数上的绑定；<br>@RequestHeader：请求头（header）数据到处理器功能处理方法的方法参数上的绑定；<br>@RequestBody：请求的body体的绑定（通过HttpMessageConverter进行类型转换）；<br>@ResponseBody：处理器功能处理方法的返回值作为响应体（通过HttpMessageConverter进行类型转换）；<br>@ResponseStatus：定义处理器功能处理方法/异常处理器返回的状态码和原因；<br>@ExceptionHandler：注解式声明异常处理器；<br>@PathVariable：请求URI中的模板变量部分到处理器功能处理方法的方法参数上的绑定，从而支持RESTful架构风格的UR<br>使用Spring 3开始的ConversionService进行类型转换（PropertyEditor依然有效），支持使用@NumberFormat 和 @DateTimeFormat来进行数字和日期的格式化；<br>HttpMessageConverter（Http输入/输出转换器，比如JSON、XML等的数据输出转换器）；<br>ContentNegotiatingViewResolver，内容协商视图解析器，它还是视图解析器，只是它支持根据请求信息将同一模型数据以不同的视图方式展示（如json、xml、html等），RESTful架构风格中很重要的概念（同一资源，多种表现形式）；<br>Spring 3 引入 一个  mvc XML的命名空间用于支持mvc配置，包括如：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;mvc:annotation-driven&gt;</div><div class="line">&lt;mvc:interceptors&gt;：注册自定义的处理器拦截器；</div><div class="line">&lt;mvc:view-controller&gt;：和ParameterizableViewController类似，收到相应请求后直接选择相应的视图；</div><div class="line">&lt;mvc:resources&gt;：逻辑静态资源路径到物理静态资源路径的支持；</div><div class="line">&lt;mvc:default-servlet-handler&gt;：当在web.xml 中DispatcherServlet使用&lt;url-pattern&gt;/&lt;/url-pattern&gt; 映射时，能映射静态资源（当Spring Web MVC框架没有处理请求对应的控制器时（如一些静态资源），转交给默认的Servlet来响应静态文件，否则报404找不到资源错误，）。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>URI模板变量增强：URI模板变量可以直接绑定到@ModelAttribute指定的命令对象、@PathVariable方法参数在视图渲染之前被合并到模型数据中（除JSON序列化、XML混搭场景下）。<br>@Validated：JSR-303的javax.validation.Valid一种变体（非JSR-303规范定义的，而是Spring自定义的），用于提供对Spring的验证器（org.springframework.validation.Validator）支持，需要Hibernate Validator 4.2及更高版本支持；<br>@RequestPart：提供对“multipart/form-data”请求的全面支持，支持Servlet 3.0文件上传（javax.servlet.http.Part）、支持内容的HttpMessageConverter（即根据请求头的Content-Type，来判断内容区数据是什么类型，如JSON、XML，能自动转换为命令对象），比@RequestParam更强大（只能对请求参数数据绑定，key-alue格式），而@RequestPart支持如JSON、XML内容区数据的绑定；详见本章的第×××节；<br>Flash 属性 和 RedirectAttribute：通过FlashMap存储一个请求的输出，当进入另一个请求时作为该请求的输入，典型场景如重定向（POST-REDIRECT-GET模式，1、POST时将下一次需要的数据放在FlashMap；2、重定向；3、通过GET访问重定向的地址，此时FlashMap会把1放到FlashMap的数据取出放到请求中，并从FlashMap中删除；从而支持在两次请求之间保存数据并防止了重复表单提交）。<br>Spring Web MVC提供FlashMapManager用于管理FlashMap，默认使用SessionFlashMapManager，即数据默认存储在session中。</p>
+</blockquote>
+<h3 id="DispatcherServlet控制器配置"><a href="#DispatcherServlet控制器配置" class="headerlink" title="DispatcherServlet控制器配置"></a>DispatcherServlet控制器配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;servlet&gt;</div><div class="line">  	&lt;servlet-name&gt;mvc&lt;/servlet-name&gt;</div><div class="line">  	&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;</div><div class="line">  	&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</div><div class="line">  	&lt;init-param&gt;</div><div class="line">  		&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">  		&lt;param-value&gt;classpath:spring-mvc.xml&lt;/param-value&gt;</div><div class="line">  	&lt;/init-param&gt;</div><div class="line">  &lt;/servlet&gt;</div><div class="line">  &lt;servlet-mapping&gt;</div><div class="line">  	&lt;servlet-name&gt;mvc&lt;/servlet-name&gt;</div><div class="line">  	&lt;url-pattern&gt;*.do&lt;/url-pattern&gt;</div><div class="line">  &lt;/servlet-mapping&gt;</div></pre></td></tr></table></figure>
+<h3 id="Controller组件"><a href="#Controller组件" class="headerlink" title="Controller组件"></a>Controller组件</h3><p>编写实现Controller组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class ControllerT implements Controller&#123;</div><div class="line">	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		ModelAndView model = new ModelAndView(&quot;hello&quot;);</div><div class="line">		return model;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Spring Web MVC支持多种类型的控制器，比如实现Controller接口，从Spring2.5开始支持注解方式的控制器（如@Controller、@RequestMapping、@RequestParam、@ModelAttribute等），我们也可以自己实现相应的控制器（只需要定义相应的HandlerMapping和HandlerAdapter即可）。<br>因为考虑到还有部分公司使用继承Controller接口实现方式，因此我们也学习一下，虽然已经不推荐使用了。</p>
+</blockquote>
+<h3 id="ModelAndView-组件"><a href="#ModelAndView-组件" class="headerlink" title="ModelAndView 组件"></a>ModelAndView 组件</h3><p>Controller组件按照约定的handleRequest方法执行后返回一个ModelAndView对象，该对象封装了模型数据和视图名称。</p>
+<ul>
+<li>ModelAndView（String viewName）</li>
+<li>ModelAndView（String viewName,Map model）<br>model数据存在request的attribute中</li>
+</ul>
+<h3 id="HandlerMapping组件"><a href="#HandlerMapping组件" class="headerlink" title="HandlerMapping组件"></a>HandlerMapping组件</h3><p>通过HanderMapping组件，DispatcherServlet将请求映射到Controller上。</p>
+<ul>
+<li><p>SimpleUrlHandlerMapping</p>
+<ul>
+<li>维护一个Http请求和Controller映射关系列表（map），根据列表对象关系调用Controller。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;bean class=&quot;org.springframework.web.servlet.handler.SimpleUrlHandlerMapping&quot; &gt;</div><div class="line">        	&lt;property name=&quot;mappings&quot;&gt;</div><div class="line">        		&lt;props&gt;</div><div class="line">        			&lt;prop key=&quot;/login.do&quot;&gt;loginController&lt;/prop&gt;</div><div class="line">        		&lt;/props&gt;</div><div class="line">        	&lt;/property&gt;</div><div class="line">        &lt;/bean&gt;</div><div class="line">        &lt;bean id=&quot;loginController&quot; class=&quot;com.jty.controller.ControllerT&quot;&gt;&lt;/bean&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>RequestMappingHandlerMapping</p>
+</li>
+<li>RequestMappingHandlerAdapter<ul>
+<li>在Controller类和方法上使用@RequestMapping注解指定对应的客户Http请求。<h3 id="ViewResolver组件"><a href="#ViewResolver组件" class="headerlink" title="ViewResolver组件"></a>ViewResolver组件</h3>视图解析器ViewResolver通过名字来解析视图。<br>Spring提供了多种视图解析器。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;jspViewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;</div><div class="line">        	&lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot;/&gt;</div><div class="line">        	&lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;/&gt;</div><div class="line">        &lt;/bean&gt;</div></pre></td></tr></table></figure>
+<h3 id="基于注解的MVC应用"><a href="#基于注解的MVC应用" class="headerlink" title="基于注解的MVC应用"></a>基于注解的MVC应用</h3><p>URL路径映射：使用URL映射请求到处理器的功能处理方法；<br>请求方法映射限定：如限定功能处理方法只处理GET请求；<br>请求参数映射限定：如限定只处理包含“abc”请求参数的请求；<br>请求头映射限定：如限定只处理“Accept=application/json”的请求。</p>
+<h3 id="URL路径映射"><a href="#URL路径映射" class="headerlink" title="URL路径映射"></a>URL路径映射</h3><h4 id="普通URL路径映射"><a href="#普通URL路径映射" class="headerlink" title="普通URL路径映射"></a>普通URL路径映射</h4><p>@RequestMapping(value={“/test1”, “/user/create”})：多个URL路径可以映射到同一个处理器的功能处理方法。</p>
+<h4 id="URI模板模式映射"><a href="#URI模板模式映射" class="headerlink" title="URI模板模式映射"></a>URI模板模式映射</h4><p>@RequestMapping(value=”/users/{userId}”)：{×××}占位符， 请求的URL可以是 “/users/123456”或<br>“/users/abcd”，通过6.6.5讲的通过@PathVariable可以提取URI模板模式中的{×××}中的×××变量。<br>@RequestMapping(value=”/users/{userId}/create”)：这样也是可以的，请求的URL可以是“/users/123/create”。<br>@RequestMapping(value=”/users/{userId}/topics/{topicId}”)：这样也是可以的，请求的URL可以是“/users/123/topics/123”。</p>
+<h4 id="Ant风格的URL路径映射"><a href="#Ant风格的URL路径映射" class="headerlink" title="Ant风格的URL路径映射"></a>Ant风格的URL路径映射</h4><p>@RequestMapping(value=”/users/<strong>“)：可以匹配“/users/abc/abc”，但“/users/123”将会被【URI模板模式映射中的“/users/{userId}”模式优先映射到】【详见4.14的最长匹配优先】。<br>@RequestMapping(value=”/product?”)：可匹配“/product1”或“/producta”，但不匹配“/product”或“/productaa”;<br>@RequestMapping(value=”/product<em>“)：可匹配“/productabc”或“/product”，但不匹配“/productabc/abc”;<br>@RequestMapping(value=”/product/</em>“)：可匹配“/product/abc”，但不匹配“/productabc”;<br>@RequestMapping(value=”/products/</strong>/{productId}”)：可匹配“/products/abc/abc/123”或“/products/123”，也就是Ant风格和URI模板变量风格可混用;<br>此处需要注意的是【4.14中提到的最长匹配优先】，Ant风格的模式请参考4.14。</p>
+<h4 id="正则表达式风格的URL路径映射"><a href="#正则表达式风格的URL路径映射" class="headerlink" title="正则表达式风格的URL路径映射"></a>正则表达式风格的URL路径映射</h4><p>从Spring3.0开始支持正则表达式风格的URL路径映射，格式为{变量名:正则表达式}，这样我们就可以通过6.6.5讲的通过@PathVariable提取模式中的{×××：正则表达式匹配的值}中的×××变量了。<br>@RequestMapping(value=”/products/{categoryCode:\d+}-{pageNumber:\d+}”)：可以匹配“/products/123-1”，但不能匹配“/products/abc-1”，这样可以设计更加严格的规则。</p>
+<p>正则表达式风格的URL路径映射是一种特殊的URI模板模式映射：<br>URI模板模式映射是{userId}，不能指定模板变量的数据类型，如是数字还是字符串；<br>正则表达式风格的URL路径映射，可以指定模板变量的数据类型，可以将规则写的相当复杂。</p>
+<h4 id="组合使用是“或”的关系"><a href="#组合使用是“或”的关系" class="headerlink" title="组合使用是“或”的关系"></a>组合使用是“或”的关系</h4><p>如 @RequestMapping(value={“/test1”, “/user/create”}) 组合使用是或的关系，即“/test1”或“/user/create”请求URL路径都可以映射到@RequestMapping指定的功能处理方法。</p>
+<h3 id="请求方法映射限定"><a href="#请求方法映射限定" class="headerlink" title="请求方法映射限定"></a>请求方法映射限定</h3><p>我们熟知的，展示表单一般为GET请求方法；提交表单一般为POST请求方法。但URL路径映射方式对任意请求方法是全盘接受的，因此我们需要某种方式来告诉相应的功能处理方法只处理如GET请求方法的请求或POST请求方法的请求。<br>①处理器的通用映射前缀（父路径）：表示该处理器只处理匹配“/customers/<strong>”的请求；<br>②对类级别的@RequestMapping进行窄化，表示showForm可处理匹配“/customers/</strong>/create”且请求方法为“GET”的请求；<br>③对类级别的@RequestMapping进行窄化，表示submit可处理匹配“/customers/**/create”且请求方法为“POST”的请求。<br>组合使用是“或”的关系<br>@RequestMapping(value=”/methodOr”, method = {RequestMethod.POST, RequestMethod.GET})：即请求方法可以是 GET 或 POST。</p>
+<h3 id="请求参数数据映射限定"><a href="#请求参数数据映射限定" class="headerlink" title="请求参数数据映射限定"></a>请求参数数据映射限定</h3><p>@RequestMapping(params=”create”, method=RequestMethod.GET) ：表示请求中有“create”的参数名且请求方法为“GET”即可匹配，如可匹配的请求URL“<a href="http://×××/parameter1?create”；" target="_blank" rel="external">http://×××/parameter1?create”；</a><br>@RequestMapping(params=”create”, method=RequestMethod.POST)：表示请求中有“create”的参数名且请求方法为“POST”即可匹配；</p>
+<h3 id="请求头数据映射限定"><a href="#请求头数据映射限定" class="headerlink" title="请求头数据映射限定"></a>请求头数据映射限定</h3><p>@RequestMapping(value=”/header/test1”, headers = “Accept”)：表示请求的URL必须为“/header/test1”<br>且 请求头中必须有Accept参数才能匹配。<br>@RequestMapping(value=”/header/test1”, headers = “abc”)：表示请求的URL必须为“/header/test1”<br>且 请求头中必须有abc参数才能匹配。<br>@RequestMapping(value=”/header/test3”, headers = “Content-Type=application/json”)：表示请求的URL必须为“/header/test3” 且 请求头中必须有“Content-Type=application/json”参数即可匹配。（将Modify Header的Content-Type参数值改为“application/json”即可）；<br>@RequestMapping(value=”/header/test5”, headers = “Accept=text/<em>“) ：表示请求的URL必须为“/header/test5” 且 请求头中必须有如“Accept=text/plain”参数即可匹配。（将Modify Header的Accept参数值改为“text/plain”即可）；<br>Accept=text/</em>：表示主类型为text，子类型任意，如“text/plain”、“text/html”等都可以匹配。</p>
+<hr>
+<h3 id="强大数据绑定"><a href="#强大数据绑定" class="headerlink" title="强大数据绑定"></a>强大数据绑定</h3><p>1、@RequestParam绑定单个请求参数值；<br>2、@PathVariable绑定URI模板变量值；<br>3、@CookieValue绑定Cookie数据值<br>4、@RequestHeader绑定请求头数据；<br>5、@ModelValue绑定参数到命令对象；<br>6、@SessionAttributes绑定命令对象到session；<br>7、@RequestBody绑定请求的内容区数据并能进行自动类型转换等。<br>8、@RequestPart绑定“multipart/data”数据，除了能绑定@RequestParam能做到的请求参数外，还能绑定上传的文件等。<br>除了上边提到的注解，我们还可以通过如HttpServletRequest等API得到请求数据，但推荐使用注解方式，因为使用起来更简单。</p>
+<h3 id="生产者、消费者限定"><a href="#生产者、消费者限定" class="headerlink" title="生产者、消费者限定"></a>生产者、消费者限定</h3><p>Media Type：<br>互联网媒体类型，一般就是我们所说的MIME类型，用来确定请求的内容类型或响应的内容类型。</p>
+<blockquote>
+<p>text/html ： HTML格式          text/plain ：纯文本格式             text/xml ：XML格式<br>image/gif ：gif图片格式          image/jpeg ：jpg图片格式          image/png：png图片格式<br>application/x-www-form-urlencoded ： <form enctype="””">中默认的encType，form表单数据被编码为key/value格式发送到服务器（表单默认的提交数据的格式）。<br>multipart/form-data ： 当你需要在表单中进行文件上传时，就需要使用该格式；<br>application/xhtml+xml ：XHTML格式               application/xml     ： XML数据格式<br>application/atom+xml  ：Atom XML聚合格式    application/json    ： JSON数据格式<br>application/pdf       ：pdf格式                        application/msword  ： Word文档格式<br>application/octet-stream ： 二进制流数据（如常见的文件下载）。<br>在如tomcat服务器的 “conf/web.xml”中指定了扩展名到媒体类型的映射，在此我们可以看到服务器支持的媒体类型。</form></p>
+</blockquote>
+<h4 id="Content-Type：内容类型，即请求-响应的内容区数据的媒体类型"><a href="#Content-Type：内容类型，即请求-响应的内容区数据的媒体类型" class="headerlink" title="Content-Type：内容类型，即请求/响应的内容区数据的媒体类型"></a>Content-Type：内容类型，即请求/响应的内容区数据的媒体类型</h4><ul>
+<li>请求头的内容类型，表示发送到服务器的内容数据的媒体类型；<br>request中设置请求头“Content-Type: application/x-www-form-urlencoded”表示请求的数据为key/value数据；</li>
+</ul>
+<h3 id="此处需要注意一下几点："><a href="#此处需要注意一下几点：" class="headerlink" title="此处需要注意一下几点："></a>此处需要注意一下几点：</h3><p>1、返回值：即模型和视图部分；<br>ModelAndView：模型和视图部分，之前已经见过了；<br>Map：只返回模型数据，逻辑视图名会根据RequestToViewNameTranslator实现类来计算，稍候讨论；<br>String：只返回逻辑视图名；<br>void：表示该功能方法直接写出response响应（如果其他返回值类型（如Map）返回null则和void进行相同的处理）；<br>request功能处理方法：只对请求头为“Content-Type:application/x-www-form-urlencoded”的请求进行处理（即消费请求内容区数据）;<br>request.getContentType()：可以得到请求头的内容区数据类型（即Content-Type头的值）<br>request.getCharacterEncoding()：如“Content-Type:application/json;charset=GBK”,则得到的编码为“GBK”，否则如果你设置过滤器（CharacterEncodingFilter）则得到它设置的编码，否则返回null。<br>request.getParameter()：因为请求的内容区数据为application/x-www-form-urlencoded格式的数据，因此我们可以通过request.getParameter()得到相应参数数据。<br>request中设置请求头“Content-Type:application/json;charset=GBK”表示请求的内容区数据为json类型数据，且内容区的数据以GBK进行编码；</p>
+<h4 id="Accept：用来指定什么媒体类型的响应是可接受的，即告诉服务器我需要什么媒体类型的数据，此时服务器应该根据Accept请求头生产指定媒体类型的数据。"><a href="#Accept：用来指定什么媒体类型的响应是可接受的，即告诉服务器我需要什么媒体类型的数据，此时服务器应该根据Accept请求头生产指定媒体类型的数据。" class="headerlink" title="Accept：用来指定什么媒体类型的响应是可接受的，即告诉服务器我需要什么媒体类型的数据，此时服务器应该根据Accept请求头生产指定媒体类型的数据。"></a>Accept：用来指定什么媒体类型的响应是可接受的，即告诉服务器我需要什么媒体类型的数据，此时服务器应该根据Accept请求头生产指定媒体类型的数据。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value = &quot;/response/ContentType&quot;, headers = &quot;Accept=application/json&quot;)  </div><div class="line">public void response2(HttpServletResponse response) throws IOException &#123;  </div><div class="line">    //①表示响应的内容区数据的媒体类型为json格式，且编码为utf-8(客户端应该以utf-8解码)  </div><div class="line">    response.setContentType(&quot;application/json;charset=utf-8&quot;);  </div><div class="line">    //②写出响应体内容  </div><div class="line">    String jsonData = &quot;&#123;\&quot;username\&quot;:\&quot;zhang\&quot;, \&quot;password\&quot;:\&quot;123\&quot;&#125;&quot;;  </div><div class="line">    response.getWriter().write(jsonData);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>服务器根据请求头“Accept=application/json”生产json数据。</p>
+<h3 id="使用普通客户端测试（服务器之间通信可使用该方式）"><a href="#使用普通客户端测试（服务器之间通信可使用该方式）" class="headerlink" title="使用普通客户端测试（服务器之间通信可使用该方式）"></a>使用普通客户端测试（服务器之间通信可使用该方式）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">private static void jsonRequest() throws IOException, URISyntaxException &#123;  </div><div class="line">    //请求的地址  </div><div class="line">    String url = &quot;http://localhost:9080/springmvc-chapter6/response/ContentType&quot;;  </div><div class="line">    //①创建Http Request(内部使用HttpURLConnection)  </div><div class="line">    ClientHttpRequest request =   </div><div class="line">        new SimpleClientHttpRequestFactory().     </div><div class="line">            createRequest(new URI(url), HttpMethod.POST);  </div><div class="line">    //②设置客户端可接受的媒体类型（即需要什么类型的响应体数据）  </div><div class="line">    request.getHeaders().set(&quot;Accept&quot;, &quot;application/json&quot;);          </div><div class="line">    //③发送请求并得到响应  </div><div class="line">    ClientHttpResponse response = request.execute();  </div><div class="line">    //④得到响应体的编码方式  </div><div class="line">    Charset charset = response.getHeaders().getContentType().getCharSet();          </div><div class="line">    //⑤得到响应体的内容          </div><div class="line">    InputStream is = response.getBody();  </div><div class="line">    byte bytes[] = new byte[(int)response.getHeaders().getContentLength()];  </div><div class="line">    is.read(bytes);  </div><div class="line">    String jsonData = new String(bytes, charset);  </div><div class="line">    System.out.println(&quot;charset : &quot; + charset + &quot;, json data : &quot; + jsonData);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>request.getHeaders().set(“Accept”, “application/json”)：表示客户端只接受（即只消费）json格式的响应数据；<br>response.getHeaders()：可以得到响应头，从而可以得到响应体的内容类型和编码、内容长度。</p>
+<h3 id="服务器端控制器"><a href="#服务器端控制器" class="headerlink" title="服务器端控制器"></a>服务器端控制器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value = &quot;/response/ContentType&quot;, headers = &quot;Accept=application/xml&quot;)  </div><div class="line">public void response3(HttpServletResponse response) throws IOException &#123;  </div><div class="line">    //①表示响应的内容区数据的媒体类型为xml格式，且编码为utf-8(客户端应该以utf-8解码)  </div><div class="line">    response.setContentType(&quot;application/xml;charset=utf-8&quot;);  </div><div class="line">    //②写出响应体内容  </div><div class="line">    String xmlData = &quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;&quot;;  </div><div class="line">    xmlData += &quot;&lt;user&gt;&lt;username&gt;zhang&lt;/username&gt;&lt;password&gt;123&lt;/password&gt;&lt;/user&gt;&quot;;  </div><div class="line">    response.getWriter().write(xmlData);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>和生产json数据唯一不同的两点：请求头为“Accept=application/xml”，响应体数据为xml。</p>
+<h3 id="使用普通客户端测试（服务器之间通信可使用该方式）-1"><a href="#使用普通客户端测试（服务器之间通信可使用该方式）-1" class="headerlink" title="使用普通客户端测试（服务器之间通信可使用该方式）"></a>使用普通客户端测试（服务器之间通信可使用该方式）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">private static void xmlRequest() throws IOException, URISyntaxException &#123;  </div><div class="line">    //请求的地址  </div><div class="line">    String url = &quot;http://localhost:9080/springmvc-chapter6/response/ContentType&quot;;  </div><div class="line">    //①创建Http Request(内部使用HttpURLConnection)  </div><div class="line">    ClientHttpRequest request =   </div><div class="line">        new SimpleClientHttpRequestFactory().     </div><div class="line">            createRequest(new URI(url), HttpMethod.POST);  </div><div class="line">    //②设置客户端可接受的媒体类型（即需要什么类型的响应体数据）  </div><div class="line">    request.getHeaders().set(&quot;Accept&quot;, &quot;application/xml&quot;);  </div><div class="line">    //③发送请求并得到响应  </div><div class="line">    ClientHttpResponse response = request.execute();          </div><div class="line">    //④得到响应体的编码方式  </div><div class="line">    Charset charset = response.getHeaders().getContentType().getCharSet();  </div><div class="line">    //⑤得到响应体的内容          </div><div class="line">    InputStream is = response.getBody();  </div><div class="line">    byte bytes[] = new byte[(int)response.getHeaders().getContentLength()];  </div><div class="line">    is.read(bytes);  </div><div class="line">    String xmlData = new String(bytes, charset);  </div><div class="line">    System.out.println(&quot;charset : &quot; + charset + &quot;, xml data : &quot; + xmlData);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>request.getHeaders().set(“Accept”, “application/xml”)：表示客户端只接受（即只消费）xml格式的响应数据；<br>response.getHeaders()：可以得到响应头，从而可以得到响应体的内容类型和编码、内容长度。</p>
+<h3 id="RequestParam绑定单个请求参数值"><a href="#RequestParam绑定单个请求参数值" class="headerlink" title="RequestParam绑定单个请求参数值"></a>RequestParam绑定单个请求参数值</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public String requestparam1(@RequestParam String username)  </div><div class="line">接下来我们看一下@RequestParam注解主要有哪些参数：</div><div class="line">value：参数名字，即入参的请求参数名字，如username表示请求的参数区中的名字为username的参数的值将传入；</div><div class="line">required：是否必须，默认是true，表示请求中一定要有相应的参数，否则将报404错误码；</div><div class="line">defaultValue：默认值，表示如果请求中没有同名参数时的默认值，默认值可以是SpEL表达式，</div><div class="line">如“#&#123;systemProperties[&apos;java.vm.version&apos;]&#125;”。</div><div class="line">原子类型：必须有值，否则抛出异常，如果允许空值请使用包装类代替。</div><div class="line">Boolean包装类型类型：默认Boolean.FALSE，其他引用类型默认为null。</div><div class="line">如果请求中有多个同名的应该如何接收呢？如给用户授权时，可能授予多个权限，首先看下如下代码：</div><div class="line">public String requestparam7(@RequestParam(value=&quot;role&quot;) String roleList)  </div><div class="line">如果请求参数类似于url?role=admin&amp;rule=user，则实际roleList参数入参的数据为“admin,user”，即多个数据之间使用“，”分割；我们应该使用如下方式来接收多个请求参数：</div><div class="line">public String requestparam7(@RequestParam(value=&quot;role&quot;) String[] roleList)     </div><div class="line">或</div><div class="line">public String requestparam8(@RequestParam(value=&quot;list&quot;) List&lt;String&gt; list)      </div><div class="line">到此@RequestParam我们就介绍完了，以上测试代码在cn.javass.chapter6.web.controller. paramtype.RequestParamTypeController中。</div></pre></td></tr></table></figure>
+<h3 id="PathVariable绑定URI模板变量值"><a href="#PathVariable绑定URI模板变量值" class="headerlink" title="PathVariable绑定URI模板变量值"></a>PathVariable绑定URI模板变量值</h3><p>@PathVariable用于将请求URL中的模板变量映射到功能处理方法的参数上。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(value=&quot;/users/&#123;userId&#125;/topics/&#123;topicId&#125;&quot;)  </div><div class="line">public String test(  </div><div class="line">       @PathVariable(value=&quot;userId&quot;) int userId,   </div><div class="line">       @PathVariable(value=&quot;topicId&quot;) int topicId)        </div><div class="line"> 如请求的URL为“控制器URL/users/123/topics/456”，则自动将URL中模板变量&#123;userId&#125;和&#123;topicId&#125;绑定到通过@PathVariable注解的同名参数上，即入参后userId=123、topicId=456。代码在PathVariableTypeController中。</div></pre></td></tr></table></figure></p>
+<h3 id="CookieValue绑定Cookie数据值"><a href="#CookieValue绑定Cookie数据值" class="headerlink" title="@CookieValue绑定Cookie数据值"></a>@CookieValue绑定Cookie数据值</h3><p>@CookieValue用于将请求的Cookie数据映射到功能处理方法的参数上。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public String test(@CookieValue(value=&quot;JSESSIONID&quot;, defaultValue=&quot;&quot;) String sessionId)   </div><div class="line">``` </div><div class="line">如上配置将自动将JSESSIONID值入参到sessionId参数上，defaultValue表示Cookie中没有JSESSIONID时默认为空。</div><div class="line">Java代码  收藏代码</div><div class="line">public String test2(@CookieValue(value=&quot;JSESSIONID&quot;, defaultValue=&quot;&quot;) Cookie sessionId)         </div><div class="line">传入参数类型也可以是javax.servlet.http.Cookie类型。</div><div class="line"></div><div class="line">### @RequestHeader绑定请求头数据</div><div class="line">@RequestHeader用于将请求的头信息区数据映射到功能处理方法的参数上。</div><div class="line">``` </div><div class="line">@RequestMapping(value=&quot;/header&quot;)  </div><div class="line">public String test(  </div><div class="line">       @RequestHeader(&quot;User-Agent&quot;) String userAgent,  </div><div class="line">       @RequestHeader(value=&quot;Accept&quot;) String[] accepts)</div></pre></td></tr></table></figure></p>
+<p>如上配置将自动将请求头“User-Agent”值入参到userAgent参数上，并将“Accept”请求头值入参到accepts参数上。测试代码在HeaderValueTypeController中。</p>
+<h3 id="ModelAttribute绑定请求参数到命令对象"><a href="#ModelAttribute绑定请求参数到命令对象" class="headerlink" title="@ModelAttribute绑定请求参数到命令对象"></a>@ModelAttribute绑定请求参数到命令对象</h3><p>@ModelAttribute一个具有如下三个作用：<br>①绑定请求参数到命令对象：放在功能处理方法的入参上时，用于将多个请求参数绑定到一个命令对象，从而简化绑定流程，而且自动暴露为模型数据用于视图页面展示时使用；<br>②暴露表单引用对象为模型数据：放在处理器的一般方法（非功能处理方法）上时，是为表单准备要展示的表单引用对象，如注册时需要选择的所在城市等，而且在执行功能处理方法（@RequestMapping注解的方法）之前，自动添加到模型对象中，用于视图页面展示时使用；<br>③暴露@RequestMapping方法返回值为模型数据：放在功能处理方法的返回值上时，是暴露功能处理方法的返回值为模型数据，用于视图页面展示时使用。</p>
+<h3 id="绑定请求参数到命令对象"><a href="#绑定请求参数到命令对象" class="headerlink" title="绑定请求参数到命令对象"></a>绑定请求参数到命令对象</h3><p>public String test1(@ModelAttribute(“user”) UserModel user)<br>命令/表单对象功能一样。只是此处多了一个注解@ModelAttribute(“user”)，它的作用是将该绑定的命令对象以“user”为名称添加到模型对象中供视图页面展示使用。我们此时可以在视图页面使用${user.username}来获取绑定的命令对象的属性。</p>
+<h3 id="SessionAttributes绑定命令对象到session"><a href="#SessionAttributes绑定命令对象到session" class="headerlink" title="@SessionAttributes绑定命令对象到session"></a>@SessionAttributes绑定命令对象到session</h3><p>有时候我们需要在多次请求之间保持数据，一般情况需要我们明确的调用HttpSession的API来存取会话数据，如多步骤提交的表单。Spring Web MVC提供了@SessionAttributes进行请求间透明的存取会话数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">1、在控制器类头上添加@SessionAttributes注解  </div><div class="line">@SessionAttributes(value = &#123;&quot;user&quot;&#125;)   </div><div class="line">public class SessionAttributeController   </div><div class="line">2、@ModelAttribute注解的方法进行表单引用对象的创建  </div><div class="line">@ModelAttribute(&quot;user&quot;)    </div><div class="line">public UserModel initUser()   </div><div class="line">3、@RequestMapping注解方法的@ModelAttribute注解的参数进行命令对象的绑定  </div><div class="line">@RequestMapping(&quot;/session1&quot;)   </div><div class="line">public String session1(@ModelAttribute(&quot;user&quot;) UserModel user)  </div><div class="line">4、通过SessionStatus的setComplete()方法清除@SessionAttributes指定的会话数据  </div><div class="line">@RequestMapping(&quot;/session2&quot;)   </div><div class="line">public String session(@ModelAttribute(&quot;user&quot;) UserModel user, SessionStatus status) &#123;  </div><div class="line">    if(true) &#123; </div><div class="line">        status.setComplete();  </div><div class="line">    &#125;  </div><div class="line">    return &quot;success&quot;;  </div><div class="line">&#125;   </div><div class="line">@SessionAttributes(value = &#123;&quot;user&quot;&#125;)含义：</div><div class="line">@SessionAttributes(value = &#123;&quot;user&quot;&#125;) 标识将模型数据中的名字为“user” 的对象存储到会话中（默认HttpSession），此处value指定将模型数据中的哪些数据（名字进行匹配）存储到会话中，此外还有一个types属性表示模型数据中的哪些类型的对象存储到会话范围内，如果同时指定value和types属性则那些名字和类型都匹配的对象才能存储到会话范围内。</div></pre></td></tr></table></figure>
+<h3 id="SpringMVC常用注解"><a href="#SpringMVC常用注解" class="headerlink" title="SpringMVC常用注解"></a>SpringMVC常用注解</h3><blockquote>
+<p>@Controller<br>负责注册一个bean 到spring 上下文中<br>@RequestMapping<br>注解为控制器指定可以处理哪些 URL 请求<br>@RequestBody<br>该注解用于读取Request请求的body部分数据，使用系统默认配置的HttpMessageConverter进行解析，然后把相应的数据绑定到要返回的对象上 ,再把HttpMessageConverter返回的对象数据绑定到 controller中方法的参数上<br>@ResponseBody<br>该注解用于将Controller的方法返回的对象，通过适当的HttpMessageConverter转换为指定格式后，写入到Response对象的body数据区<br>@ModelAttribute 　　　<br>在方法定义上使用 @ModelAttribute 注解：Spring MVC 在调用目标处理方法前，会先逐个调用在方法级上标注了@ModelAttribute 的方法<br>在方法的入参前使用 @ModelAttribute 注解：可以从隐含对象中获取隐含的模型数据中获取对象，再将请求参数 –绑定到对象中，再传入入参将方法入参对象添加到模型中<br>@RequestParam　<br>在处理方法入参处使用 @RequestParam 可以把请求参 数传递给请求方法<br>@PathVariable<br>绑定 URL 占位符到入参<br>@ExceptionHandler<br>注解到方法上，出现异常时会执行该方法<br>@ControllerAdvice<br>使一个Contoller成为全局的异常处理类，类中用@ExceptionHandler方法注解的方法可以处理所有Controller发生的异常</p>
+</blockquote>
+<h3 id="Controller注解应用"><a href="#Controller注解应用" class="headerlink" title="Controller注解应用"></a>Controller注解应用</h3><p>需配置文件中开启组件扫描，同时指定controller所在得包。</p>
+<h3 id="RequestMapping注解"><a href="#RequestMapping注解" class="headerlink" title="RequestMapping注解"></a>RequestMapping注解</h3><p>可以定义在方法或类上，与客户请求对应。<br>开启该注解映射，需要在配置文件中定义，RequestMappingHandlerMapping（类定义前），和RequestMappingHandlerAdapter(方法定义前)<br>在Spring 3.2版本之后，可以使用下面的XML配置简化</p>
+<mvc:annotation-driven>
+
+<h3 id="接受请求参数值"><a href="#接受请求参数值" class="headerlink" title="接受请求参数值"></a>接受请求参数值</h3><ul>
+<li>Spring会自动将表单参数注入到方法参数。（名称一致）</li>
+<li>HttpServletRequest</li>
+<li>使用@RequestParam<br>可以映射不一致的名称，参数类型自动转换，但可能出现类型转换异常</li>
+<li>使用自动封装机制封装成Bean对象。<br>定义User实体，属性名和form表单中的name相同。</li>
+</ul>
+<h3 id="向页面传值"><a href="#向页面传值" class="headerlink" title="向页面传值"></a>向页面传值</h3><p>当Controller组件处理后需要向jsp页面传值荣下面的方法。</p>
+<ul>
+<li>直接使用HttpServletRequest和Session</li>
+<li>使用ModelAndView对象。<br>利用HttpServletRequest的Attribute传递</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">package com.jty.controller;</div><div class="line">import java.util.HashMap;</div><div class="line">import java.util.Map;</div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import org.springframework.stereotype.Controller;</div><div class="line">import org.springframework.web.bind.annotation.RequestMapping;</div><div class="line">import org.springframework.web.servlet.ModelAndView;</div><div class="line">@Controller</div><div class="line">@RequestMapping(&quot;/hello&quot;)</div><div class="line">public class Controller1 &#123;</div><div class="line">	@RequestMapping(&quot;/login.do&quot;)</div><div class="line">	public ModelAndView login(String name,String pwd,HttpServletRequest req)&#123;</div><div class="line">		Map&lt;String,Object&gt; map = new HashMap&lt;String,Object&gt;();</div><div class="line">		map.put(&quot;user&quot;, name);</div><div class="line">		ModelAndView model = new ModelAndView(&quot;hello&quot;,map);</div><div class="line">		return model;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>使用ModelMap参数对象<br>在Controller处理方法中追加一个ModelMap类型参数<br>利用HttpServletRequest的Attribute传递</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(&quot;/login1.do&quot;)</div><div class="line">	public String checkLogin(String name,String pwd,ModelMap map)&#123;</div><div class="line">		map.addAttribute(&quot;user&quot;, pwd);</div><div class="line">		return &quot;hello&quot;;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>使用@ModelAttribute注解<br>利用HttpServletRequest的Attribute传递<br><strong>在Controller方法的参数部分或Bean属性方法上使用</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(&quot;/login2.do&quot;)</div><div class="line">	public String checkLogin2(@ModelAttribute User user,String pwd)&#123;</div><div class="line">		return &quot;hello&quot;;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Session存储"><a href="#Session存储" class="headerlink" title="Session存储"></a>Session存储</h3><p>可以利用HttpServletRequest的getSession()方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(&quot;/login3.do&quot;)</div><div class="line">	public String checkLogin(String name,String pwd,ModelMap map,HttpServletRequest req)&#123;</div><div class="line">		req.getSession().setAttribute(&quot;loginUser&quot;, name);</div><div class="line">		map.addAttribute(&quot;user&quot;, name);</div><div class="line">		return &quot;hello&quot;;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="重定向视图"><a href="#重定向视图" class="headerlink" title="重定向视图"></a>重定向视图</h3><p>Spring MVC 默认采用转发的方式定位视图，如需重定向</p>
+<ul>
+<li>使用RedirectView<br>ModelAndView 返回的</li>
+<li>使用redirect:前缀<br>返回的是String类型的</li>
+</ul>
+<h3 id="中文乱码解决"><a href="#中文乱码解决" class="headerlink" title="中文乱码解决"></a>中文乱码解决</h3><ul>
+<li>CharacterEncodingFilter</li>
+<li>POst方式提交</li>
+<li>页面编码和过滤器指定编码一致</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;filter&gt;</div><div class="line">&lt;filter-name&gt;char&lt;/filter-name&gt;</div><div class="line">&lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;</div><div class="line">&lt;init-param&gt;</div><div class="line">&lt;param-name&gt;encoding&lt;/param-name&gt;</div><div class="line">&lt;param-value&gt;UTF-8&lt;/param-value&gt;</div><div class="line">&lt;/init-param&gt;</div><div class="line">&lt;/filter&gt;</div><div class="line">&lt;filter-mapping&gt;</div><div class="line">&lt;filter-name&gt;char&lt;/filter-name&gt;</div><div class="line">&lt;url-pattern&gt;*.do&lt;/url-pattern&gt;</div><div class="line">&lt;/filter-mapping&gt;</div></pre></td></tr></table></figure>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>Spring MVC处理异常有一下三种方法</p>
+<ul>
+<li>使用简单异常处理器<br>适合全局处理简单异常</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;bean class=&quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&quot;&gt;</div><div class="line">        	&lt;property name=&quot;exceptionMappings&quot;&gt;</div><div class="line">        		&lt;props&gt;</div><div class="line">        			&lt;prop key=&quot;java.lang.Exception&quot;&gt;error&lt;/prop&gt;</div><div class="line">        			&lt;prop key=&quot;&quot;&gt;&lt;/prop&gt;</div><div class="line">        		&lt;/props&gt;</div><div class="line">        	&lt;/property&gt;</div><div class="line">        &lt;/bean&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>实现HandlerExceptionResolver接口<br>自定义异常处理</li>
+<li>使用@ExceptionHandler注解实现异常处理<br>适合局部处理有处理过程的异常</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public class BaseController &#123;</div><div class="line">	@ExceptionHandler</div><div class="line">	public String execute(HttpServletRequest req,Exception ex)&#123;</div><div class="line">		req.setAttribute(&quot;ex&quot;, ex);</div><div class="line">		//可根据异常类型的不同返回不同的视图名</div><div class="line">		return &quot;error&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其他的Controller继承BaseController</p>
+<h3 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h3><p>Spring的HanderMapping处理器支持拦截器应用。<br>拦截器必须实现HandlerInterceptor接口<br>preHandle(..)<br>处理器执行前被调用，方法返回true，继续执行其他胡处理器和拦截器。<br>返回false表示中断流程。<br>postHandle(..)<br>处理器执行后，视图处理前调用，可以对模型数据进行处理或对视图进行处理。<br>afterCompletion（..）<br>整个清楚处理完毕后调用，如输出消耗时间。还可以进行一些资源清理。只有preHandle返回true才会执行。<br><strong>如果只需要一个方法，可以继承HandlerInterceptorAdapter</strong></p>
+<h3 id="Spring-对DAO技术提供了那些支持"><a href="#Spring-对DAO技术提供了那些支持" class="headerlink" title="Spring 对DAO技术提供了那些支持"></a>Spring 对DAO技术提供了那些支持</h3><ul>
+<li>对DAO异常提供了统一处理。</li>
+<li>对DAO编写提供了支持的抽象类<br>Spring把特定魔种技术的异常，如SQLException，统一转化为自己的异常类型，这些异常以DataAccessException为父类。封装了原始异常对象，不会丢失原始错误信息。<br>DataAccessException是RuntimeException，不会因为没有处理而出现编译错误，但是必须处理，可应用拦截器或在界面层统一处理。</li>
+<li>JdbcTemplate</li>
+<li>HibernateTemplate</li>
+<li>JdbcDaoSupport jdbc数据访问对象的基类</li>
+<li>HibernateDaoSupport Hibernate数据访问对象的基类<br>JdbcDaoSupport使用时需要注入一个DataSource对象。</li>
+</ul>
+<h3 id="基于JDBC技术编写DAO组件可以采用两中方式。"><a href="#基于JDBC技术编写DAO组件可以采用两中方式。" class="headerlink" title="基于JDBC技术编写DAO组件可以采用两中方式。"></a>基于JDBC技术编写DAO组件可以采用两中方式。</h3><ul>
+<li>继承JdbcDaoSupport，Dao实现类注入一个DataSource完成JdbcTemplate实例化。</li>
+<li>Spring容器配置一个JdbcTemplate bean，然后注入给Dao实现类。<h3 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h3></li>
+<li>加载配置<br>一种是xml，一种是注解<br>MyBatis将sql的配置信息加载成一个个的MappedStatement对象，将其存在内存中。</li>
+<li>SQL解析<br>当接口层API收到调用请求时，会接受传入sql的id和传入对象（map，javabean，基本数据类型），MyBatis会根据传入的sql的id找到对应的MappedStatement,然后根据传入参数对象对MappedStatement进行解析，解析后可以得到最终要执行的SQL语句和参数。</li>
+<li>SQL执行<br>将最终得到sql和参数拿到数据库执行，得到操作数据库的结果。</li>
+<li>结果映射<br>将操作数据库的结果按照映射的配置进行转换，可以转换成Hashmap<br>、javabean、或者基本数据类型，并将最终结果返回。<h3 id="Mybatis配置文件"><a href="#Mybatis配置文件" class="headerlink" title="Mybatis配置文件"></a>Mybatis配置文件</h3></li>
+<li>sqlMapConfig。xml<br>主配置文件，用于指定数据库参数和框架参数</li>
+<li>sqlMap.xml<br>映射定义文件，用于定义sql语句和映射信息<h3 id="框架API简介"><a href="#框架API简介" class="headerlink" title="框架API简介"></a>框架API简介</h3></li>
+<li>SqlSessionFactoryBuilder</li>
+<li>SqlSessionFactory</li>
+<li>SqlSession</li>
+</ul>
+<h3 id="JSON数据交换"><a href="#JSON数据交换" class="headerlink" title="JSON数据交换"></a>JSON数据交换</h3><ul>
+<li>var obj = eval(“(“+str+”)”)</li>
+<li>JSON.parse(str)<h3 id="ajax"><a href="#ajax" class="headerlink" title="ajax"></a>ajax</h3>$.ajax({})<br>url 请求地址<br>type:请求方式<br>data：参数<br>dataType 服务器返回的数据类型<br>success<br>error<br>async true(缺省)</li>
+</ul>
+<h3 id="properties"><a href="#properties" class="headerlink" title="properties"></a>properties</h3><p>先记下<context:property-placeholder>和<util:properties>的区别。</util:properties></context:property-placeholder></p>
+<p><context:property-placeholder>是将properties加载到spring上下文中，接下来在定义bean的时候就能用${xx.xx}来访问了。</context:property-placeholder></p>
+<p><util:properties>是org.springframework.beans.factory.config.PropertiesFactoryBean的简化，声明了一个bean，可以用于注入。</util:properties></p>
+<h3 id="AOP概念及优点"><a href="#AOP概念及优点" class="headerlink" title="AOP概念及优点"></a>AOP概念及优点</h3><p>基于动态代理</p>
+<ul>
+<li>cglib工具包</li>
+<li>JDk proxy API<br>Aspect Oriented Programming 面向切面编程</li>
+<li>方面<br>封装共同处理的组件，该组件被作用到其他目标组件上。</li>
+<li>目标<br>被1个或多个方面所作用的对象</li>
+<li>切入点<br>用于指定那些组件和方法使用方面功能，在Spring中利用一个表达式指定切入目标<ul>
+<li>方法限定表达式<br>  execution(修饰符？ 返回类型 方法名参数 throws 异常类型)</li>
+<li>类型限定表达式<br>within(包名，类型)</li>
+<li>Bean名称限定表达式<br>bean（“Bean 的id或name属性值”）</li>
+</ul>
+</li>
+<li>通知<br>用于指定方面组件和目标组件作用的时机。<br>Spring提供了几种类型的通知</li>
+<li>前置通知 先执行方面功能在执行目标功能</li>
+<li>后置</li>
+<li>最终通知</li>
+<li>异常通知<br>先执行目标，抛出异常后，执行方面</li>
+<li>环绕通知<br>先执行方面前置部分，执行目标，执行方面后置部分</li>
+</ul>
+<h3 id="注解实现AOP"><a href="#注解实现AOP" class="headerlink" title="注解实现AOP"></a>注解实现AOP</h3><ul>
+<li>创建方面组件<br>创建一个类，充当方面组件，实现统用逻辑。</li>
+<li>声明方面组件<br>在applicationContext。xml中开启AOP注解扫描<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>使用@Component 注解标识这个类，将其声明为组件<br>使用@Aspect注解标识这个类，将其声明为方面组件</p>
+<ul>
+<li>使用方面组件<br>在组件方法上，使用注解将方面组件作用到目标组件的方法上，并设置通知类型已确认方面组件调用的时机。</li>
+<li>前置通知<br>@Before（”within(controller..*)”）<br>@Around(“”)<br>@AfterThrowing(ponitcut=”within()”,throwing=”e”)</li>
+</ul>
+<h3 id="Spring事务"><a href="#Spring事务" class="headerlink" title="Spring事务"></a>Spring事务</h3><h3 id="非集成spring事务管理"><a href="#非集成spring事务管理" class="headerlink" title="非集成spring事务管理"></a>非集成spring事务管理</h3><p>事务是指由一个或者多个SQL语句组成的工作单元，这个单元中SQL语句只要有一个SQL语句执行失败，就会撤销整个工作单元。<br> 事务的成功取决于工作单元的所有SQL语句都执行成功，它必须具备ACID特征，ACID是Atomic(原子性)、Consistency(一致性)、Isolation(隔离性)和持久性(Durability),它们的含义是:<br>(1)    原子性:事务是不可分割的工作单元,事务中所有操作执行成功事务才算成功<br>(2)    一致性:事务不能破坏数据的完整性和一致性(正确性)<br>(3)    隔离性:在并发环境中,事务是独立的,它不依赖其他事务也能完成任务<br>(4)    持久性:只要事务成功执行,数据永久保存下来<br>2声明事务边界<br>数据库系统支持以下两种事务模式:<br>(1)自动提交模式:每一个SQL语句都是一个独立的事务,如果执行成功就自动提交,否之  自动回滚<br>(2)手工提交模式:由程序显式指定事务边界<br>在mysql.exe程序中声明事务<br>(1)    在自动提交模式下运行事务<br>每一个SQL语句就是一个独立的事务,由系统自动提交和回滚,如:<br>insert into ACCOUNTS values(1,’Tom’,10000)<br>(2)    手工提交模式下运行事务<br>手工提交模式,必须显式指定事务边界</p>
+<ol>
+<li>开始事务:begin transaction</li>
+<li>提交事务:commit transaction</li>
+<li>回滚(撤销)事务:rollback transaction<br>如以下的银行转帐事务<blockquote>
+<p>begin transaction<br>set @errorSum=0<br>update bank set currentMoney=currentMoney-1000 where customerName=’张三’<br>set @errorSum=@errorSum+@@error–@@error是系统的全局变量.<br>update bank set currentMoney=currentMoney+1000 where customerName=’李四’<br>set @errorSum=@errorSum+@@error<br>if @errorSum&lt;&gt;0<br>rollback transaction<br>else<br>commit transaction<br>通过JDBC API声明事务边界<br>java.sq.Connection类提供了以下用于控制事务的方法<br>(1)  setAutoCommit(boolean autoCommit):设置是事自动提交事务<br>(2)  commit():提交事务<br>(3)  rollback():撤销事务</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">try&#123;  </div><div class="line">con.setAutoCommit(false);//设置为手工提交模式  </div><div class="line">stmt=con.createStatement();  </div><div class="line">stmt.executeUpdate(“update ACCOUNTS set BALANCE=1000-100 where ID=1”);  </div><div class="line">stmt.executeUpdate(update ACCOUNTS set BALANCE=0+100 where ID=2”)  </div><div class="line">con.commit();//提交事务  </div><div class="line">&#125;catch(SQLException e)&#123;  </div><div class="line">con.rollback();//不成功就撤销事务.这语句也要捕获异常,代码略  </div><div class="line">&#125;finally&#123;  </div><div class="line">stmt.close();  </div><div class="line">con.close();//.这语句也要捕获异常,代码  </div><div class="line">&#125;  </div><div class="line">通过Hibernate API声明事务边界</div><div class="line">Hibernate API封装了JDBC API和JTA API.应用程序可以绕过Hibernate API直接通过    JDBC API和JTA API来声明事务,但是这不利于跨平台开发</div><div class="line">从SessionFactory中获得Session实例有两种方式:</div><div class="line">(1)Session session=sessionFactory.openSession();//从连接池中获得连接,并把连接设为手            工提交事务模式</div><div class="line">(2)Connection con=DriverManager.getConnection(url,user,pwd);//这种方式绕过Hibernate</div><div class="line">con.setAutoCommit(false); Session session=sessionFactory.openSession(con);</div><div class="line">在Hibernate API中,Session和Transaction类提供了以下声明事务的方法:</div><div class="line">(1)    Transaction tx=session.beginTransaction();//开始事务</div><div class="line">(2)    tx.commit();//提交事务,调用flush()方法清理缓存,然后提交事务</div><div class="line">(3)    tx.rollback();//撤销事务</div></pre></td></tr></table></figure>
+<ul>
+<li>提供简单易用的编程式事物</li>
+<li>支持声明时事物管理</li>
+<li>便于Spring整合各种数据库<h4 id="编程式事物"><a href="#编程式事物" class="headerlink" title="编程式事物"></a>编程式事物</h4></li>
+<li>使用TransactionTemplate<br>与JdbcTemplate风格类似，采用回调机制，将事物代码与业务代码分离</li>
+<li>直接使用PlatformTransactionManager<h4 id="声明式事物"><a href="#声明式事物" class="headerlink" title="声明式事物"></a>声明式事物</h4>通过SpringAop实现</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">事务管理组价</div><div class="line">&lt;bean id=&quot;txManager&quot; class=&quot;org.springframework.orm.hibernate3.HibernateTransactionManager&quot;&gt;</div><div class="line">        	&lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;</div><div class="line">        &lt;/bean&gt;</div><div class="line">事物注解扫描</div><div class="line">        &lt;tx:annotation-driven transaction-manager=&quot;txManager&quot; proxy-target-class=&quot;true&quot;/&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>transaction-manager 指定的事物管理器，需要根据数据库访问技术的不同选择不同的实现，jdbc、mybatis选择DataSourceTransactionManager，Hibernate悬着HibernateTransactionManager.</li>
+<li>使用@Transactional注解声明事务。<br>可以定义在类和方法之前，方法的事物设置将优于类级别注解的设置。<h3 id="Transactional注解有一下属性"><a href="#Transactional注解有一下属性" class="headerlink" title="@Transactional注解有一下属性"></a>@Transactional注解有一下属性</h3></li>
+<li>propagation：设置事务传播</li>
+<li>isolation ：事务隔离级别</li>
+<li>readOnly：设置只读，还是可读写</li>
+<li>rollbackFor：设置遇到哪些异常必须回滚</li>
+<li>noRollbackFor:设置遇到哪些异常不回滚<h3 id="注解实现声明时事务"><a href="#注解实现声明时事务" class="headerlink" title="注解实现声明时事务"></a>注解实现声明时事务</h3>@Transactional默认<br>设置事务传播 propagation_REQUIRED<br>事务隔离级别 ISOLATION_DEFAULT<br>事务是读写<br>事务超时默认是依赖于事务系统的，或者不被支持<br>任何RuntimeException将触发事务回滚，但是任何CheckedException将不触发事务回滚。<h3 id="XML配置实现声明式事务"><a href="#XML配置实现声明式事务" class="headerlink" title="XML配置实现声明式事务"></a>XML配置实现声明式事务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;aop:config proxy-target-class=&quot;true&quot;&gt;</div><div class="line">        	&lt;aop:advisor advice-ref=&quot;txAdvice&quot; pointcut=&quot;within(controller..*)&quot;/&gt;</div><div class="line">        &lt;/aop:config&gt;</div><div class="line">&lt;tx:advice id=&quot;txAdvice&quot; transaction-manager=&quot;txManager&quot;&gt;</div><div class="line">        	&lt;tx:attributes&gt;</div><div class="line">        		&lt;tx:method name=&quot;find*&quot; read-only=&quot;true&quot;/&gt;</div><div class="line">        		&lt;tx:method name=&quot;add&quot; propagation=&quot;REQUIRED&quot;/&gt;</div><div class="line">        		&lt;tx:method name=&quot;update*&quot; propagation=&quot;REQUIRED&quot;/&gt;</div><div class="line">        		&lt;tx:method name=&quot;delete*&quot; propagation=&quot;REQUIRED&quot;/&gt;</div><div class="line">        	&lt;/tx:attributes&gt;</div><div class="line">        &lt;/tx:advice&gt;</div><div class="line">&lt;bean id=&quot;txManager&quot; class=&quot;org.springframework.orm.hibernate3.HibernateTransactionManager&quot;&gt;</div><div class="line">        	&lt;property name=&quot;sessionFactory&quot; ref=&quot;sessionFactory&quot;&gt;&lt;/property&gt;</div><div class="line">        &lt;/bean&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="事务回滚"><a href="#事务回滚" class="headerlink" title="事务回滚"></a>事务回滚</h3><p>下是RuntimeException<br>ArithmeticException<br>NullPointerException<br>ClassCastException<br>NumberFormatException<br>IndexOutOfBoundException<br>NegativeArraySizeException<br>UnsupportedOperationException<br>对于CheckedException，需要手动指定异常类型， 才能实现事务回滚。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@Transactional(rollbackFor=Exception.class)</div><div class="line">       		&lt;tx:method name=&quot;update*&quot; propagation=&quot;REQUIRED&quot; rollbakc-for=&quot;java.lang.ClassNotFoundException&quot;/&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="事务传播"><a href="#事务传播" class="headerlink" title="事务传播"></a>事务传播</h3><p>是指一个方法调用了另一个带有事务控制的方法，这种复杂其情况就需要制定事务的处理方案。<br>REQUIRED 支持当前事务，如果当前没有事务，就新建一个事务，这是最常见的选择。<br>SUPPORTS 支持当前事务，如果当前没有事务，就以非事务方式执行。<br>MANDATORY 支持当前事务，如果当前没有事务，就抛出异常。<br>PROPAGATION_REQUIRES_NEW–新建事务，如果当前存在事务，把当前事务挂起。<br>PROPAGATION_NOT_SUPPORTED–以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。<br>PROPAGATION_NEVER–以非事务方式执行，如果当前存在事务，则抛出异常。<br>PROPAGATION_NESTED–如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则进行与PROPAGATION_REQUIRED类似的操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@Transactional（propogation=Propagation.REQUIRED）</div></pre></td></tr></table></figure></p>
+<h3 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h3><p>在读取数据哭的过程中，如果两个事务并发执行，那么之间的数据会发生影响。为了避免冲突，需要将两个事务隔离起来。<br>READ_UNCOMMITED<br>READ_COMMITED 大多数主流数据库的默认配置，保证了一个事务不会读取到另一个并行事务已修改但未提交的数据。该级别适用于大多数系统。<br>REPEATABLE_READ 保证一个一个事务不会修改已经有另一个事务读取但未提交的数据。<br>SERIALIZABLE<br>DEFAULT<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@Transactional(isolation=Isolation.READ_COMMITED)</div></pre></td></tr></table></figure></p>
+<p>参考：<br><a href="http://blog.csdn.net/qq_33290787/article/details/51924963" target="_blank" rel="external">http://blog.csdn.net/qq_33290787/article/details/51924963</a></p>
+<h3 id="Spring与RESTful"><a href="#Spring与RESTful" class="headerlink" title="Spring与RESTful"></a>Spring与RESTful</h3><p>符合REST约束风格和原则的应用程序或设计就是RESTful。</p>
+<h3 id="静态资源访问处理"><a href="#静态资源访问处理" class="headerlink" title="静态资源访问处理"></a>静态资源访问处理</h3><p>采用REStFul架构后，需要将web。xml中控制器拦截的请求设置为/，这样会将css,js等静态资源进行拦截，发生404错误。</p>
+<ul>
+<li>解决上述问题的方法如下</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;mvc:resource mapping=&quot;请求uri&quot; loaction=&quot;资源位置&quot;/&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>配置<code>&lt;mvc:default-servlet-handler/&gt;</code></li>
+</ul>
+</mvc:annotation-driven>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/webMVC/" rel="tag"># webMVC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/04/Spring学习1/" rel="next" title="Spring 学习1">
+                <i class="fa fa-chevron-left"></i> Spring 学习1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/10/Spring MVC实例/" rel="prev" title="Spring MVC实例">
+                Spring MVC实例 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/07/04/Spring学习2/"
+           data-title="Spring 学习2" data-url="http://guilongyue.github.io/2017/07/04/Spring学习2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-学习2"><span class="nav-number">1.</span> <span class="nav-text">Spring 学习2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#首先让我们了解下MVC（Model-View-Controller）三元组的概念"><span class="nav-number">1.0.1.</span> <span class="nav-text">首先让我们了解下MVC（Model-View-Controller）三元组的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Web-MVC核心组件"><span class="nav-number">1.0.2.</span> <span class="nav-text">Spring Web MVC核心组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过程"><span class="nav-number">1.0.3.</span> <span class="nav-text">过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DispatcherServlet控制器配置"><span class="nav-number">1.0.4.</span> <span class="nav-text">DispatcherServlet控制器配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Controller组件"><span class="nav-number">1.0.5.</span> <span class="nav-text">Controller组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ModelAndView-组件"><span class="nav-number">1.0.6.</span> <span class="nav-text">ModelAndView 组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HandlerMapping组件"><span class="nav-number">1.0.7.</span> <span class="nav-text">HandlerMapping组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ViewResolver组件"><span class="nav-number">1.0.8.</span> <span class="nav-text">ViewResolver组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于注解的MVC应用"><span class="nav-number">1.0.9.</span> <span class="nav-text">基于注解的MVC应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL路径映射"><span class="nav-number">1.0.10.</span> <span class="nav-text">URL路径映射</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通URL路径映射"><span class="nav-number">1.0.10.1.</span> <span class="nav-text">普通URL路径映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#URI模板模式映射"><span class="nav-number">1.0.10.2.</span> <span class="nav-text">URI模板模式映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ant风格的URL路径映射"><span class="nav-number">1.0.10.3.</span> <span class="nav-text">Ant风格的URL路径映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则表达式风格的URL路径映射"><span class="nav-number">1.0.10.4.</span> <span class="nav-text">正则表达式风格的URL路径映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组合使用是“或”的关系"><span class="nav-number">1.0.10.5.</span> <span class="nav-text">组合使用是“或”的关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求方法映射限定"><span class="nav-number">1.0.11.</span> <span class="nav-text">请求方法映射限定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求参数数据映射限定"><span class="nav-number">1.0.12.</span> <span class="nav-text">请求参数数据映射限定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求头数据映射限定"><span class="nav-number">1.0.13.</span> <span class="nav-text">请求头数据映射限定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强大数据绑定"><span class="nav-number">1.0.14.</span> <span class="nav-text">强大数据绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生产者、消费者限定"><span class="nav-number">1.0.15.</span> <span class="nav-text">生产者、消费者限定</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Type：内容类型，即请求-响应的内容区数据的媒体类型"><span class="nav-number">1.0.15.1.</span> <span class="nav-text">Content-Type：内容类型，即请求/响应的内容区数据的媒体类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#此处需要注意一下几点："><span class="nav-number">1.0.16.</span> <span class="nav-text">此处需要注意一下几点：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept：用来指定什么媒体类型的响应是可接受的，即告诉服务器我需要什么媒体类型的数据，此时服务器应该根据Accept请求头生产指定媒体类型的数据。"><span class="nav-number">1.0.16.1.</span> <span class="nav-text">Accept：用来指定什么媒体类型的响应是可接受的，即告诉服务器我需要什么媒体类型的数据，此时服务器应该根据Accept请求头生产指定媒体类型的数据。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用普通客户端测试（服务器之间通信可使用该方式）"><span class="nav-number">1.0.17.</span> <span class="nav-text">使用普通客户端测试（服务器之间通信可使用该方式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器端控制器"><span class="nav-number">1.0.18.</span> <span class="nav-text">服务器端控制器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用普通客户端测试（服务器之间通信可使用该方式）-1"><span class="nav-number">1.0.19.</span> <span class="nav-text">使用普通客户端测试（服务器之间通信可使用该方式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestParam绑定单个请求参数值"><span class="nav-number">1.0.20.</span> <span class="nav-text">RequestParam绑定单个请求参数值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PathVariable绑定URI模板变量值"><span class="nav-number">1.0.21.</span> <span class="nav-text">PathVariable绑定URI模板变量值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CookieValue绑定Cookie数据值"><span class="nav-number">1.0.22.</span> <span class="nav-text">@CookieValue绑定Cookie数据值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ModelAttribute绑定请求参数到命令对象"><span class="nav-number">1.0.23.</span> <span class="nav-text">@ModelAttribute绑定请求参数到命令对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定请求参数到命令对象"><span class="nav-number">1.0.24.</span> <span class="nav-text">绑定请求参数到命令对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SessionAttributes绑定命令对象到session"><span class="nav-number">1.0.25.</span> <span class="nav-text">@SessionAttributes绑定命令对象到session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringMVC常用注解"><span class="nav-number">1.0.26.</span> <span class="nav-text">SpringMVC常用注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Controller注解应用"><span class="nav-number">1.0.27.</span> <span class="nav-text">Controller注解应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestMapping注解"><span class="nav-number">1.0.28.</span> <span class="nav-text">RequestMapping注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接受请求参数值"><span class="nav-number">1.0.29.</span> <span class="nav-text">接受请求参数值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向页面传值"><span class="nav-number">1.0.30.</span> <span class="nav-text">向页面传值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session存储"><span class="nav-number">1.0.31.</span> <span class="nav-text">Session存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向视图"><span class="nav-number">1.0.32.</span> <span class="nav-text">重定向视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中文乱码解决"><span class="nav-number">1.0.33.</span> <span class="nav-text">中文乱码解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常处理"><span class="nav-number">1.0.34.</span> <span class="nav-text">异常处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拦截器"><span class="nav-number">1.0.35.</span> <span class="nav-text">拦截器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-对DAO技术提供了那些支持"><span class="nav-number">1.0.36.</span> <span class="nav-text">Spring 对DAO技术提供了那些支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于JDBC技术编写DAO组件可以采用两中方式。"><span class="nav-number">1.0.37.</span> <span class="nav-text">基于JDBC技术编写DAO组件可以采用两中方式。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mybatis"><span class="nav-number">1.0.38.</span> <span class="nav-text">Mybatis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mybatis配置文件"><span class="nav-number">1.0.39.</span> <span class="nav-text">Mybatis配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#框架API简介"><span class="nav-number">1.0.40.</span> <span class="nav-text">框架API简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON数据交换"><span class="nav-number">1.0.41.</span> <span class="nav-text">JSON数据交换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ajax"><span class="nav-number">1.0.42.</span> <span class="nav-text">ajax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#properties"><span class="nav-number">1.0.43.</span> <span class="nav-text">properties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP概念及优点"><span class="nav-number">1.0.44.</span> <span class="nav-text">AOP概念及优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注解实现AOP"><span class="nav-number">1.0.45.</span> <span class="nav-text">注解实现AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring事务"><span class="nav-number">1.0.46.</span> <span class="nav-text">Spring事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非集成spring事务管理"><span class="nav-number">1.0.47.</span> <span class="nav-text">非集成spring事务管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#编程式事物"><span class="nav-number">1.0.47.1.</span> <span class="nav-text">编程式事物</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#声明式事物"><span class="nav-number">1.0.47.2.</span> <span class="nav-text">声明式事物</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transactional注解有一下属性"><span class="nav-number">1.0.48.</span> <span class="nav-text">@Transactional注解有一下属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注解实现声明时事务"><span class="nav-number">1.0.49.</span> <span class="nav-text">注解实现声明时事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XML配置实现声明式事务"><span class="nav-number">1.0.50.</span> <span class="nav-text">XML配置实现声明式事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务回滚"><span class="nav-number">1.0.51.</span> <span class="nav-text">事务回滚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务传播"><span class="nav-number">1.0.52.</span> <span class="nav-text">事务传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务的隔离级别"><span class="nav-number">1.0.53.</span> <span class="nav-text">事务的隔离级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring与RESTful"><span class="nav-number">1.0.54.</span> <span class="nav-text">Spring与RESTful</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态资源访问处理"><span class="nav-number">1.0.55.</span> <span class="nav-text">静态资源访问处理</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

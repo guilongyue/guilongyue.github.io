@@ -1,0 +1,946 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Spring,容器、IOC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Spring 容器、IocSpring 容器的实例化ApplicationContext继承自BeanFactory接口，拥有更多的企业级方法。我们现在知道了控制反转，我们可以把它看作是一个概念。而依赖注入(Dependency Injection)是控制反转的一种实现方法。James Shore给出了依赖注入的定义：依赖注入就是将实例变量传入到一个对象中去(Dependency injectio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring 学习1">
+<meta property="og:url" content="http://guilongyue.github.io/2017/07/04/Spring学习1/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Spring 容器、IocSpring 容器的实例化ApplicationContext继承自BeanFactory接口，拥有更多的企业级方法。我们现在知道了控制反转，我们可以把它看作是一个概念。而依赖注入(Dependency Injection)是控制反转的一种实现方法。James Shore给出了依赖注入的定义：依赖注入就是将实例变量传入到一个对象中去(Dependency injectio">
+<meta property="og:updated_time" content="2017-07-04T07:20:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring 学习1">
+<meta name="twitter:description" content="Spring 容器、IocSpring 容器的实例化ApplicationContext继承自BeanFactory接口，拥有更多的企业级方法。我们现在知道了控制反转，我们可以把它看作是一个概念。而依赖注入(Dependency Injection)是控制反转的一种实现方法。James Shore给出了依赖注入的定义：依赖注入就是将实例变量传入到一个对象中去(Dependency injectio">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/07/04/Spring学习1/"/>
+
+
+
+
+
+  <title> Spring 学习1 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/07/04/Spring学习1/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Spring 学习1
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-04T09:02:40+08:00">
+                2017-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/04/Spring学习1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/04/Spring学习1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Spring-容器、Ioc"><a href="#Spring-容器、Ioc" class="headerlink" title="Spring 容器、Ioc"></a>Spring 容器、Ioc</h1><p>Spring 容器的实例化<br>ApplicationContext继承自BeanFactory接口，拥有更多的企业级方法。<br>我们现在知道了控制反转，我们可以把它看作是一个概念。而依赖注入(Dependency Injection)是控制反转的一种实现方法。James Shore给出了依赖注入的定义：依赖注入就是将实例变量传入到一个对象中去(Dependency injection means giving an object its instance variables)。<br>Spring的核心就是依赖注入。Spring支持的注入方式主要有两种：setter注入(setter injection)和构造器注入(constructor injection)。我们上面的代码便是使用的构造器注入。</p>
+<a id="more"></a>
+<blockquote>
+<p>依赖注入<br>Spring框架的核心功能有两个：<br>Spring容器作为超级大工厂，负责创建、管理所有的Java对象，这些Java对象被称为Bean。<br>Spring容器管理容器中Bean之间的依赖关系，Spring使用一种被称为”依赖注入”的方式来管理Bean之间的依赖关系。<br>使用依赖注入，不仅可以为Bean注入普通的属性值，还可以注入其他Bean的引用。依赖注入是一种优秀的解耦方式，其可以让Bean以配置文件组织在一起，而不是以硬编码的方式耦合在一起。<br>理解依赖注入<br>Rod Johnson是第一个高度重视以配置文件来管理Java实例的协作关系的人，他给这种方式起了一个名字：控制反转（Inverse of Control，IoC）。后来Martine Fowler为这种方式起了另一个名称：依赖注入（Dependency Injection），因此不管是依赖注入，还是控制反转，其含义完全相同。当某个Java对象（调用者）需要调用另一个Java对象（被依赖对象）的方法时，在传统模式下通常有两种做法：<br>原始做法: 调用者主动创建被依赖对象，然后再调用被依赖对象的方法。<br>简单工厂模式: 调用者先找到被依赖对象的工厂，然后主动通过工厂去获取被依赖对象，最后再调用被依赖对象的方法。<br>注意上面的主动二字，这必然会导致调用者与被依赖对象实现类的硬编码耦合，非常不利于项目升级的维护。使用Spring框架之后，调用者无需主动获取被依赖对象，调用者只要被动接受Spring容器为调用者的成员变量赋值即可，由此可见，使用Spring后，调用者获取被依赖对象的方式由原来的主动获取，变成了被动接受——所以Rod Johnson称之为控制反转。<br>另外从Spring容器的角度来看，Spring容器负责将被依赖对象赋值给调用者的成员变量——相当于为调用者注入它依赖的实例，因此Martine Fowler称之为依赖注入。<br>设值注入<br>设值注入是指IoC容器通过成员变量的setter方法来注入被依赖对象。这种注入方式简单、直观，因而在Spring的依赖注入里大量使用。<br>构造注入<br>利用构造器来设置依赖关系的方式，被称为构造注入。通俗来说，就是驱动Spring在底层以反射方式执行带指定参数的构造器，当执行带参数的构造器时，就可利用构造器参数对成员变量执行初始化——这就是构造注入的本质。<br>两种注入方式的对比<br>设值注入有如下优点：<br>与传统的JavaBean的写法更相似，程序开发人员更容易理解、接受。通过setter方法设定依赖关系显得更加直观、自然。<br>对于复杂的依赖关系，如果采用构造注入，会导致构造器过于臃肿，难以阅读。Spring在创建Bean实例时，需要同时实例化其依赖的全部实例，因而导致性能下降。而使用设值注入，则能避免这些问题。<br>尤其在某些成员变量可选的情况下，多参数的构造器更加笨重。<br>构造注入优势如下：<br>构造注入可以在构造器中决定依赖关系的注入顺序，优先依赖的优先注入。<br>对于依赖关系无需变化的Bean，构造注入更有用处。因为没有setter方法，所有的依赖关系全部在构造器内设定，无须担心后续的代码对依赖关系产生破坏。<br>依赖关系只能在构造器中设定，则只有组件的创建者才能改变组件的依赖关系，对组件的调用者而言，组件内部的依赖关系完全透明，更符合高内聚的原则。<br>注意：<br>建议采用设值注入为主，构造注入为辅的注入策略。对于依赖关系无须变化的注入，尽量采用构造注入；而其他依赖关系的注入，则考虑采用设值注入。</p>
+</blockquote>
+<ul>
+<li>Spring BeanFactory 容器<br>它是最简单的容器，给 DI 提供了基本的支持，它用 org.springframework.beans.factory.BeanFactory 接口来定义。</li>
+<li>Spring ApplicationContext 容器<br>该容器添加了更多的企业特定的功能，例如从一个属性文件中解析文本信息的能力，发布应用程序事件给感兴趣的事件监听器的能力。该容器是由org.springframework.context.ApplicationContext 接口定义。 <h2 id="Dependency-Injection-and-Inversion-of-Control"><a href="#Dependency-Injection-and-Inversion-of-Control" class="headerlink" title="Dependency Injection and Inversion of Control"></a>Dependency Injection and Inversion of Control</h2>通过阅读配置元数据提供的指令，容器知道对哪些对象进行实例化，配置和组装。配置元数据可以通过 XML，Java 注释或 Java 代码来表示。下图是 Spring 如何工作的高级视图。 Spring IoC 容器利用 Java 的 POJO 类和配置元数据来生成完全配置和可执行的系统或应用程序。<blockquote>
+<p>最常被使用的 ApplicationContext 接口实现：<br>FileSystemXmlApplicationContext：该容器从 XML 文件中加载已被定义的 bean。在这里，你需要提供给构造器 XML 文件的完整路径<br>ClassPathXmlApplicationContext：该容器从 XML 文件中加载已被定义的 bean。在这里，你不需要提供 XML 文件的完整路径，只需正确配置 CLASSPATH 环境变量即可，因为，容器会从 CLASSPATH 中搜索 bean 配置文件。<br>WebXmlApplicationContext：该容器会在一个 web 应用程序的范围内加载在 XML 文件中已被定义的 bean。</p>
+<h3 id="Spring-配置元数据"><a href="#Spring-配置元数据" class="headerlink" title="Spring 配置元数据"></a>Spring 配置元数据</h3><p>Spring IoC 容器完全由实际编写的配置元数据的格式解耦。有下面三个重要的方法把配置元数据提供给 Spring 容器：</p>
+</blockquote>
+</li>
+<li>基于 XML 的配置文件。</li>
+<li>基于注解的配置</li>
+<li>基于 Java 的配置<h3 id="Bean-的实例化"><a href="#Bean-的实例化" class="headerlink" title="Bean 的实例化"></a>Bean 的实例化</h3></li>
+<li>构造器</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;...&quot; class=&quot;...&quot;&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>id或name属性指定bean的名称，用于从spring中查找这个bean对象。<br>class用于指定bean对象的类型，会自动调用无参构造器。</p>
+<ul>
+<li>静态工厂方法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;caleandar01&quot; class=&quot;java.util.Calendar&quot; factory-method=&quot;getInstance&quot;&gt;&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>factory-method 必须为静态方法。</p>
+<ul>
+<li>实例工厂方法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;c2&quot; class=&quot;java.util.GregorianCalendar&quot; &gt;&lt;/bean&gt;</div><div class="line">&lt;bean id=&quot;dateObj&quot; factory-bean=&quot;c2&quot; factory-method=&quot;getTime&quot;&gt;&lt;/bean&gt;</div><div class="line">``` </div><div class="line"></div><div class="line">#### Bean的名称</div><div class="line">spring容器用id或name，Bean的别名，&lt;alias&gt;指定```&lt;alias name=&quot;fromName&quot; alias=&quot;toName&quot;/&gt;</div></pre></td></tr></table></figure>
+<h3 id="Bean-的作用域"><a href="#Bean-的作用域" class="headerlink" title="Bean 的作用域"></a>Bean 的作用域</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">作用域</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">singleton</td>
+<td style="text-align:center">该作用域将 bean 的定义的限制在每一个 Spring IoC 容器中的一个单一实例(默认)。</td>
+</tr>
+<tr>
+<td style="text-align:center">prototype</td>
+<td style="text-align:center">该作用域将单一 bean 的定义限制在任意数量的对象实例。</td>
+</tr>
+<tr>
+<td style="text-align:center">request</td>
+<td style="text-align:center">该作用域将 bean 的定义限制为 HTTP 请求。只在 web-aware Spring</td>
+</tr>
+<tr>
+<td style="text-align:center">ApplicationContext</td>
+<td style="text-align:center">的上下文中有效。</td>
+</tr>
+<tr>
+<td style="text-align:center">session</td>
+<td style="text-align:center">该作用域将 bean 的定义限制为 HTTP 会话。 只在web-aware Spring ApplicationContext的上下文中有效。</td>
+</tr>
+<tr>
+<td style="text-align:center">global-session</td>
+<td style="text-align:center">该作用域将 bean 的定义限制为全局 HTTP 会话。只在 web-aware Spring ApplicationContext 的上下文中有效。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>协调作用域不同步的Bean<br>当singleton作用域的Bean依赖于prototype作用域的Bean时，会产生不同步的现象，原因是因为当Spring容器初始化时，容器会预初始化容器中所有的singleton Bean，由于singleton Bean依赖于prototype Bean，因此Spring在初始化singleton Bean之前，会先创建prototypeBean——然后才创建singleton Bean，接下里将prototype Bean注入singleton Bean。<br>解决不同步的方法有两种：<br>放弃依赖注入: singleton作用域的Bean每次需要prototype作用域的Bean时，主动向容器请求新的Bean实例，即可保证每次注入的prototype Bean实例都是最新的实例。<br>利用方法注入: 方法注入通常使用lookup方法注入，使用lookup方法注入可以让Spring容器重写容器中Bean的抽象或具体方法，返回查找容器中其他Bean的结果，被查找的Bean通常是一个non-singleton Bean。Spring通过使用JDK动态代理或cglib库修改客户端的二进制码，从而实现上述要求。<br>建议采用第二种方法，使用方法注入。为了使用lookup方法注入，大致需要如下两步：<br>将调用者Bean的实现类定义为抽象类，并定义一个抽象方法来获取被依赖的Bean。<br>在<bean...>元素中添加<lookup-method...>子元素让Spring为调用者Bean的实现类实现指定的抽象方法。<br>注意：<br>Spring会采用运行时动态增强的方式来实现<lookup-method...>元素所指定的抽象方法，如果目标抽象类实现过接口，Spring会采用JDK动态代理来实现该抽象类，并为之实现抽象方法；如果目标抽象类没有实现过接口，Spring会采用cglib实现该抽象类，并为之实现抽象方法。Spring4.0的spring-core-xxx.jar包中已经集成了cglib类库。</lookup-method...></lookup-method...></bean...></p>
+<h3 id="Bean-的生命周期"><a href="#Bean-的生命周期" class="headerlink" title="Bean 的生命周期"></a>Bean 的生命周期</h3><p>理解 Spring bean 的生命周期很容易。当一个 bean 被实例化时，它可能需要执行一些初始化使它转换成可用状态。同样，当 bean 不再需要，并且从容器中移除时，可能需要做一些清除工作。<br>为了定义安装和拆卸一个 bean，我们只要声明带有 init-method 和/或 destroy-method 参数的 。init-method 属性指定一个方法，在实例化 bean 时，立即调用该方法。同样，destroy-method 指定一个方法，只有从容器中移除 bean 之后，才能调用该方法。</p>
+</blockquote>
+<p>在基于 XML 的配置元数据的情况下，你可以使用 init-method 属性来指定带有 void 无参数方法的名称。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;exampleBean&quot;</div><div class="line">         class=&quot;examples.ExampleBean&quot; init-method=&quot;init&quot;/&gt;</div></pre></td></tr></table></figure></p>
+<p>在基于 XML 的配置元数据的情况下，你可以使用 destroy-method 属性来指定带有 void 无参数方法的名称。例如：<br>指定销毁回调方法仅适用与Singleton<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;exampleBean&quot;</div><div class="line">         class=&quot;examples.ExampleBean&quot; destroy-method=&quot;destroy&quot;/&gt;</div></pre></td></tr></table></figure></p>
+<p>测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">package com.jty;</div><div class="line"></div><div class="line">public class Example01 &#123;</div><div class="line">	private String message;</div><div class="line">	public String getMessage() &#123;</div><div class="line">		return message;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setMessage(String message) &#123;</div><div class="line">		this.message = message;</div><div class="line">	&#125;</div><div class="line">	public void init()&#123;</div><div class="line">		System.out.println(&quot;init...&quot;);</div><div class="line">	&#125;</div><div class="line">	public void destory()&#123;</div><div class="line">		System.out.println(&quot;destory...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">测试Junit</div><div class="line">@Test</div><div class="line">public void test1()&#123;</div><div class="line">		String cfg =&quot;applicationContext.xml&quot;;</div><div class="line">		AbstractApplicationContext ac = new ClassPathXmlApplicationContext(cfg);</div><div class="line">		Example01 e1 = (Example01)ac.getBean(&quot;e1&quot;);</div><div class="line">		System.out.println(e1.getMessage());</div><div class="line">		ac.registerShutdownHook();</div><div class="line">	&#125;</div><div class="line">结果</div><div class="line">init...</div><div class="line">Hello World!</div><div class="line">destory...</div></pre></td></tr></table></figure></p>
+<h3 id="Spring-Bean-后置处理器"><a href="#Spring-Bean-后置处理器" class="headerlink" title="Spring Bean 后置处理器"></a>Spring Bean 后置处理器</h3><p>BeanPostProcessor 接口定义回调方法，你可以实现该方法来提供自己的实例化逻辑，依赖解析逻辑等。你也可以在 Spring 容器通过插入一个或多个 BeanPostProcessor 的实现来完成实例化，配置和初始化一个bean之后实现一些自定义逻辑回调方法。</p>
+<h3 id="Bean-延迟实例化"><a href="#Bean-延迟实例化" class="headerlink" title="Bean 延迟实例化"></a>Bean 延迟实例化</h3><p>在ApplicationContext实现的默认行为就是在启动时将所有的singleton<br> bean提前实例化。<br>如果不想，可以使用bean元素的lazy-init=”true”属性改变。<br>一个延迟初始化bean将在第一次被用到时实例化。<br><strong>用于使用频率很低的单例对象</strong></p>
+<h3 id="DI-依赖注入"><a href="#DI-依赖注入" class="headerlink" title="DI 依赖注入"></a>DI 依赖注入</h3><ul>
+<li><p>Setter注入<br>当容器调用一个无参的构造函数或一个无参的静态 factory 方法来初始化你的 bean 后，通过容器在你的 bean 上调用设值函数，基于设值函数的 DI 就完成了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;textEditor&quot; class=&quot;com.tutorialspoint.TextEditor&quot;&gt;</div><div class="line">      &lt;property name=&quot;spellChecker&quot; ref=&quot;spellChecker&quot;/&gt;</div><div class="line">   &lt;/bean&gt;</div><div class="line">   &lt;!-- Definition for spellChecker bean --&gt;</div><div class="line">   &lt;bean id=&quot;spellChecker&quot; class=&quot;com.tutorialspoint.SpellChecker&quot;&gt;</div><div class="line">   &lt;/bean&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>构造器注入<br>当容器调用带有一组参数的类构造函数时，基于构造函数的 DI 就完成了，其中每个参数代表一个对其他类的依赖。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;textEditor&quot; class=&quot;com.tutorialspoint.TextEditor&quot;&gt;</div><div class="line">      &lt;constructor-arg ref=&quot;spellChecker&quot;/&gt;</div><div class="line">   &lt;/bean&gt;</div><div class="line">   &lt;!-- Definition for spellChecker bean --&gt;</div><div class="line">   &lt;bean id=&quot;spellChecker&quot; class=&quot;com.tutorialspoint.SpellChecker&quot;&gt;</div><div class="line">   &lt;/bean&gt;</div><div class="line">&lt;bean id=&quot;&quot; class=&quot;&quot;&gt;</div><div class="line">	&lt;constructor-arg index=&quot;0&quot; value=&quot;aa&quot;&gt;</div><div class="line">	&lt;constructor-arg index=&quot;1&quot; value=&quot;2G&quot;&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>注入内部beans<br>正如你所知道的 Java 内部类是在其他类的范围内被定义的，同理，inner beans 是在其他 bean 的范围内定义的 bean。因此在 或 元素内 元素被称为内部bean，如下所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;outerBean&quot; class=&quot;...&quot;&gt;</div><div class="line">    &lt;property name=&quot;target&quot;&gt;</div><div class="line">       &lt;bean id=&quot;innerBean&quot; class=&quot;...&quot;/&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line"> &lt;/bean&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用自动装配注入合作者Bean<br>Spring能自动装配Bean与Bean之间的依赖关系，即无须使用ref显式指定依赖Bean，而是由Spring容器检查XML配置文件内容，根据某种规则，为调用者Bean注入被依赖的Bean。<br>Spring自动装配可通过<beans>元素的default-autowire属性指定，该属性对配置文件中所有的Bean起作用；也可通过对<bean>元素的autowire属性指定，该属性只对该Bean起作用。<br>autowire和default-autowire可以接受如下值：</bean></beans></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">模式</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">no</td>
+<td style="text-align:center">这是默认的设置，它意味着没有自动装配，你应该使用显式的bean引用来连线。你不用为了连线做特殊的事。在依赖注入章节你已经看到这个了。</td>
+</tr>
+<tr>
+<td style="text-align:center">byName</td>
+<td style="text-align:center">由属性名自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byName。然后尝试匹配，并且将它的属性与在配置文件中被定义为相同名称的 beans 的属性进行连接。</td>
+</tr>
+<tr>
+<td style="text-align:center">byType</td>
+<td style="text-align:center">由属性数据类型自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byType。然后如果它的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。如果存在不止一个这样的 bean，则一个致命的异常将会被抛出。</td>
+</tr>
+<tr>
+<td style="text-align:center">constructor</td>
+<td style="text-align:center">类似于 byType，但该类型适用于构造函数参数类型。如果在容器中没有一个构造函数参数类型的 bean，则一个致命错误将会发生。</td>
+</tr>
+<tr>
+<td style="text-align:center">autodetect</td>
+<td style="text-align:center">Spring首先尝试通过 constructor 使用自动装配来连接，如果它不执行，Spring 尝试通过 byType 来自动装配。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>byName: 根据setter方法名进行自动装配。Spring容器查找容器中全部Bean，找出其id与setter方法名去掉set前缀，并小写首字母后同名的Bean来完成注入。如果没有找到匹配的Bean实例，则Spring不会进行任何注入。<br>byType: 根据setter方法的形参类型来自动装配。Spring容器查找容器中的全部Bean，如果正好有一个Bean类型与setter方法的形参类型匹配，就自动注入这个Bean；如果找到多个这样的Bean，就抛出一个异常；如果没有找到这样的Bean，则什么都不会发生，setter方法不会被调用。<br>constructor: 与byType类似，区别是用于自动匹配构造器的参数。如果容器不能恰好找到一个与构造器参数类型匹配的Bean，则会抛出一个异常。<br>当一个Bean既使用自动装配依赖，又使用ref显式指定依赖时，则显式指定的依赖覆盖自动装配依赖；对于大型的应用，不鼓励使用自动装配。虽然使用自动装配可减少配置文件的工作量，但大大将死了依赖关系的清晰性和透明性。依赖关系的装配依赖于源文件的属性名和属性类型，导致Bean与Bean之间的耦合降低到代码层次，不利于高层次解耦。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;!--通过设置可以将Bean排除在自动装配之外--&gt;</div><div class="line">&lt;bean id=&quot;&quot; autowire-candidate=&quot;false&quot;/&gt;</div><div class="line">&lt;!--除此之外，还可以在beans元素中指定，支持模式字符串，如下所有以abc结尾的Bean都被排除在自动装配之外--&gt;</div><div class="line">&lt;beans default-autowire-candidates=&quot;*abc&quot;/&gt;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="Spring-注入集合"><a href="#Spring-注入集合" class="headerlink" title="Spring 注入集合"></a>Spring 注入集合</h3><p>你已经看到了如何使用 value 属性来配置基本数据类型和在你的 bean 配置文件中使用<property>标签的 ref 属性来配置对象引用。这两种情况下处理奇异值传递给一个 bean。<br>现在如果你想传递多个值，如 Java Collection 类型 List、Set、Map 和 Properties，应该怎么做呢。为了处理这种情况，Spring 提供了四种类型的集合的配置元素，如下所示：</property></p>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;list&gt;</code></td>
+<td>它有助于连线，如注入一列值，允许重复。</td>
+</tr>
+<tr>
+<td><code>&lt;set&gt;</code></td>
+<td>它有助于连线一组值，但不能重复。</td>
+</tr>
+<tr>
+<td><code>&lt;map&gt;</code></td>
+<td>它可以用来注入名称-值对的集合，其中名称和值可以是任何类型。</td>
+</tr>
+<tr>
+<td><code>&lt;props&gt;</code></td>
+<td>它可以用来注入名称-值对的集合，其中名称和值都是字符串类型。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;javaCollection&quot; class=&quot;com.tutorialspoint.JavaCollection&quot;&gt;</div><div class="line">      &lt;!-- results in a setAddressList(java.util.List) call --&gt;</div><div class="line">      &lt;property name=&quot;addressList&quot;&gt;</div><div class="line">         &lt;list&gt;</div><div class="line">            &lt;value&gt;INDIA&lt;/value&gt;</div><div class="line">            &lt;value&gt;Pakistan&lt;/value&gt;</div><div class="line">            &lt;value&gt;USA&lt;/value&gt;</div><div class="line">            &lt;value&gt;USA&lt;/value&gt;</div><div class="line">         &lt;/list&gt;</div><div class="line">      &lt;/property&gt;</div><div class="line">      &lt;!-- results in a setAddressSet(java.util.Set) call --&gt;</div><div class="line">      &lt;property name=&quot;addressSet&quot;&gt;</div><div class="line">         &lt;set&gt;</div><div class="line">            &lt;value&gt;INDIA&lt;/value&gt;</div><div class="line">            &lt;value&gt;Pakistan&lt;/value&gt;</div><div class="line">            &lt;value&gt;USA&lt;/value&gt;</div><div class="line">            &lt;value&gt;USA&lt;/value&gt;</div><div class="line">        &lt;/set&gt;</div><div class="line">      &lt;/property&gt;</div><div class="line">      &lt;!-- results in a setAddressMap(java.util.Map) call --&gt;</div><div class="line">      &lt;property name=&quot;addressMap&quot;&gt;</div><div class="line">         &lt;map&gt;</div><div class="line">            &lt;entry key=&quot;1&quot; value=&quot;INDIA&quot;/&gt;</div><div class="line">            &lt;entry key=&quot;2&quot; value=&quot;Pakistan&quot;/&gt;</div><div class="line">            &lt;entry key=&quot;3&quot; value=&quot;USA&quot;/&gt;</div><div class="line">            &lt;entry key=&quot;4&quot; value=&quot;USA&quot;/&gt;</div><div class="line">         &lt;/map&gt;</div><div class="line">      &lt;/property&gt;</div><div class="line">      &lt;!-- results in a setAddressProp(java.util.Properties) call --&gt;</div><div class="line">      &lt;property name=&quot;addressProp&quot;&gt;</div><div class="line">         &lt;props&gt;</div><div class="line">            &lt;prop key=&quot;one&quot;&gt;INDIA&lt;/prop&gt;</div><div class="line">            &lt;prop key=&quot;two&quot;&gt;Pakistan&lt;/prop&gt;</div><div class="line">            &lt;prop key=&quot;three&quot;&gt;USA&lt;/prop&gt;</div><div class="line">            &lt;prop key=&quot;four&quot;&gt;USA&lt;/prop&gt;</div><div class="line">         &lt;/props&gt;</div><div class="line">      &lt;/property&gt;</div><div class="line">   &lt;/bean&gt;</div></pre></td></tr></table></figure>
+<h3 id="注入-null-和空字符串的值"><a href="#注入-null-和空字符串的值" class="headerlink" title="注入 null 和空字符串的值"></a>注入 null 和空字符串的值</h3><p>如果你需要传递一个空字符串作为值，那么你可以传递它，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;...&quot; class=&quot;exampleBean&quot;&gt;</div><div class="line">   &lt;property name=&quot;email&quot; value=&quot;&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<p>前面的例子相当于 Java 代码：exampleBean.setEmail(“”)。<br>如果你需要传递一个 NULL 值，那么你可以传递它，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;...&quot; class=&quot;exampleBean&quot;&gt;</div><div class="line">   &lt;property name=&quot;email&quot;&gt;&lt;null/&gt;&lt;/property&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="引用方式List集合注入"><a href="#引用方式List集合注入" class="headerlink" title="引用方式List集合注入"></a>引用方式List集合注入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;util:list id=&quot;l1&quot;&gt;</div><div class="line">        	&lt;value&gt;c&lt;/value&gt;</div><div class="line">        	&lt;value&gt;java&lt;/value&gt;</div><div class="line">        	&lt;value&gt;c++&lt;/value&gt;</div><div class="line"> &lt;/util:list&gt;</div></pre></td></tr></table></figure>
+<h3 id="Spring表达式"><a href="#Spring表达式" class="headerlink" title="Spring表达式"></a>Spring表达式</h3><p>全称为“Spring Expression Language”，缩写为“SpEL”，类似于Struts2x中使用的OGNL表达式语言，能在运行时构建复杂表达式、存取对象图属性、对象方法调用等等，并且能与Spring功能完美整合，如能用来配置Bean定义。<br>表达式语言给静态Java语言增加了动态功能。<br>SpEL是单独模块，只依赖于core模块，不依赖于其他模块，可以单独使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;property name=&quot;name&quot; value=&quot;#&#123;msg.name&#125;&quot;&gt;&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="基于注解的组件扫描"><a href="#基于注解的组件扫描" class="headerlink" title="基于注解的组件扫描"></a>基于注解的组件扫描</h3><p>从 Spring 2.5 开始就可以使用注解来配置依赖注入。而不是采用 XML 来描述一个 bean 连线，你可以使用相关类，方法或字段声明的注解，将 bean 配置移动到组件类本身。<br>在 XML 注入之前进行注解注入，因此后者的配置将通过两种方式的属性连线被前者重写。<br>注解连线在默认情况下在 Spring 容器中不打开。因此，在可以使用基于注解的连线之前，我们将需要在我们的 Spring 配置文件中启用它。所以如果你想在 Spring 应用程序中使用的任何注解，可以考虑到下面的配置文件。<context:annotation-config>。</context:annotation-config></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>注解 &amp; 描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@Required</td>
+<td>@Required 注解应用于 bean 属性的 setter 方法。</td>
+</tr>
+<tr>
+<td>@Autowired</td>
+<td>@Autowired 注解可以应用到 bean 属性的 setter 方法，非 setter 方法，构造函数和属性。</td>
+</tr>
+<tr>
+<td>@Qualifier</td>
+<td>通过指定确切的将被连线的 bean，@Autowired 和 @Qualifier 注解可以用来删除混乱。</td>
+</tr>
+<tr>
+<td>JSR-250 Annotations</td>
+<td>Spring 支持 JSR-250 的基础的注解，其中包括了 @Resource，@PostConstruct 和 @PreDestroy 注解。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Spring @Required 注释<br>@Required 注释应用于 bean 属性的 setter 方法，它表明受影响的 bean 属性在配置时必须放在 XML 配置文件中，否则容器就会抛出一个 BeanInitializationException 异常。下面显示的是一个使用 @Required 注释的示例。</li>
+<li>Spring @Autowired 注释<blockquote>
+<p>Setter 方法中的 @Autowired<br>你可以在 XML 文件中的 setter 方法中使用 @Autowired 注释来除去 元素。当 Spring遇到一个在 setter 方法中使用的 @Autowired 注释，它会在方法中视图执行 byType 自动连接。<br>构造函数中的 @Autowired<br>你也可以在构造函数中使用 @Autowired。一个构造函数 @Autowired 说明当创建 bean 时，即使在 XML 文件中没有使用元素配置 bean ，构造函数也会被自动连接。让我们检查一下下面的示例。<br>@Autowired 的（required=false）选项<br>默认情况下，@Autowired 注释意味着依赖是必须的，它类似于 @Required 注释，然而，你可以使用 @Autowired 的 （required=false） 选项关闭默认行为。</p>
+</blockquote>
+</li>
+<li>Spring @Qualifier 注释<br>可能会有这样一种情况，当你创建多个具有相同类型的 bean 时，并且想要用一个属性只为它们其中的一个进行装配，在这种情况下，你可以使用 @Qualifier 注释和 @Autowired 注释通过指定哪一个真正的 bean 将会被装配来消除混乱。下面显示的是使用 @Qualifier 注释的一个示例。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@Autowired</div><div class="line"> @Qualifier(&quot;student1&quot;)</div><div class="line">private Student student;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="组件扫描"><a href="#组件扫描" class="headerlink" title="组件扫描"></a>组件扫描</h3><p>指定一个包路径，spring自动扫该包及其自爆所有的组件类，当发现组件类定义前有特定的注解标记时，就将该组件纳入到spring容器。等价于xml中的<bean><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;context:component-scan base-package=&quot;com.jty&quot;&gt;&lt;/context:component-scan&gt;</div></pre></td></tr></table></figure></bean></p>
+<h3 id="自动扫描的注解标记"><a href="#自动扫描的注解标记" class="headerlink" title="自动扫描的注解标记"></a>自动扫描的注解标记</h3><p>@Component: 标注一个普通的Spring Bean类<br>@Named :通用的。<br>@Controller: 标注一个控制器组件类<br>@Service: 标注一个业务逻辑组件类<br>@Repository: 标注一个DAO组件类<br><strong>当一个组件在扫描的过程中被检测到时，会生成一个默认的id值，默认id为小写开头的类名，也可以在标记注解中自定义id。</strong><br>@Component(“example”)</p>
+<h3 id="指定组件的组用域"><a href="#指定组件的组用域" class="headerlink" title="指定组件的组用域"></a>指定组件的组用域</h3><p>默认是“singleton” 如果需求其他的组用域可以使用@Scope注解。<br>@Scope（”prototype”）</p>
+<h3 id="使用-Resource配置依赖"><a href="#使用-Resource配置依赖" class="headerlink" title="使用@Resource配置依赖"></a>使用@Resource配置依赖</h3><p>@Resource位于javax.annotation包下，是来自JavaEE规范的一个Annotation，Spring直接借鉴了该Annotation，通过使用该Annotation为目标Bean指定协作者Bean。使用@Resource与<property...>元素的ref属性有相同的效果。<br>@Resource不仅可以修饰setter方法，也可以直接修饰实例变量，如果使用@Resource修饰实例变量将会更加简单，此时Spring将会直接使用JavaEE规范的Field注入，此时连setter方法都可以不要。</property...></p>
+<h3 id="使用-PostConstruct和-PreDestroy定制生命周期行为"><a href="#使用-PostConstruct和-PreDestroy定制生命周期行为" class="headerlink" title="使用@PostConstruct和@PreDestroy定制生命周期行为"></a>使用@PostConstruct和@PreDestroy定制生命周期行为</h3><p>@PostConstruct和@PreDestroy同样位于javax.annotation包下，也是来自JavaEE规范的两个Annotation，Spring直接借鉴了它们，用于定制Spring容器中Bean的生命周期行为。它们都用于修饰方法，无须任何属性。其中前者修饰的方法时Bean的初始化方法；而后者修饰的方法时Bean销毁之前的方法。</p>
+<h3 id="Spring4-0增强的自动装配和精确装配"><a href="#Spring4-0增强的自动装配和精确装配" class="headerlink" title="Spring4.0增强的自动装配和精确装配"></a>Spring4.0增强的自动装配和精确装配</h3><p>Spring提供了@Autowired注解来指定自动装配，@Autowired可以修饰setter方法、普通方法、实例变量和构造器等。当使用@Autowired标注setter方法时，默认采用byType自动装配策略。在这种策略下，符合自动装配类型的候选Bean实例常常有多个，这个时候就可能引起异常，为了实现精确的自动装配，Spring提供了@Qualifier注解，通过使用@Qualifier，允许根据Bean的id来执行自动装配。</p>
+<h3 id="指定依赖注入关系"><a href="#指定依赖注入关系" class="headerlink" title="指定依赖注入关系"></a>指定依赖注入关系</h3><p>@Autowired 写在构造器前。<br>@Qualifier 写在参数前面。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Autowired</div><div class="line">public void setName(@Qualifier(&quot;name&quot;) String name) &#123;</div><div class="line">	this.name = name;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>注入的对象为单例是，@Qualifier可省略。此时按类型匹配参数。</strong></p>
+<ul>
+<li>@Resource注解能用于setter注入<br>@Resource(name=”computer”)<br><strong>注入对象为单例,(name=”computer”)可省略，此时spring按类型匹配参数</strong><br>@Resource也可以写在属性上，作用和set上一致，但是只会执行<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">### 注入Spring表达式值</div><div class="line">@Value可以注入spring表达式值。</div></pre></td></tr></table></figure></li>
+</ul>
+<p><util:properties id="const" location="classpath:const.properties"></util:properties></p>
+<p>@Value(“#{const.PAGE_SIZE}”)<br>private int pageSize;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">### Spring 框架的 AOP</div><div class="line">- 切面（Aspect）: 切面用于组织多个Advice，Advice放在切面中定义。</div><div class="line">- 连接点（Joinpoint）: 程序执行过程中明确的点，如方法的调用，或者异常的抛出。在Spring AOP中，连接点总是方法的调用。</div><div class="line">- 增强处理（Advice）: AOP框架在特定的切入点执行的增强处理。处理有&quot;around&quot;、&quot;before&quot;和&quot;after&quot;等类型</div><div class="line">- 切入点（Pointcut）: 可以插入增强处理的连接点。简而言之，当某个连接点满足指定要求时，该连接点将被添加增强处理，该连接点也就变成了切入点。</div><div class="line">Spring中的AOP代理由Spring的IoC容器负责生成、管理，其依赖关系也由IoC容器负责管理。</div><div class="line">为了在应用中使用@AspectJ支持，Spring需要添加三个库：</div><div class="line">aspectjweaver.jar</div><div class="line">aspectjrt.jar</div><div class="line">aopalliance.jar </div><div class="line">- 并在Spring配置文件中做如下配置：</div><div class="line">``` </div><div class="line">启动@AspectJ支持</div><div class="line">&lt;aop:aspectj-autoproxy/&gt;</div><div class="line">指定自动搜索Bean组件、自动搜索切面类</div><div class="line">&lt;context:component-scan base-package=&quot;edu.shu.sprint.service&quot;&gt;</div><div class="line">    &lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.aspectj.lang.annotation.Aspect&quot;/&gt;</div><div class="line">&lt;/context:component-scan&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="Spring过滤器组件自动扫描"><a href="#Spring过滤器组件自动扫描" class="headerlink" title="Spring过滤器组件自动扫描"></a>Spring过滤器组件自动扫描</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</div><div class="line">	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">	xmlns:context=&quot;http://www.springframework.org/schema/context&quot;</div><div class="line">	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans</div><div class="line">	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd</div><div class="line">	http://www.springframework.org/schema/context</div><div class="line">	http://www.springframework.org/schema/context/spring-context-2.5.xsd&quot;&gt;</div><div class="line">	&lt;context:component-scan base-package=&quot;com.yiibai&quot; &gt;</div><div class="line">		&lt;context:include-filter type=&quot;regex&quot; </div><div class="line">             expression=&quot;com.yiibai.customer.dao.*DAO.*&quot; /&gt;</div><div class="line">		&lt;context:include-filter type=&quot;regex&quot;         expression=&quot;com.yiibai.customer.services.*Service.*&quot; /&gt;</div><div class="line">	&lt;/context:component-scan&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>使用“横切”技术，AOP把软件系统分为两个部分：核心关注点和横切关注点。业务处理的主要流程是核心关注点，与之关系不大的部分是横切关注点。横切关注点的一个特点是，他们经常发生在核心关注点的多处，而各处都基本相似。比如权限认证、日志、事务处理。Aop 的作用在于分离系统中的各种关注点，将核心关注点和横切关注点分离开来。正如Avanade公司的高级方案构架师Adam Magee所说，AOP的核心思想就是“将应用程序中的商业逻辑同对其提供支持的通用服务进行分离。”</li>
+<li><p>实现AOP的技术，主要分为两大类：一是采用动态代理技术，利用截取消息的方式，对该消息进行装饰，以取代原有对象行为的执行；二是采用静态织入的方式，引入特定的语法创建“方面”，从而使得编译器可以在编译期间织入有关“方面”的代码。</p>
+</li>
+<li><p>AOP使用场景<br>AOP用来封装横切关注点，具体可以在下面的场景中使用:<br>Authentication 权限<br>Caching 缓存<br>Context passing 内容传递<br>Error handling 错误处理<br>Lazy loading　懒加载<br>Debugging　　调试<br>logging, tracing, profiling and monitoring　记录跟踪　优化　校准<br>Performance optimization　性能优化<br>Persistence　　持久化<br>Resource pooling　资源池<br>Synchronization　同步<br>Transactions 事务</p>
+</li>
+<li><p>Spring提供了4种实现AOP的方式：<br>1.经典的基于代理的AOP<br>2.@AspectJ注解驱动的切面<br>3.纯POJO切面<br>4.注入式AspectJ切面</p>
+</li>
+<li><p>Spring支持五种类型的通知：<br>Before(前)  org.apringframework.aop.MethodBeforeAdvice<br>After-returning(返回后) org.springframework.aop.AfterReturningAdvice<br>After-throwing(抛出后) org.springframework.aop.ThrowsAdvice<br>Arround(周围) org.aopaliance.intercept.MethodInterceptor<br>Introduction(引入) org.springframework.aop.IntroductionInterceptor</p>
+</li>
+</ul>
+<h3 id="配置可以通过xml文件来进行，大概有四种方式："><a href="#配置可以通过xml文件来进行，大概有四种方式：" class="headerlink" title="配置可以通过xml文件来进行，大概有四种方式："></a>配置可以通过xml文件来进行，大概有四种方式：</h3><ol>
+<li>配置ProxyFactoryBean，显式地设置advisors, advice, target等</li>
+<li>配置AutoProxyCreator，这种方式下，还是如以前一样使用定义的bean，但是从容器中获得的其实已经是代理对象</li>
+<li>通过<aop:config>来配置</aop:config></li>
+<li>通过<aop: aspectj-autoproxy="">来配置，使用AspectJ的注解来标识通知及切入点</aop:></li>
+</ol>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div></pre></td><td class="code"><pre><div class="line">package com.jty;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line">import com.day1.HelloWorld;</div><div class="line">@Component</div><div class="line">public class HelloWorldImpl implements HelloWorld &#123;</div><div class="line">	@Override</div><div class="line">	public void printHelloworld() &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		System.out.println(&quot;printHelloworld1&quot;);</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public void doPrint()  &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		try &#123;</div><div class="line">			Thread.sleep(5);</div><div class="line">		&#125; catch (InterruptedException e) &#123;</div><div class="line">			// TODO Auto-generated catch block</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">		System.out.println(&quot;doPrint1&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">切面</div><div class="line">package com.jty;</div><div class="line">public class LogHandler &#123;</div><div class="line">	public void logBefore()&#123;</div><div class="line">		System.out.println(&quot;log ... before&quot;);</div><div class="line">	&#125;</div><div class="line">	public void logAfter()&#123;</div><div class="line">		System.out.println(&quot;log...after&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">package com.jty;</div><div class="line">public class TimeHandler &#123;</div><div class="line">	private void printTime() &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		System.out.println(System.currentTimeMillis());</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">配置文件</div><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line"> &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; </div><div class="line">    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">    xmlns:context=&quot;http://www.springframework.org/schema/context&quot; </div><div class="line">    xmlns:jdbc=&quot;http://www.springframework.org/schema/jdbc&quot;  </div><div class="line">    xmlns:jee=&quot;http://www.springframework.org/schema/jee&quot; </div><div class="line">    xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;</div><div class="line">    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; </div><div class="line">    xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;</div><div class="line">    xmlns:util=&quot;http://www.springframework.org/schema/util&quot;</div><div class="line">    xmlns:jpa=&quot;http://www.springframework.org/schema/data/jpa&quot;</div><div class="line">    xsi:schemaLocation=&quot;</div><div class="line">        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd</div><div class="line">        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd</div><div class="line">        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd&quot;&gt;</div><div class="line">       </div><div class="line">        &lt;context:annotation-config/&gt;</div><div class="line">        &lt;context:component-scan base-package=&quot;com.jty&quot;&gt;&lt;/context:component-scan&gt;</div><div class="line">        &lt;bean id=&quot;caleandar01&quot; class=&quot;java.util.Calendar&quot; factory-method=&quot;getInstance&quot;&gt;&lt;/bean&gt;</div><div class="line">        &lt;bean id=&quot;c2&quot; class=&quot;java.util.GregorianCalendar&quot; &gt;&lt;/bean&gt;</div><div class="line">        &lt;bean id=&quot;dateObj&quot; factory-bean=&quot;c2&quot; factory-method=&quot;getTime&quot;&gt;&lt;/bean&gt;</div><div class="line">        </div><div class="line">        &lt;bean id=&quot;e1&quot; class=&quot;com.jty.Example01&quot; init-method=&quot;init&quot; destroy-method=&quot;destory&quot;&gt;</div><div class="line">        	&lt;property name=&quot;message&quot; value=&quot;Hello World!&quot;&gt;&lt;/property&gt;</div><div class="line">        &lt;/bean&gt;</div><div class="line">        &lt;util:properties id=&quot;const&quot; location=&quot;classpath:const.properties&quot;&gt;&lt;/util:properties&gt;</div><div class="line">        &lt;util:list id=&quot;l1&quot;&gt;</div><div class="line">        	&lt;value&gt;c&lt;/value&gt;</div><div class="line">        	&lt;value&gt;java&lt;/value&gt;</div><div class="line">        	&lt;value&gt;c++&lt;/value&gt;</div><div class="line">        &lt;/util:list&gt;</div><div class="line">        &lt;aop:aspectj-autoproxy&gt;&lt;/aop:aspectj-autoproxy&gt;</div><div class="line">        </div><div class="line">        &lt;bean id=&quot;timehandle&quot; class=&quot;com.jty.TimeHandler&quot;&gt;&lt;/bean&gt;</div><div class="line">         &lt;bean id=&quot;logHandler&quot; class=&quot;com.jty.LogHandler&quot;&gt;&lt;/bean&gt;</div><div class="line">        &lt;aop:config&gt;</div><div class="line">        	&lt;aop:aspect id=&quot;time&quot; ref=&quot;timehandle&quot;&gt;</div><div class="line">        		&lt;aop:pointcut expression=&quot;execution(* com.jty.*.*(..))&quot; id=&quot;addAllMethod&quot;/&gt;</div><div class="line">        		&lt;aop:before method=&quot;printTime&quot; pointcut-ref=&quot;addAllMethod&quot; /&gt;</div><div class="line">        		&lt;aop:after method=&quot;printTime&quot; pointcut-ref=&quot;addAllMethod&quot; /&gt;</div><div class="line">     		&lt;/aop:aspect&gt;</div><div class="line">     		&lt;aop:aspect id=&quot;logHandler&quot; ref=&quot;logHandler&quot;&gt;</div><div class="line">     			&lt;aop:pointcut expression=&quot;execution(* com.jty.HelloWorld*.*(..))&quot; id=&quot;AllM&quot;/&gt;</div><div class="line">     			&lt;aop:before method=&quot;logBefore&quot; pointcut-ref=&quot;AllM&quot; /&gt;</div><div class="line">     			&lt;aop:after method=&quot;logAfter&quot; pointcut-ref=&quot;AllM&quot; /&gt;</div><div class="line">     		&lt;/aop:aspect&gt;</div><div class="line">        &lt;/aop:config&gt;</div><div class="line">        &lt;/beans&gt;</div><div class="line"></div><div class="line">Junit</div><div class="line">package com.test;</div><div class="line">import org.junit.Test;</div><div class="line">import org.springframework.context.ApplicationContext;</div><div class="line">import org.springframework.context.support.AbstractApplicationContext;</div><div class="line">import org.springframework.context.support.ClassPathXmlApplicationContext;</div><div class="line">import com.day1.HelloWorld;</div><div class="line">import com.jty.Example01;</div><div class="line">public class TestCase &#123;</div><div class="line">	@Test</div><div class="line">	public void test1()&#123;</div><div class="line">		String cfg =&quot;applicationContext.xml&quot;;</div><div class="line">		AbstractApplicationContext ac = new ClassPathXmlApplicationContext(cfg);</div><div class="line">		HelloWorld h1 = (HelloWorld)ac.getBean(&quot;helloWorldImpl&quot;);</div><div class="line">		h1.doPrint();</div><div class="line">		h1.printHelloworld();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>要想让logHandler在timeHandler前使用有两个办法：<br>（1）aspect里面有一个order属性，order属性的数字就是横切关注点的顺序<br>（2）把logHandler定义在timeHandler前面，Spring默认以aspect的定义顺序作为织入顺序</p>
+<h3 id="强制使用CGLIB生成代理"><a href="#强制使用CGLIB生成代理" class="headerlink" title="强制使用CGLIB生成代理"></a>强制使用CGLIB生成代理</h3><p>前面说过Spring使用动态代理或是CGLIB生成代理是有规则的，高版本的Spring会自动选择是使用动态代理还是CGLIB生成代理内容，当然我们也可以强制使用CGLIB生成代理，那就是<aop:config>里面有一个”proxy-target-class”属性，这个属性值如果被设置为true，那么基于类的代理将起作用，如果proxy-target-class被设置为false或者这个属性被省略，那么基于接口的代理将起作用</aop:config></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/容器、IOC/" rel="tag"># 容器、IOC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/01/java 集合Map/" rel="next" title="java 集合Map">
+                <i class="fa fa-chevron-left"></i> java 集合Map
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/04/Spring学习2/" rel="prev" title="Spring 学习2">
+                Spring 学习2 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/07/04/Spring学习1/"
+           data-title="Spring 学习1" data-url="http://guilongyue.github.io/2017/07/04/Spring学习1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-容器、Ioc"><span class="nav-number">1.</span> <span class="nav-text">Spring 容器、Ioc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dependency-Injection-and-Inversion-of-Control"><span class="nav-number">1.1.</span> <span class="nav-text">Dependency Injection and Inversion of Control</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-配置元数据"><span class="nav-number">1.1.1.</span> <span class="nav-text">Spring 配置元数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean-的实例化"><span class="nav-number">1.1.2.</span> <span class="nav-text">Bean 的实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean-的作用域"><span class="nav-number">1.1.3.</span> <span class="nav-text">Bean 的作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean-的生命周期"><span class="nav-number">1.1.4.</span> <span class="nav-text">Bean 的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Bean-后置处理器"><span class="nav-number">1.1.5.</span> <span class="nav-text">Spring Bean 后置处理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean-延迟实例化"><span class="nav-number">1.1.6.</span> <span class="nav-text">Bean 延迟实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DI-依赖注入"><span class="nav-number">1.1.7.</span> <span class="nav-text">DI 依赖注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-注入集合"><span class="nav-number">1.1.8.</span> <span class="nav-text">Spring 注入集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注入-null-和空字符串的值"><span class="nav-number">1.1.9.</span> <span class="nav-text">注入 null 和空字符串的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用方式List集合注入"><span class="nav-number">1.1.10.</span> <span class="nav-text">引用方式List集合注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring表达式"><span class="nav-number">1.1.11.</span> <span class="nav-text">Spring表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于注解的组件扫描"><span class="nav-number">1.1.12.</span> <span class="nav-text">基于注解的组件扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件扫描"><span class="nav-number">1.1.13.</span> <span class="nav-text">组件扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动扫描的注解标记"><span class="nav-number">1.1.14.</span> <span class="nav-text">自动扫描的注解标记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定组件的组用域"><span class="nav-number">1.1.15.</span> <span class="nav-text">指定组件的组用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Resource配置依赖"><span class="nav-number">1.1.16.</span> <span class="nav-text">使用@Resource配置依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-PostConstruct和-PreDestroy定制生命周期行为"><span class="nav-number">1.1.17.</span> <span class="nav-text">使用@PostConstruct和@PreDestroy定制生命周期行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring4-0增强的自动装配和精确装配"><span class="nav-number">1.1.18.</span> <span class="nav-text">Spring4.0增强的自动装配和精确装配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定依赖注入关系"><span class="nav-number">1.1.19.</span> <span class="nav-text">指定依赖注入关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring过滤器组件自动扫描"><span class="nav-number">1.1.20.</span> <span class="nav-text">Spring过滤器组件自动扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置可以通过xml文件来进行，大概有四种方式："><span class="nav-number">1.1.21.</span> <span class="nav-text">配置可以通过xml文件来进行，大概有四种方式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">1.1.22.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强制使用CGLIB生成代理"><span class="nav-number">1.1.23.</span> <span class="nav-text">强制使用CGLIB生成代理</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

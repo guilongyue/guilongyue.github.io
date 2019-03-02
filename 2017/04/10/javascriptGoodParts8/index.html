@@ -1,0 +1,838 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,javascript语言精粹," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="方法Array
+array.concat(item…)concat方法返回一个新数组，它包含array的浅复制，并将1个或多个参数item附加在其后，如果参数item是一个数组，那么它的元素会被分别添加，此外参见arrary.push(item…);">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javascript good parts 方法">
+<meta property="og:url" content="http://guilongyue.github.io/2017/04/10/javascriptGoodParts8/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="方法Array
+array.concat(item…)concat方法返回一个新数组，它包含array的浅复制，并将1个或多个参数item附加在其后，如果参数item是一个数组，那么它的元素会被分别添加，此外参见arrary.push(item…);">
+<meta property="og:updated_time" content="2017-04-13T08:29:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javascript good parts 方法">
+<meta name="twitter:description" content="方法Array
+array.concat(item…)concat方法返回一个新数组，它包含array的浅复制，并将1个或多个参数item附加在其后，如果参数item是一个数组，那么它的元素会被分别添加，此外参见arrary.push(item…);">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/04/10/javascriptGoodParts8/"/>
+
+
+
+
+
+  <title> javascript good parts 方法 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/04/10/javascriptGoodParts8/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                javascript good parts 方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-10T12:00:13+08:00">
+                2017-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/10/javascriptGoodParts8/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/10/javascriptGoodParts8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h3 id="Array"><a href="#Array" class="headerlink" title="Array"></a>Array</h3><ol>
+<li>array.concat(item…)<br>concat方法返回一个新数组，它包含array的浅复制，并将1个或多个参数item附加在其后，如果参数item是一个数组，那么它的元素会被分别添加，此外参见arrary.push(item…);<a id="more"></a></li>
+<li><p>array.join(separator)<br>join方法把数组变为字符串，用separator把他们连在一起，默认的方法separator是，。我们可以把空字符串作为separator。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;];</div><div class="line">a.push(&apos;d&apos;);</div><div class="line">var c = a.join(&apos;&apos;);</div><div class="line">c 是&quot;abcd&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>array.pop();<br>push和pop使array像堆栈stack一样工作，pop移除array中最后一个元素<br>并返回，如果array是空的他将返回undefined。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var a = [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;];</div><div class="line">var c = a.pop();</div><div class="line">c &quot;c&quot;</div><div class="line">a [&quot;a&quot;, &quot;b&quot;]</div><div class="line">可以类似于这样实现</div><div class="line">Array.method(&apos;pop&apos;,function()&#123;</div><div class="line">	return this.replace(this.length-1,1)[0];</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>array.push(item…)<br>push方法将一个或多个参数item附加到一个数组的末尾，不像concat方法那样，他会修改该数组array，如果参数item是一个数组，他会将数组作为单个元素添加到数组中，它返回新array的长度。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var a = [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;];</div><div class="line">var c = [&apos;c&apos;,&apos;d&apos;,&apos;e&apos;];</div><div class="line">a.concat(c);        [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;]</div><div class="line">a          [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</div><div class="line">a.push(c);       4</div><div class="line">a           [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, Array(3)]</div></pre></td></tr></table></figure>
+</li>
+<li><p>array.reverse();<br>reverse方法反转array中的元素的顺序，他返回当前的array。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;];</div><div class="line">var c = a.reverse();</div><div class="line">a          [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</div><div class="line">c          [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>array.shift()<br>shift方法会移除数组array中的第一个元素并返回该元素，如果这个数组是空的，他会返回undefined。shift通常比pop慢的多；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;];</div><div class="line">var c = a.shift();</div><div class="line">c    &quot;a&quot;</div><div class="line">a    [&quot;b&quot;, &quot;c&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>array.slice(start,end);<br>slice方法对array中的一段做浅复制。第一个被复制的元素是array[start].他将一直复制到array[end]为止。end参数是可选的，被且默认值是该数组的长度array.length，若果两个参数中的任何一个是负数，array.length将和他们相加，视图使他们变成非负数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var a = [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;];</div><div class="line">var b = a.slice(0,1);</div><div class="line">b   [&quot;a&quot;]</div><div class="line">a   [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</div><div class="line">var c = a.slice(1);</div><div class="line">c     [&quot;b&quot;, &quot;c&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>array.sort(comparefn)<br>sort方法对array中的内容做适当的排序，他不能正确的给一组数字排序。<br>js默认的比较函数假定所有要排序的元素都是字符串，没有检测他们的类型，幸运的是你可以用自己的比较函数来替换默认的比较函数，你的比较函数应该接受两个参数，并且若果两个参数相等则返回0，如果第一个参数要排在前面，则返回一个负数，如果第二个参数要排在前面则返回一个正数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var n = [3,4,1,23];</div><div class="line">n.sort();      [1, 23, 3, 4]</div><div class="line">n.sort(function(a,b)&#123;return a-b;&#125;);         [1, 3, 4, 23]</div><div class="line">var m = [&apos;aa&apos;,&apos;bb&apos;,&apos;a&apos;,4,8,15,16,23,42];</div><div class="line">m.sort(function(a,b)&#123;if(a==b)&#123;return 0&#125;if(typeof a === typeof b)&#123;return a&lt;b?-1:1;&#125;return typeof a &lt; typeof b?-1:1&#125;);</div><div class="line">[4, 8, 15, 16, 23, 42, &quot;a&quot;, &quot;aa&quot;, &quot;bb&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>array.splice(start,deleteCount,item…)<br>splice方法从array中移除1个或多个元素，并用新的item替换他们，参数start是从数组array中移除元素的开始位置。参数deleteCount是要移除的元素合数。如果有额外的参数，那么item都将插入到所移除元素的位置上。他将返回一个被移除元素的数组。<br>splice最主要的作用是从一个数组中删除元素，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;];</div><div class="line">var r = a.splice(1,1,&apos;ache&apos;,&apos;bug&apos;);</div><div class="line">a     [&quot;a&quot;, &quot;ache&quot;, &quot;bug&quot;, &quot;c&quot;]</div><div class="line">r     [&quot;b&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>array.unshift(item…)<br>unshift方法像push方法一样用于将元素添加到数组中，是吧item插入到开始部分而不是末尾。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;];</div><div class="line">var r = a.unshift(&apos;?&apos;,&apos;@&apos;);</div><div class="line">a       [&quot;?&quot;, &quot;@&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</div><div class="line">r       5</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h3><ol>
+<li>function.apply(thisArg,argArray)<br>apply方法调用函数function，传递一个将被绑到this上的对象和一个可选的参数数组。apply方法被用在apply调用模式中。</li>
+</ol>
+<h3 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h3><ol>
+<li>number.toExponential（fractionDigits）<br>toExponential方法吧这个number转化成一个指数形式的字符串。</li>
+<li>number.toFixed(fractionDigits)<br>toFixed方法把这个number转换为一个十进制形式的字符串。可选参数fractionDigits控制其小数点后的数字位数。0-20之间</li>
+<li>number.toPrecision(precision)<br>把这个number转换成一个10进制形式的字符串，可选参数控制控制有效数字位数。0-21之间<br>number.toString(radix);<br>toString方法把这个number转换成字符串<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(10).toString(10)</div><div class="line">&quot;10&quot;</div><div class="line">(10).toString(2)</div><div class="line">&quot;1010&quot;</div><div class="line">(10).toString(16)</div><div class="line">&quot;a&quot;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h3><ol>
+<li>object.hasOwnProperty(name)<br>如果这个object包含了一个名为name的属性，那么hasOwnProperty方法返回true。原型链中同名属性是不会被检查的。这个方法对name就是hasOwnProperty时不起作用，此时返回false.<h3 id="RegExp"><a href="#RegExp" class="headerlink" title="RegExp"></a>RegExp</h3></li>
+<li>regexp.exec(string);<br>是最强大也是最慢的方法，如果他成功匹配regexp和string，他会返回一个数组，数组中下表为0的元素将包含正则表达式regexp匹配的子字符串，下标为1元素是分组一捕获的文本，下标为2的元素是分组2捕获的文本，以此类推，如果匹配失败返回null。<br>如果regexp带有一个g标志(全局标志)，事情变得有点更加复杂了，查找不是从这个字符串的其实位置开始，而是从regexp.lastIndex（它初始化为0）位置开始。如果匹配成功，那么regexp。lastIndex将被设置为该匹配后第一个字符的位置。</li>
+<li>regexp.test（string）<br>test方法是最简单和最快的方法，如果该regexp匹配该字符串，他会返回true，否则返回false。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var b = /&amp;.+;/.test(&apos;feeaada &amp;amp;beans&apos;);</div><div class="line">b        true</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><ol>
+<li><p>string.charAt(pos);<br>charAt方法返回在string中pos位置处的字符。如果pos小于0，或大于等于length。他会返回空字符串，js没有字符类型，这个方法返回的结果是一个字符串。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var name = &apos;Crrrra&apos;;</div><div class="line">var initial = name.charAt(0);  &apos;C&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>String.charCodeAt(pos)<br>charCodeAt方法同charAt一样，只不过他返回的不是一个字符串，而是以整数形式表示的在String中的pos位置处的字符的字符码位，如果pos小于0或大于等于字符串的长度string.length,它返回NaN。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var initial = name.charCodeAt(0);</div><div class="line">initial    67</div></pre></td></tr></table></figure>
+</li>
+<li><p>string.concat(string…)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var a = &apos;A&apos;.concat(&apos;b&apos;,&apos;c&apos;);</div><div class="line">+号运算符更方便</div></pre></td></tr></table></figure>
+</li>
+<li><p>string.indexOf(searchString,position);<br>indexOf方法在string内查找另一个字符串searchString。如果找到，返回第一个匹配字符的位置，否则返回-1，可选参数可设置从string的某个位置开始查找。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var text = &apos;Mississippi&apos;;</div><div class="line">var p = text.indexOf(&apos;ss&apos;);   2</div><div class="line">p = text.indexOf(&apos;ss&apos;,3);   5</div></pre></td></tr></table></figure>
+</li>
+<li><p>string.lastIndexOf(searchString,position)<br>lastIndexOf方法和indexOf方法类似，只不过他是从字符串末尾开始查找。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">text.lastIndexOf(&apos;ss&apos;);  5</div><div class="line">text.lastIndexOf(&apos;ss&apos;,3);</div></pre></td></tr></table></figure>
+</li>
+<li><p>string.localeCompare(that)<br>比较两个字符串，如果string比字符串thst小，那么结果为负数，相等结果为0.</p>
+</li>
+<li>string.match(regexp)<br>match方法匹配一个字符串和一个正则表达式。他根据g标识来决定如何进行匹配，如果没有g标识，那么调用string.match(regexp)的结果与regexp。exec(string)的结果相同。然而如果regexp带有g标识，那么他将返回一个包含除捕获分组之外的所有匹配的数组。</li>
+<li>replace方法string.replace（searchValue,replaceValue）<br>replace方法对string进行查找和替换操作，并返回一个新的字符串。参数searchValue可以是字符串或正则表达式对象，如果他是一个字符串，那么searchvalue只会在第一次出现的地方替换。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var res = &apos;mothor_in_law&apos;.replace(&apos;_&apos;,&apos;-&apos;);</div><div class="line">res   &quot;mothor-in_law&quot;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果searchValue是一个正则表达式且带有g标志。那么他将替换所有匹配之处，如果没有他将只替换第一个。<br>replaceValue可以是一个字符串或一个函数，如果replaceValue是一个字符串，字符$有特别的含义。还可以是函数，以后再说。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var old = /\((\d&#123;3&#125;)\)/g;</div><div class="line">var p = &apos;(555)666-1212&apos;.replace(old,&apos;$1-&apos;); &quot;555-666-1212&quot;</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>string.search(regexp)<br>search方法和indexOf方法类似，只是他接受一个正则表达式对象，而不是字符串，如果找到匹配，他返回第一个匹配的首字符位置，如果没有找到匹配，则返回-1.此方法会忽略g标志，且没有position参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var text = &apos;and in it he says &quot;Any damn fool could&apos;;</div><div class="line">var pos = text.search(/[&quot;&apos;]/);</div></pre></td></tr></table></figure>
+</li>
+<li><p>string.slice(start,end)<br>slice方法复制string的一部分来构造一个新的字符串，如果start是负数，他将于string.length相加。end参数是可选的，且他的默认值是负数，那么他将与string。length相加。end参数，想要得到从位置p开始的n个字符，就用string。slice(p,p+n).此外。substring和array。slice。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var text = &apos;and in it he says &quot;Any damn fool could&apos;;</div><div class="line">undefined</div><div class="line">var a = text.slice(18);  &quot;&quot;Any damn fool could&quot;</div><div class="line">text  &quot;and in it he says &quot;Any damn fool could&quot;</div><div class="line">var c = a.slice(-5);      &quot;could&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>string.split(separator,limit)<br>split方法就是把这个string分割成片段来创建一个字符串数组，可选参数，limit可以限制被分割的判断数量。separator可以是一个字符串或一个正则表达式。<br>如果separator是一个空字符串，将返回一个单字符的数组：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = digits.split(&apos;&apos;,5);   [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;]</div><div class="line">var ip = [&quot;192.168.1.0&quot;]</div><div class="line">var d = ip.split(&apos;.&apos;);    [&quot;192&quot;, &quot;168&quot;, &quot;1&quot;, &quot;0&quot;]</div><div class="line">var c= &apos;|a|b|c&apos;.split(&apos;|&apos;);   [&quot;&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>否则，此方法会返回string中查找所有separator出现的地方。分隔符两边的每个单元文本都会被复制到该数组中。此方法会忽略g标志:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var text = &apos;and,  fire	,middle&apos;;</div><div class="line">var d = text.split(/\s*,\s*/);</div><div class="line">[&quot;and&quot;, &quot;fire&quot;, &quot;middle&quot;]  火狐可以，但谷歌不行。</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>string.substring(start,end)<br>和slice一样，只是他不处理负参数.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var t = &quot;sadsadas&quot;;</div><div class="line">var s = t.substring(1,2); &quot;a&quot;</div><div class="line">var s1 = t.substr(1,2);  &quot;ad&quot;</div><div class="line">var s2 = t.slice(1,2);  &quot;a&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>string.toLowerCase(); toUpperCase();<br>返回一个新的字符串。</p>
+</li>
+<li>string.fromCharCode(char…)<br>从一串数字返回一个字符串。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String.fromCharCode(67,97,116);</div><div class="line">&quot;Cat&quot;</div></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+            <a href="/tags/javascript语言精粹/" rel="tag"># javascript语言精粹</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/07/java Array/" rel="next" title="java Array">
+                <i class="fa fa-chevron-left"></i> java Array
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/18/javascriptGoodParts5/" rel="prev" title="javascript good parts 继承">
+                javascript good parts 继承 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/10/javascriptGoodParts8/"
+           data-title="javascript good parts 方法" data-url="http://guilongyue.github.io/2017/04/10/javascriptGoodParts8/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#方法"><span class="nav-number">1.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Array"><span class="nav-number">1.0.1.</span> <span class="nav-text">Array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Function"><span class="nav-number">1.0.2.</span> <span class="nav-text">Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Number"><span class="nav-number">1.0.3.</span> <span class="nav-text">Number</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object"><span class="nav-number">1.0.4.</span> <span class="nav-text">Object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RegExp"><span class="nav-number">1.0.5.</span> <span class="nav-text">RegExp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">1.0.6.</span> <span class="nav-text">String</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

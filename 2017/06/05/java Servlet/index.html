@@ -1,0 +1,932 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,Servlet," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Java Servlet 工作原理解析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Servlet 工作原理解析">
+<meta property="og:url" content="http://guilongyue.github.io/2017/06/05/java Servlet/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Java Servlet 工作原理解析">
+<meta property="og:image" content="http://guilongyue.github.io/images/servlet1.png">
+<meta property="og:updated_time" content="2017-06-09T02:03:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Servlet 工作原理解析">
+<meta name="twitter:description" content="Java Servlet 工作原理解析">
+<meta name="twitter:image" content="http://guilongyue.github.io/images/servlet1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/06/05/java Servlet/"/>
+
+
+
+
+
+  <title> Java Servlet 工作原理解析 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/06/05/java Servlet/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java Servlet 工作原理解析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-05T16:18:54+08:00">
+                2017-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/05/java Servlet/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/05/java Servlet/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java-Servlet-工作原理解析"><a href="#Java-Servlet-工作原理解析" class="headerlink" title="Java Servlet 工作原理解析"></a>Java Servlet 工作原理解析</h1><a id="more"></a>
+<ol>
+<li>编写1个实现servlet接口或继承HttpServlet的类</li>
+<li>编译源文件为字节码</li>
+<li>将编译完的组件打包</li>
+<li>部署：将整个appName整个文件夹拷贝到Tomcat的webapps文件夹下。</li>
+<li>启动Tomcat并访问。<a href="http://ip:port/appName/servlet" target="_blank" rel="external">http://ip:port/appName/servlet</a></li>
+<li>HTTP协议用来定义浏览器和web服务器如何通信及通信格式的应用层协议。</li>
+</ol>
+<h3 id="从Servlet-容器说起"><a href="#从Servlet-容器说起" class="headerlink" title="从Servlet 容器说起"></a>从Servlet 容器说起</h3><ul>
+<li><p>HttpServletRequest对象</p>
+<ul>
+<li>读取写入Http请求数据 请求行消息头</li>
+<li>取的和设置cookie</li>
+<li>取的路径信息</li>
+<li>标识Http回话</li>
+<li>实现请求转发<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">getHeaderNames</div><div class="line">getHeader(String name)</div><div class="line">getMethod()</div><div class="line">getRequestURI</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>HttpServletResponse对象</p>
+<ul>
+<li>设置对客户端的输出内容</li>
+<li>这只响应的状态码</li>
+<li>设置浏览器的解码方式</li>
+<li>设置cookie</li>
+<li>实现重定向<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">中文</div><div class="line">setContentType(String type)</div><div class="line">setCharacterEncoding(String charset)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="获取请求参数"><a href="#获取请求参数" class="headerlink" title="获取请求参数"></a>获取请求参数</h3><p>1:1的 getParameter(name)<br>1:M 的Name-Values(name)  getParameterValues(paraName)<br>复选框的值</p>
+<h3 id="区分请求方式"><a href="#区分请求方式" class="headerlink" title="区分请求方式"></a>区分请求方式</h3><p>GET 请求方式 地址栏输入 点击链接  表单默认提交<br>POST PUT DELETE HEAD</p>
+<h3 id="中文乱码"><a href="#中文乱码" class="headerlink" title="中文乱码"></a>中文乱码</h3><ul>
+<li>当表单提交时，浏览器会对中文参数值进行编码（会使用打开表单所在的页面时的字符集进行编码）。Web服务器在默认情况下会使用iso-8859-1去解码。</li>
+<li>编码与解码方式不一致<br>解决POST方式时的乱码问题</li>
+<li><p>表单所在页面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta http-equiv=&quot;content-type&quot; content =&quot;text/html;charset=utf-8&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>服务器端 POST</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">request.setCharacterEncoding(&quot;utf-8&quot;)</div><div class="line">添加在读取参数的前面</div><div class="line">此方法只针对post请求有效</div></pre></td></tr></table></figure>
+</li>
+<li><p>服务器端 GET</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">meta 方式</div><div class="line">String username = request.getParameter(&quot;&quot;);</div><div class="line">username = new String(username.getBytes(&quot;iso-8859-1&quot;),&quot;utf-8&quot;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>解决输出内容乱码<br>在获取WriteOut对象及调用out方法之前调用setContentType方法。<br>response.setContentType(“text/html;charset=utf-8”);<br>作用：</p>
+<ul>
+<li>通知容器，在调用out.println方法输出时，使用指定的字符集</li>
+<li>生成消息头中content-type的值，通知浏览器，服务器返回的数据类型和字符集。</li>
+</ul>
+</li>
+</ul>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p>服务器向浏览器发送一个302的状态码及一个Location消息头（该消息头的值是一个地址，称之为重定向地址），浏览器收到后会立即向重定向地址发送请求。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">resopnse.sendRedirect(String url)</div></pre></td></tr></table></figure></p>
+<pre><code>- 重定向的地址是任意地址
+- 重定向之后浏览器的地址会发生改变
+- 重定向过程中涉及到的Web组件并不会共享同一个request和response对象
+</code></pre><blockquote>
+<p>一、request.setCharacterEncoding()：用来确保发往服务器的参数以汉字的编码来提取，设置从request中取得的值或从数据库中取出的值。<br>指定后可以通过request.getParameter()获取自己想要的字符串,如果没有提前指定，则会按照服务器端默认的“iso-8859-1”来进行编码；该方法只对post请求有效，对get请求无效；对于get请求，应该在server.xml中指定：URIEncoding=utf-8；<br>注意：在执行request.setCharacterEncoding()之前不能执行request.getParameter()方法；<br>原因：应该是在执行第一个getParameter()的时候，Java将会按照编码分析所有的提交内容，而后续的getParameter()不再进行分析，所以setCharacterEncoding()无效。而对于GET方法提交表单是，提交的内容在URL中，一开始就已经按照编码分析提交内容，setCharacterEncoding()自然就无效。<br>二、response.setCharacterEncoding():设置HTTP 响应的编码，用于设置服务器给客户端的数据的编码<br>一般不会用这个方法来设置响应编码，<br>一般使用response.setContentType()方法来设置HTTP 响应的编码，同时指定了浏览器显示的编码；<br>因为他在执行该方法通知服务器端以指定编码进行编码后，会自动调用response.setCharacterEncoding()方法来通知浏览器以指定编码来解码；使用此方法要在response.getWriter()执行之前或response提交之前；</p>
+</blockquote>
+<h3 id="请求资源路径"><a href="#请求资源路径" class="headerlink" title="请求资源路径"></a>请求资源路径</h3><ul>
+<li>浏览器依据ip，port建立与Servlet容器之间的连接，然后将请求的资源路径appName/xx.html发送过去给容器。</li>
+<li>容器根据应用名 /appname 找到对应应用的文件夹，容器会默认请求的是一个Servlet，查找web.xml文件中所有的Servlet配置“<url-pattern>”，看看是否有匹配的Servlet。</url-pattern></li>
+<li>匹配Servlet规则-精确匹配 <code>&lt;url-pattern&gt;abc.html&lt;/url-pattern&gt;</code>尽管应用中有abc.html这个具体的页面，也回去执行url-pattern对应的Servlet.</li>
+<li>通配符匹配，使用“*” 来匹配0个或多个字符</li>
+<li>如<code>&lt;url-pattern&gt;/*&lt;/url-pattern&gt;</code> 输入任何不同的地址都能匹配。</li>
+<li>后缀匹配，不能使用/开头，使用”*.”开头的任意多个字符。</li>
+<li>如<url-pattern>*.do</url-pattern></li>
+<li>无匹配Servlet的处理，如果精确匹配、通配符匹配、后缀匹配都没有成功时，容器会查到对应的文件，找不到文件会返回404。</li>
+</ul>
+<h3 id="一个Servlet实现多个请求"><a href="#一个Servlet实现多个请求" class="headerlink" title="一个Servlet实现多个请求"></a>一个Servlet实现多个请求</h3><ul>
+<li>一般情况下Servlet充当控制器的角色，即接受请求并分发给不同的资源。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class SomeServlet extends HttpServlet&#123;</div><div class="line">    public void service(HttpServletRequest request,</div><div class="line">                  HttpServletResponse response)     throws </div><div class="line">ServletException,IOException&#123;</div><div class="line">        //获得请求资源路径</div><div class="line">        String uri = request.getRequestURI();</div><div class="line">        System.out.println(&quot;uri:&quot; + uri);</div><div class="line">        if(uri.equals(&quot;/test/list.do&quot;))&#123;</div><div class="line">            System.out.println(&quot;进行员工列表的处理...&quot;);</div><div class="line">        &#125;else if(uri.equals(&quot;/test/add.do&quot;))&#123;</div><div class="line">            System.out.println(&quot;添加员工的处理...&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Servlet的生命周期"><a href="#Servlet的生命周期" class="headerlink" title="Servlet的生命周期"></a>Servlet的生命周期</h3><ol>
+<li><p>实例化 容器调用Servlet构造器，创建一个Servlet对象。情形：</p>
+<ul>
+<li>开始容器里面没有Servlet对象，只有在收到请求后才会创建Servlet对象。</li>
+<li><p>容器启动之后就立即创建相应的实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;servlet&gt;</div><div class="line">   &lt;servlet-name&gt;someServlet&lt;/servlet-name&gt;</div><div class="line">   &lt;servlet-class&gt;test/SomeServlet&lt;/servlet-class&gt;</div><div class="line">       &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</div><div class="line">&lt;/servlet&gt;</div><div class="line">&lt;servlet-mapping&gt; </div><div class="line">   	&lt;servlet-name&gt;someServlet&lt;/servlet-name&gt;</div><div class="line">   	&lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">&lt;/servlet-mapping&gt;</div></pre></td></tr></table></figure>
+<p>-配置文件中的load-on-startup节点用于设置该Servlet的创建时机。当其中的值大于等于0时，表示容器在启动时就会创建实例小于0时或没有指定时，代表容器在该Servlet被请求时再执行创建正数的值越小，优先级越高，应用启动时就越先被创建。</p>
+</li>
+</ul>
+</li>
+<li><p>初始化</p>
+<ul>
+<li>容器在创建好Servlet对象后，会立即调用该对象的init方法。</li>
+<li>一般情况下，我们不需写init方法，因为GenericServlet已经提供了init方法的实现(将容器传递过来的ServletConfig对象保存下来，并且提供了getServletConfig方法来获得ServletConfig对象)</li>
+<li>init方法只会执行一次。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;servlet&gt;</div><div class="line">      &lt;servlet-name&gt;someServlet&lt;/servlet-name&gt;</div><div class="line">      &lt;servlet-class&gt;test/SomeServlet&lt;/servlet-class&gt;</div><div class="line">          &lt;init-param&gt;</div><div class="line">              &lt;param-name&gt;debug&lt;/param-name&gt;</div><div class="line">              &lt;param-value&gt;true&lt;/param-valule&gt;</div><div class="line">          &lt;/init-param&gt;</div><div class="line">  &lt;/servlet&gt;</div><div class="line">  &lt;servlet-mapping&gt; </div><div class="line">      &lt;servlet-name&gt;someServlet&lt;/servlet-name&gt;</div><div class="line">      &lt;url-pattern&gt;/*&lt;/url-pattern&gt;</div><div class="line">  &lt;/servlet-mapping&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>就绪</p>
+<ul>
+<li>容器收到请求之后调用Servlet对象的service()来处理请求<blockquote>
+<p>Servlet被初始化以后就处于能够响应请求的就绪状态。每个对Servlet的请求由一个ServletRequest对象代表，Servlet给客户端的响应由一个ServletResponse对象代表。当客户端有一个请求时，容器就会将请求与响应对象转给Servlet，以参数的形式传给service方法。service方法由javax.servlet.Servlet定义，由具体的Servlet实现。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>销毁 <ul>
+<li>Servlet容器在销毁Servlet对象时会调用destroy方法来释放资源。通常情况下Servlet容器停止或者重新启动都会引起销毁Servlet对象的动作，但除此之外，Servlet容器也有自身管理Servlet对象的准则，整个生命周期并不需要人为进行干预。</li>
+<li>只会执行一次</li>
+<li>应用卸载时一定会调用destory方法</li>
+<li>可以override destory来实现自己的处理逻辑</li>
+</ul>
+</li>
+</ol>
+<h3 id="Servlet核心接口与类"><a href="#Servlet核心接口与类" class="headerlink" title="Servlet核心接口与类"></a>Servlet核心接口与类</h3><ul>
+<li>Servlet接口<ul>
+<li>init(ServletConfig config)</li>
+<li>service(ServletRequest req,ServletResponse res)</li>
+<li>destroy( )</li>
+</ul>
+</li>
+<li>GenericServlet抽象类<ul>
+<li>Servlet API中另一个重要的类就是GenericServlet这个抽象类，它对Servlet接口中的部分方法（init和destroy）添加了实现，使得开发时只需要考虑针对service方法的业务实现即可。</li>
+<li>init（ServletConfig config）方法由tomcat自动调用，它读取web工程下的web.xml，将读取的信息打包传给此参数，此方法的参数同时将接收的信息传递给GenericServlet类中的成员变量config，同时调用init()。但是选择init（ServletConfig config）势必会覆盖此方法已实现的内容，没有为config变量赋值，此后若是调用getServletConfig（）方法返回config时会产生空指针异常的，所以想重写init（ServletConfig config）方法，必须在方法体中第一句写上 super.init（config），为了防止程序员忘记重写super.init（config）方法sun公司自动为用户生成一个public void init()的方法。</li>
+<li>init()执行完毕后，ServletConfig对象消失，所以this.config =config可以保存对象引用</li>
+</ul>
+</li>
+<li>HttpServlet抽象类<ul>
+<li>设计Servlet接口中的service方法时，也是希望该方法能够处理多种协议下的请求及响应，所以参数类型是ServletRequest，而在HttpServlet这个支持HTTP协议的分支中，service方法的参数则变成了HttpServletRequest和HttpServletResponse，这两个类分别继承于ServletRequest和ServletResponse，也就是对这两个类的一个具体协议的包装，区别是增加了很多与HTTP协议相关的使用API。</li>
+</ul>
+</li>
+</ul>
+<h3 id="ServletContext"><a href="#ServletContext" class="headerlink" title="ServletContext"></a>ServletContext</h3><ul>
+<li>WEB容器在启动时，它会为每个WEB应用程序都创建一个对应的ServletContext对象，它代表当前web应用，是一个全局的环境变量。该应用中的任何组件，在任何时候都可以访问到该对象，所以Servlet上下文具有唯一性。</li>
+<li>一致存在（只要容器不关闭，应用没有被卸载删除，servlet上下文就一致存在）</li>
+</ul>
+<h4 id="如何获得Servlet上下文"><a href="#如何获得Servlet上下文" class="headerlink" title="如何获得Servlet上下文"></a>如何获得Servlet上下文</h4><ul>
+<li>GenericeServlet（HttpServlet）提供的 getServletContext（）</li>
+<li>ServletConfig提供的 getServletContext（）</li>
+<li>HttpSession提供的 getServletContext（）</li>
+<li>FilterConfig提供的 getServletContext（）<blockquote>
+<p>在Web应用范围内存取共享数据:如 setAttribute(),getAttribute()<br>访问Web应用的静态资源：如getRealPath(String path)<br>跨多个请求、用户和Servlet</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h3><ul>
+<li>容器收到请求后回启动一个线程来处理相应的请求</li>
+<li>默认情况下，容器只会为每个Servlet创建一个实例</li>
+<li>如果有多个请求访问同一个Servlet </li>
+</ul>
+<h3 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h3><p>JSP（Java Server Page）是Sun公司制定的一种服务器端动态页面技术的组件规范，以“.jsp”为后缀的文件中既包含HTML静态标记用于表现页面，也包含特殊的代码，用于生成动态内容。<br>JSP作为简化Servlet开发的一种技术，实质上最终依然要转变为Servlet才可能运行，只不过这个转变过程由Servlet容器来完成。所以遵循JSP的编写规范才能使得JSP转变为需要的Servlet。</p>
+<ul>
+<li>*.jsp</li>
+<li>HTML、注释、java代码、指令、隐含对象</li>
+<li>注释<ul>
+<li><code>&lt;!--aa--&gt;</code> HTML注释</li>
+<li><code>&lt;%--aaa--&gt;</code> JSP注释</li>
+</ul>
+</li>
+<li>Java代码<ul>
+<li>JSP表达式<ul>
+<li><code>&lt;%= ......%&gt;</code></li>
+<li>合法内容：变量、变量加运算符、有返回值的方法</li>
+</ul>
+</li>
+<li>JSP小脚本<ul>
+<li><code>&lt;% ... ...%&gt;</code></li>
+<li>Java代码片段</li>
+</ul>
+</li>
+<li>JSP声明<ul>
+<li><code>&lt;%! ... ...%&gt;</code></li>
+<li>成员变量或成员方法的声明</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>JSP页面的指令<ul>
+<li><code>&lt;%@指令名 属性=值 %&gt;</code></li>
+<li>常用 page include taglib指令</li>
+<li>page</li>
+<li><code>&lt;%@ page import = &quot;java.util.*&quot;%&gt;</code>导包 </li>
+<li><code>&lt;%@ page contentType = &quot;image/gif&quot;%&gt;</code>设置 response.setContentType()方法的参数值 使用page指令可以设置输出内容的编码方式，这样就可以设置浏览器使用正确的解码方式来显示页面。</li>
+<li><code>&lt;%@page pageEncoding = &quot;UTF-8&quot;%&gt;</code> 设置容器读取该文件时的解码 这段代码可以保证页面在加载到内存时正确的解码中文。</li>
+<li>include include指令主要用于将其他页面包含在另一个页面之中。同一个应用中的很多页面都会有相同的导航头、版权声明，在每一个页面中重复编写是没有必要的，而且如果导航头发生变化时不利于所有页面的更新。如果将这样共用的部分单独做到一个文件中，只需要在不同的页面中添加引用，就可以实现页面内容的重用。</li>
+<li><code>&lt;%@include file=&#39;head.html&#39;%&gt;</code></li>
+</ul>
+</li>
+<li>JSP页面中的隐含对象<br>  这些对象的创建由系统完成，对象名也有系统命名，根据页面中要实现的功能直接使用即可。<br><img src="/images/servlet1.png" alt="内置对象"><h3 id="JSP的运行原理"><a href="#JSP的运行原理" class="headerlink" title="JSP的运行原理"></a>JSP的运行原理</h3>用于导包的page指令最终成为import语句，page指令中的contentType属性转变为了_JSPService()方法中的response.setContentType()方法，HTML标记都会有out.write方法输出，&lt;%%&gt;的小脚本原封不动成为了_JSPService()方法内的一部分。当HTMl标记与小脚本混合在一起时，转变过程遵循从上至下的顺序逐行转变。</li>
+<li>转发<ul>
+<li>绑定数据到request对象 <code>request.setAttribute(String name,Object obj)</code></li>
+<li>获得转发器 <code>request.getRequestDispatcher(String url)</code></li>
+<li>实现转发 <code>rd.forward(request,response)</code></li>
+<li>1.请求到达服务器(2.根据请求信息创建request和response对象(3.根据请求资源路径找到对应的Servlet执行处理(4.Servlet在处理过程中从数据库获取到结果信息(5.Servlet将结果信息绑定在request对象中(6.Servlet通知容器将request和response对象转交给list.jsp页面继续执行对请求的响应(7. list.jsp页面被调用并执行时从传递过来的request对象中获取绑定的数据生成结果页面(8.服务器将list.jsp页面的执行结果返回给客户端。</li>
+<li>客户端只发送了一个请求，虽然请求到达服务器的指定位置后被容器控制着传到了第二个组件继续完成工作，但浏览器并不知道这个过程，所以转发之后地址栏地址不会发生变化。</li>
+<li>转发的目的地必须是同一个应用内部的某个地址，决不能跳出应用。毕竟这个转交过程由容器实现，容器只有访问本应用的权限，而不能控制请求到达应用以外的位置。</li>
+<li>转发过程中涉及到的所有Web组件共享同一个request对象和response对象，数据的传递和共享就依赖request对象。</li>
+</ul>
+</li>
+</ul>
+<h3 id="转发和重定向的区别"><a href="#转发和重定向的区别" class="headerlink" title="转发和重定向的区别"></a>转发和重定向的区别</h3><blockquote>
+<p>重定向：浏览器发送请求到容器访问A，A可以发送一个状态码302和一个Location消息头到浏览器，于是浏览器会立即向Location发新的请求。<br>转发：浏览器发送请求到容器访问A，A可以通知容器去调用B。转发所涉及的各个Web组件会共享同一个request和response对象；而重定向不行。<br>说明：当请求到达容器，容器会创建request对象和response对象。当响应发送完毕，容器会立即删除request对象和response对象。即，request对象和response对象的生存时间是一次请求与响应期间。<br>转发之后，浏览器地址栏的地址不变，重定向会变。转发的地址必须是同一个应用内部某个地址，而重定向没有这个限制。转发是一件事情未做完，调用另外一个组件继续做；而重定向是一件事情已经做完，再做另外一件事情。</p>
+</blockquote>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><h4 id="编程式异常处理"><a href="#编程式异常处理" class="headerlink" title="编程式异常处理"></a>编程式异常处理</h4><p>编程式的异常处理就是在程序中捕获到异常时，使用转发跳转到指定页面进行提示说明。<br><code>request.setAttribute(&quot;error_msg&quot;,&quot;系统繁忙，稍后重试&quot;);
+request.getRequestDispatcher(&quot;error.jsp&quot;).forward(request,response);</code></p>
+<p>####　容器中声明式处理<br>声明式的处理主要依靠容器自己来完成，即产生异常时抛出给容器，但不能让容器将这些底层信息返回给客户端，所以需要在web.xml文件中添加配置说明，通知容器在捕获到异常时应该将什么样的页面返回给客户端。一旦使用声明式处理方式，则该项目下的任意一个文件错误或异常，都会跳到指定的错误处理页面。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">service方法</div><div class="line"> //将异常抛给容器来处理</div><div class="line"> throw new ServletException（e）；</div><div class="line">web.xml</div><div class="line">&lt;!-- 配置错误处理页面 --&gt;</div><div class="line">&lt;error-page&gt;</div><div class="line">    &lt;exception-type&gt;javax.servlet.ServletException&lt;/exception-type&gt;</div><div class="line">    &lt;location&gt;/error.jsp&lt;/location&gt;</div><div class="line">&lt;/error-page&gt;</div><div class="line">程序级的异常最好选择编程式的处理方法，利用转发到达指定的错误处理页面。</div><div class="line">系统级别的异常最好选择声明式的处理方法。</div></pre></td></tr></table></figure></p>
+<h3 id="路径问题"><a href="#路径问题" class="headerlink" title="路径问题"></a>路径问题</h3><ul>
+<li>链接地址 <code>&lt;a href = &quot;url&quot;&gt;1111&lt;/a&gt;</code></li>
+<li>表单提交 <code>&lt;form action =&quot;url&quot;&gt;</code></li>
+<li>重定向 <code>response.sendRedirect(url)</code></li>
+<li>转发 <code>request.getRequestDispatcher(url).forward(resquest,response)</code><h4 id="相对路径"><a href="#相对路径" class="headerlink" title="相对路径"></a>相对路径</h4>相对路径指的是相对于当前位置，为了到达目标文件要经过的路径。书写格式上不以“/“开头，如果为了退至上一级目录可以”../“开头。<h4 id="绝对路径"><a href="#绝对路径" class="headerlink" title="绝对路径"></a>绝对路径</h4>绝对路径指的是，不管当前文档所在的位置在应用的哪里，都会从一个固定的点出发，然后构建到达目标文件所需要经过的路径。通常绝对路径在书写格式上以“/”开头。这个固定的点可能是应用名，也可能是应用名之后。<h4 id="路径的处理技巧"><a href="#路径的处理技巧" class="headerlink" title="路径的处理技巧"></a>路径的处理技巧</h4>链接地址<a href="”/appName”">链接文本</a><br>表单提交<form action="”/appName”"><br>重定向response.sendRedirect（”/appName”）；<br>转发request.getRequestDispatcher（”/xxx”）；<br>链接地址，表单提交，重定向由于都是浏览器发出的请求，为了到达指定的应用内的资源，所以斜杠后面从应用名开始写；转发位于服务器端，已经在具体的应用内部了，所以斜杠后面从应用名之后开始写。<br>由于Web应用的真实部署名称和测试时的名称未必一样，所以使用绝对路径时如果应用名写成定值则会带来变更的麻烦。为了获取当前应用的实际部署名称可以使用如下代码来动态获取。<br><code>String request.getContextPath()</code></form></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/Servlet/" rel="tag"># Servlet</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/05/java ActionContext/" rel="next" title="ActionContext与ServletActionContext的区别及获取request、session等对象">
+                <i class="fa fa-chevron-left"></i> ActionContext与ServletActionContext的区别及获取request、session等对象
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/09/Java 状态管理/" rel="prev" title="Java Servlet 状态管理">
+                Java Servlet 状态管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/05/java Servlet/"
+           data-title="Java Servlet 工作原理解析" data-url="http://guilongyue.github.io/2017/06/05/java Servlet/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Servlet-工作原理解析"><span class="nav-number">1.</span> <span class="nav-text">Java Servlet 工作原理解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从Servlet-容器说起"><span class="nav-number">1.0.1.</span> <span class="nav-text">从Servlet 容器说起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取请求参数"><span class="nav-number">1.0.2.</span> <span class="nav-text">获取请求参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#区分请求方式"><span class="nav-number">1.0.3.</span> <span class="nav-text">区分请求方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中文乱码"><span class="nav-number">1.0.4.</span> <span class="nav-text">中文乱码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向"><span class="nav-number">1.0.5.</span> <span class="nav-text">重定向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求资源路径"><span class="nav-number">1.0.6.</span> <span class="nav-text">请求资源路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个Servlet实现多个请求"><span class="nav-number">1.0.7.</span> <span class="nav-text">一个Servlet实现多个请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet的生命周期"><span class="nav-number">1.0.8.</span> <span class="nav-text">Servlet的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet核心接口与类"><span class="nav-number">1.0.9.</span> <span class="nav-text">Servlet核心接口与类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletContext"><span class="nav-number">1.0.10.</span> <span class="nav-text">ServletContext</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何获得Servlet上下文"><span class="nav-number">1.0.10.1.</span> <span class="nav-text">如何获得Servlet上下文</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程安全问题"><span class="nav-number">1.0.11.</span> <span class="nav-text">线程安全问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP"><span class="nav-number">1.0.12.</span> <span class="nav-text">JSP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP的运行原理"><span class="nav-number">1.0.13.</span> <span class="nav-text">JSP的运行原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转发和重定向的区别"><span class="nav-number">1.0.14.</span> <span class="nav-text">转发和重定向的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常处理"><span class="nav-number">1.0.15.</span> <span class="nav-text">异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#编程式异常处理"><span class="nav-number">1.0.15.1.</span> <span class="nav-text">编程式异常处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路径问题"><span class="nav-number">1.0.16.</span> <span class="nav-text">路径问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#相对路径"><span class="nav-number">1.0.16.1.</span> <span class="nav-text">相对路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绝对路径"><span class="nav-number">1.0.16.2.</span> <span class="nav-text">绝对路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路径的处理技巧"><span class="nav-number">1.0.16.3.</span> <span class="nav-text">路径的处理技巧</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

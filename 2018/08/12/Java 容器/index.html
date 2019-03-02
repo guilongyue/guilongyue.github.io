@@ -1,0 +1,896 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java 容器," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Java容器分析容器主要包括 Collection 和 Map 两种，Collection 又包含了 List、Set 以及 Queue。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 容器分析">
+<meta property="og:url" content="http://guilongyue.github.io/2018/08/12/Java 容器/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Java容器分析容器主要包括 Collection 和 Map 两种，Collection 又包含了 List、Set 以及 Queue。">
+<meta property="og:image" content="http://guilongyue.github.io/images/collection.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/map.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/iterator.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/linkedlist.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/hashmap.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/hashmap-1.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/concurrentHashMap.png">
+<meta property="og:updated_time" content="2018-08-14T11:04:50.458Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 容器分析">
+<meta name="twitter:description" content="Java容器分析容器主要包括 Collection 和 Map 两种，Collection 又包含了 List、Set 以及 Queue。">
+<meta name="twitter:image" content="http://guilongyue.github.io/images/collection.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2018/08/12/Java 容器/"/>
+
+
+
+
+
+  <title> Java 容器分析 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2018/08/12/Java 容器/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java 容器分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-12T17:13:18+08:00">
+                2018-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/12/Java 容器/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/12/Java 容器/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java容器分析"><a href="#Java容器分析" class="headerlink" title="Java容器分析"></a>Java容器分析</h1><p>容器主要包括 Collection 和 Map 两种，Collection 又包含了 List、Set 以及 Queue。</p>
+<a id="more"></a>
+<h2 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h2><p><img src="/images/collection.png" alt=""></p>
+<h3 id="1-Set"><a href="#1-Set" class="headerlink" title="1. Set"></a>1. Set</h3><p>HashSet：基于哈希表实现，支持快速查找。但不支持有序性操作，例如根据一个范围查找元素的操作。并且失去了元素的插入顺序信息，也就是说使用 Iterator 遍历 HashSet 得到的结果是不确定的。<br>TreeSet：基于红黑树实现，支持有序性操作，但是查找效率不如 HashSet，HashSet 查找时间复杂度为 O(1)，TreeSet 则为 O(logN)。<br>LinkedHashSet：具有 HashSet 的查找效率，且内部使用双向链表维护元素的插入顺序。</p>
+<h3 id="2-List"><a href="#2-List" class="headerlink" title="2. List"></a>2. List</h3><p>ArrayList：基于动态数组实现，支持随机访问。<br>Vector：和 ArrayList 类似，但它是线程安全的。<br>LinkedList：基于双向链表实现，只能顺序访问，但是可以快速地在链表中间插入和删除元素。不仅如此，LinkedList 还可以用作栈、队列和双向队列。</p>
+<h3 id="3-Queue"><a href="#3-Queue" class="headerlink" title="3.Queue"></a>3.Queue</h3><p>LinkedList：可以用它来实现双向队列。<br>PriorityQueue：基于堆结构实现，可以用它来实现优先队列。</p>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p><img src="/images/map.png" alt=""><br>HashMap：基于哈希表实现；<br>HashTable：和 HashMap 类似，但它是线程安全的，这意味着同一时刻多个线程可以同时写入 HashTable 并且不会导致数据不一致。它是遗留类，不应该去使用它。现在可以使用 ConcurrentHashMap 来支持线程安全，并且 ConcurrentHashMap 的效率会更高，因为 ConcurrentHashMap 引入了分段锁。<br>LinkedHashMap：使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用（LRU）顺序。<br>TreeMap：基于红黑树实现。</p>
+<h2 id="容器中的设计模式"><a href="#容器中的设计模式" class="headerlink" title="容器中的设计模式"></a>容器中的设计模式</h2><p><img src="/images/iterator.png" alt=""><br>Collection 实现了 Iterable 接口，其中的 iterator()方法能够产生一个 Iterator 对象，通过这个对象就可以迭代遍历Collection 中的元素。<br>从JDK1.5之后可以使用 foreach 方法来遍历实现了Iterable接口的聚合对象。</p>
+<h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><p>java.util.Arrays#asList() 可以把数组类型转换为 List 类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@SafeVarargs</div><div class="line">public static &lt;T&gt; List&lt;T&gt; asList(T... a)</div></pre></td></tr></table></figure></p>
+<p>应该注意的是 asList() 的参数为泛型的变长参数，不能使用基本类型数组作为参数，只能使用相应的包装类型数组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Integer[] arr = &#123;1, 2, 3&#125;;</div><div class="line">List list = Arrays.asList(arr);</div><div class="line">List list = Arrays.asList(1,2,3);</div></pre></td></tr></table></figure></p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>如果没有特别说明，以下源码分析基于 JDK 1.8。</p>
+<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><ol>
+<li>概述<br>实现了RandomAccess接口，因此支持随机访问。这是理所当然的，因为ArrayList是基于数组实现的。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public class ArrayList&lt;E&gt; extends AbstractList&lt;E&gt;</div><div class="line">implements List&lt;E&gt;, RandomAccess, Cloneable, java.io.Serializable</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>数组的默认大小为 10。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">private static final int DEFAULT_CAPACITY = 10;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>序列化<br>ArrayList 基于数组实现，并且具有动态扩容特性，因此保存元素的数组不一定都会被使用，那么就没必要全部进行序列化。<br>保存元素的数组 elementData 使用 transient 修饰，该关键字声明数组默认不会被序列化。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">transient Object[] elementData; // non-private to simplify nested class access</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>ArrayList 实现了 writeObject() 和 readObject() 来控制只序列化数组中有元素填充那部分内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">private void readObject(java.io.ObjectInputStream s)</div><div class="line">    throws java.io.IOException, ClassNotFoundException &#123;</div><div class="line">    elementData = EMPTY_ELEMENTDATA;</div><div class="line">    // Read in size, and any hidden stuff</div><div class="line">    s.defaultReadObject();</div><div class="line">    // Read in capacity</div><div class="line">    s.readInt(); // ignored</div><div class="line">    if (size &gt; 0) &#123;</div><div class="line">        // be like clone(), allocate array based upon size not capacity</div><div class="line">        ensureCapacityInternal(size);</div><div class="line"></div><div class="line">        Object[] a = elementData;</div><div class="line">        // Read in all elements in the proper order.</div><div class="line">        for (int i=0; i&lt;size; i++) &#123;</div><div class="line">            a[i] = s.readObject();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">private void writeObject(java.io.ObjectOutputStream s)</div><div class="line">    throws java.io.IOException&#123;</div><div class="line">    // Write out element count, and any hidden stuff</div><div class="line">    int expectedModCount = modCount;</div><div class="line">    s.defaultWriteObject();</div><div class="line">    // Write out size as capacity for behavioural compatibility with clone()</div><div class="line">    s.writeInt(size);</div><div class="line">    // Write out all elements in the proper order.</div><div class="line">    for (int i=0; i&lt;size; i++) &#123;</div><div class="line">        s.writeObject(elementData[i]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (modCount != expectedModCount) &#123;</div><div class="line">        throw new ConcurrentModificationException();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>序列化时需要使用 ObjectOutputStream 的 writeObject() 将对象转换为字节流并输出。而 writeObject() 方法在传入的对象存在 writeObject() 的时候会去反射调用该对象的 writeObject() 来实现序列化。反序列化使用的是 ObjectInputStream 的 readObject() 方法，原理类似。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ArrayList list = new ArrayList();</div><div class="line">ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));</div><div class="line">oos.writeObject(list);</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>扩容<br>添加元素时使用 ensureCapacityInternal() 方法来保证容量足够，如果不够时，需要使用 grow() 方法进行扩容，新容量的大小为 oldCapacity + (oldCapacity &gt;&gt; 1)，也就是旧容量的 1.5 倍。<br>扩容操作需要调用 Arrays.copyOf() 把原数组整个复制到新数组中，这个操作代价很高，因此最好在创建 ArrayList 对象时就指定大概的容量大小，减少扩容操作的次数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">public boolean add(E e) &#123;</div><div class="line">    ensureCapacityInternal(size + 1);  // Increments modCount!!</div><div class="line">    elementData[size++] = e;</div><div class="line">    return true;</div><div class="line">&#125;</div><div class="line">private void ensureCapacityInternal(int minCapacity) &#123;</div><div class="line">    if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) &#123;</div><div class="line">        minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);</div><div class="line">    &#125;</div><div class="line">    ensureExplicitCapacity(minCapacity);</div><div class="line">&#125;</div><div class="line">private void ensureExplicitCapacity(int minCapacity) &#123;</div><div class="line">    modCount++;</div><div class="line">    // overflow-conscious code</div><div class="line">    if (minCapacity - elementData.length &gt; 0)</div><div class="line">        grow(minCapacity);</div><div class="line">&#125;</div><div class="line">private void grow(int minCapacity) &#123;</div><div class="line">    // overflow-conscious code</div><div class="line">    int oldCapacity = elementData.length;</div><div class="line">    int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</div><div class="line">    if (newCapacity - minCapacity &lt; 0)</div><div class="line">        newCapacity = minCapacity;</div><div class="line">    if (newCapacity - MAX_ARRAY_SIZE &gt; 0)</div><div class="line">        newCapacity = hugeCapacity(minCapacity);</div><div class="line">    // minCapacity is usually close to size, so this is a win:</div><div class="line">    elementData = Arrays.copyOf(elementData, newCapacity);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除元素<br>需要调用 System.arraycopy() 将 index+1 后面的元素都复制到 index 位置上，该操作的时间复杂度为 O(N)，可以看出 ArrayList 删除元素的代价是非常高的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public E remove(int index) &#123;</div><div class="line">    rangeCheck(index);</div><div class="line">    modCount++;</div><div class="line">    E oldValue = elementData(index);</div><div class="line">    int numMoved = size - index - 1;</div><div class="line">    if (numMoved &gt; 0)</div><div class="line">        System.arraycopy(elementData, index+1, elementData, index, numMoved);</div><div class="line">    elementData[--size] = null; // clear to let GC do its work</div><div class="line">    return oldValue;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Fail-Fast<br>modCount 用来记录 ArrayList 结构发生变化的次数。结构发生变化是指添加或者删除至少一个元素的所有操作，或者是调整内部数组的大小，仅仅只是设置元素的值不算结构发生变化。<br>在进行序列化或者迭代等操作时，需要比较操作前后 modCount 是否改变，如果改变了需要抛出ConcurrentModificationException。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">private void writeObject(java.io.ObjectOutputStream s)</div><div class="line">    throws java.io.IOException&#123;</div><div class="line">    // Write out element count, and any hidden stuff</div><div class="line">    int expectedModCount = modCount;</div><div class="line">    s.defaultWriteObject();</div><div class="line">    // Write out size as capacity for behavioural compatibility with clone()</div><div class="line">    s.writeInt(size);</div><div class="line">    // Write out all elements in the proper order.</div><div class="line">    for (int i=0; i&lt;size; i++) &#123;</div><div class="line">        s.writeObject(elementData[i]);</div><div class="line">    &#125;</div><div class="line">    if (modCount != expectedModCount) &#123;</div><div class="line">        throw new ConcurrentModificationException();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Vector"><a href="#Vector" class="headerlink" title="Vector"></a>Vector</h3><ol>
+<li><p>同步<br>它的实现与 ArrayList 类似，但是使用了 synchronized 进行同步。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public synchronized boolean add(E e) &#123;</div><div class="line">    modCount++;</div><div class="line">    ensureCapacityHelper(elementCount + 1);</div><div class="line">    elementData[elementCount++] = e;</div><div class="line">    return true;</div><div class="line">&#125;</div><div class="line">public synchronized E get(int index) &#123;</div><div class="line">    if (index &gt;= elementCount)</div><div class="line">        throw new ArrayIndexOutOfBoundsException(index);</div><div class="line"></div><div class="line">    return elementData(index);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>与ArrayList的区别<br>Vector 是同步的，因此开销就比 ArrayList 要大，访问速度更慢。最好使用 ArrayList 而不是 Vector，因为同步操作完全可以由程序员自己来控制；<br>Vector 每次扩容请求其大小的2倍空间，而ArrayList是1.5倍。</p>
+</li>
+<li>替代方案<br>为了获得线程安全的 ArrayList，可以使用 Collections.synchronizedList(); 得到一个线程安全的 ArrayList。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; list = new ArrayList&lt;&gt;();</div><div class="line">List&lt;String&gt; synList = Collections.synchronizedList(list);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>也可以使用 concurrent 并发包下的 CopyOnWriteArrayList 类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; list = new CopyOnWriteArrayList&lt;&gt;();</div></pre></td></tr></table></figure></p>
+<h3 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h3><h4 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h4><p>写操作在一个复制的数组上进行，读操作还是在原始数组中进行，读写分离，互不影响。<br>写操作需要加锁，防止同时并发写入时导致的写入数据丢失。<br>写操作结束之后需要把原始数组指向新的复制数组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public boolean add(E e) &#123;</div><div class="line">    final ReentrantLock lock = this.lock;</div><div class="line">    lock.lock();</div><div class="line">    try &#123;</div><div class="line">        Object[] elements = getArray();</div><div class="line">        int len = elements.length;</div><div class="line">        Object[] newElements = Arrays.copyOf(elements, len + 1);</div><div class="line">        newElements[len] = e;</div><div class="line">        setArray(newElements);</div><div class="line">        return true;</div><div class="line">    &#125; finally &#123;</div><div class="line">        lock.unlock();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">final void setArray(Object[] a) &#123;</div><div class="line">    array = a;</div><div class="line">&#125;</div><div class="line">@SuppressWarnings(&quot;unchecked&quot;)</div><div class="line">private E get(Object[] a, int index) &#123;</div><div class="line">    return (E) a[index];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><p>CopyOnWriteArrayList 在写操作的同时允许读操作，大大提高了读操作的性能，因此很适合读多写少的应用场景。<br>但是 CopyOnWriteArrayList 有其缺陷：</p>
+<ul>
+<li>内存占用：在写操作时需要复制一个新的数组，使得内存占用为原来的两倍左右；</li>
+<li>数据不一致：读操作不能读取实时性的数据，因为部分写操作的数据还未同步到读数组中。<br>所以 CopyOnWriteArrayList 不适合内存敏感以及对实时性要求很高的场景。</li>
+</ul>
+<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><ol>
+<li>概览<br>基于双向链表实现，使用 Node 存储链表节点信息。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">private static class Node&lt;E&gt; &#123;</div><div class="line">    E item;</div><div class="line">    Node&lt;E&gt; next;</div><div class="line">    Node&lt;E&gt; prev;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>每个链表存储了 first 和 last 指针：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">transient Node&lt;E&gt; first;</div><div class="line">transient Node&lt;E&gt; last;</div></pre></td></tr></table></figure></p>
+<p><img src="/images/linkedlist.png" alt=""></p>
+<ol>
+<li>ArrayList 与 LinkedList<br>ArrayList 基于动态数组实现，LinkedList 基于双向链表实现；<br>ArrayList 支持随机访问，LinkedList 不支持；<br>LinkedList 在任意位置添加删除元素更快。</li>
+</ol>
+<h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p>为了便于理解，以下源码分析以 JDK 1.7 为主。</p>
+<h4 id="1-存储结构"><a href="#1-存储结构" class="headerlink" title="1.存储结构"></a>1.存储结构</h4><p>内部包含了一个Entry类型的数组 table。<br>transient Entry[] table;<br>其中，Entry就是存储数据的键值对，它包含了四个字段。从next字段我们可以看出Entry是一个链表，即数组中的每个位置被当成一个桶，一个桶存放一个链表，链表中存放哈希值相同的Entry。也就是说，HashMap使用拉链法来解决冲突。<br><img src="/images/hashmap.png" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">static class Entry&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; &#123;</div><div class="line">    final K key;</div><div class="line">    V value;</div><div class="line">    Entry&lt;K,V&gt; next;</div><div class="line">    int hash;</div><div class="line">    Entry(int h, K k, V v, Entry&lt;K,V&gt; n) &#123;</div><div class="line">        value = v;</div><div class="line">        next = n;</div><div class="line">        key = k;</div><div class="line">        hash = h;</div><div class="line">    &#125;</div><div class="line">    public final K getKey() &#123;</div><div class="line">        return key;</div><div class="line">    &#125;</div><div class="line">    public final V getValue() &#123;</div><div class="line">        return value;</div><div class="line">    &#125;</div><div class="line">    public final V setValue(V newValue) &#123;</div><div class="line">        V oldValue = value;</div><div class="line">        value = newValue;</div><div class="line">        return oldValue;</div><div class="line">    &#125;</div><div class="line">    public final boolean equals(Object o) &#123;</div><div class="line">        if (!(o instanceof Map.Entry))</div><div class="line">            return false;</div><div class="line">        Map.Entry e = (Map.Entry)o;</div><div class="line">        Object k1 = getKey();</div><div class="line">        Object k2 = e.getKey();</div><div class="line">        if (k1 == k2 || (k1 != null &amp;&amp; k1.equals(k2))) &#123;</div><div class="line">            Object v1 = getValue();</div><div class="line">            Object v2 = e.getValue();</div><div class="line">            if (v1 == v2 || (v1 != null &amp;&amp; v1.equals(v2)))</div><div class="line">                return true;</div><div class="line">        &#125;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">    public final int hashCode() &#123;</div><div class="line">        return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());</div><div class="line">    &#125;</div><div class="line">    public final String toString() &#123;</div><div class="line">        return getKey() + &quot;=&quot; + getValue();</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * This method is invoked whenever the value in an entry is</div><div class="line">     * overwritten by an invocation of put(k,v) for a key k that&apos;s already</div><div class="line">     * in the HashMap.</div><div class="line">     */</div><div class="line">    void recordAccess(HashMap&lt;K,V&gt; m) &#123;</div><div class="line">    &#125;</div><div class="line">    /**</div><div class="line">     * This method is invoked whenever the entry is</div><div class="line">     * removed from the table.</div><div class="line">     */</div><div class="line">    void recordRemoval(HashMap&lt;K,V&gt; m) &#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="2-拉链法的工作原理"><a href="#2-拉链法的工作原理" class="headerlink" title="2.拉链法的工作原理"></a>2.拉链法的工作原理</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">HashMap&lt;String, String&gt; map = new HashMap&lt;&gt;();</div><div class="line">map.put(&quot;K1&quot;, &quot;V1&quot;);</div><div class="line">map.put(&quot;K2&quot;, &quot;V2&quot;);</div><div class="line">map.put(&quot;K3&quot;, &quot;V3&quot;);</div></pre></td></tr></table></figure>
+<ul>
+<li>新建一个 HashMap，默认大小为 16；</li>
+<li>插入 <k1,v1> 键值对，先计算 K1 的 hashCode 为 115，使用除留余数法得到所在的桶下标 115%16=3。</k1,v1></li>
+<li>插入 <k2,v2> 键值对，先计算 K2 的 hashCode 为 118，使用除留余数法得到所在的桶下标 118%16=6。</k2,v2></li>
+<li>插入 <k3,v3> 键值对，先计算 K3 的 hashCode 为 118，使用除留余数法得到所在的桶下标 118%16=6，插在 <k2,v2> 前面。<br>应该注意到链表的插入是以头插法方式进行的，例如上面的 <k3,v3> 不是插在 <k2,v2> 后面，而是插入在链表头部。<br>查找需要分成两步进行：</k2,v2></k3,v3></k2,v2></k3,v3></li>
+<li>计算键值对所在的桶；</li>
+<li>在链表上顺序查找，时间复杂度显然和链表的长度成正比。<br><img src="/images/hashmap-1.png" alt=""></li>
+</ul>
+<h4 id="3-put-操作"><a href="#3-put-操作" class="headerlink" title="3.put 操作"></a>3.put 操作</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public V put(K key, V value) &#123;</div><div class="line">    if (table == EMPTY_TABLE) &#123;</div><div class="line">        inflateTable(threshold);</div><div class="line">    &#125;</div><div class="line">    // 键为 null 单独处理</div><div class="line">    if (key == null)</div><div class="line">        return putForNullKey(value);</div><div class="line">    int hash = hash(key);</div><div class="line">    // 确定桶下标</div><div class="line">    int i = indexFor(hash, table.length);</div><div class="line">    // 先找出是否已经存在键为 key 的键值对，如果存在的话就更新这个键值对的值为 value</div><div class="line">    for (Entry&lt;K,V&gt; e = table[i]; e != null; e = e.next) &#123;</div><div class="line">        Object k;</div><div class="line">        if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</div><div class="line">            V oldValue = e.value;</div><div class="line">            e.value = value;</div><div class="line">            e.recordAccess(this);</div><div class="line">            return oldValue;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    modCount++;</div><div class="line">    // 插入新键值对</div><div class="line">    addEntry(hash, key, value, i);</div><div class="line">    return null;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>HashMap 允许插入键为 null 的键值对。但是因为无法调用 null 的 hashCode() 方法，也就无法确定该键值对的桶下标，只能通过强制指定一个桶下标来存放。HashMap 使用第 0 个桶存放键为 null 的键值对。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">private V putForNullKey(V value) &#123;</div><div class="line">    for (Entry&lt;K,V&gt; e = table[0]; e != null; e = e.next) &#123;</div><div class="line">        if (e.key == null) &#123;</div><div class="line">            V oldValue = e.value;</div><div class="line">            e.value = value;</div><div class="line">            e.recordAccess(this);</div><div class="line">            return oldValue;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    modCount++;</div><div class="line">    addEntry(0, null, value, 0);</div><div class="line">    return null;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="4-确定桶下标"><a href="#4-确定桶下标" class="headerlink" title="4.确定桶下标"></a>4.确定桶下标</h4><p>很多操作都需要先确定一个键值对所在的桶下标。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">int hash = hash(key);</div><div class="line">int i = indexFor(hash, table.length);</div></pre></td></tr></table></figure></p>
+<h5 id="（一）计算-hash-值"><a href="#（一）计算-hash-值" class="headerlink" title="（一）计算 hash 值"></a>（一）计算 hash 值</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">final int hash(Object k) &#123;</div><div class="line">    int h = hashSeed;</div><div class="line">    if (0 != h &amp;&amp; k instanceof String) &#123;</div><div class="line">        return sun.misc.Hashing.stringHash32((String) k);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    h ^= k.hashCode();</div><div class="line"></div><div class="line">    // This function ensures that hashCodes that differ only by</div><div class="line">    // constant multiples at each bit position have a bounded</div><div class="line">    // number of collisions (approximately 8 at default load factor).</div><div class="line">    h ^= (h &gt;&gt;&gt; 20) ^ (h &gt;&gt;&gt; 12);</div><div class="line">    return h ^ (h &gt;&gt;&gt; 7) ^ (h &gt;&gt;&gt; 4);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public final int hashCode() &#123;</div><div class="line">    return Objects.hashCode(key) ^ Objects.hashCode(value);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="（二）取模"><a href="#（二）取模" class="headerlink" title="（二）取模"></a>（二）取模</h5><p>令 x = 1&lt;<4，即x为 2="" 4="" 的="" 次方，它具有以下性质：="" <figure="" class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">x   :00010000</div><div class="line">x-1 :00001111</div></pre></td></tr></table></4，即x为></p>
+<p>令一个数y与x-1做与运算，可以去除y位级表示的第4 位以上数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">y       : 10110010</div><div class="line">x-1     : 00001111</div><div class="line">y&amp;(x-1) : 00000010</div></pre></td></tr></table></figure></p>
+<p>这个性质和 y 对 x 取模效果是一样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">y   : 10110010</div><div class="line">x   : 00010000</div><div class="line">y%x : 00000010</div></pre></td></tr></table></figure></p>
+<p>我们知道，位运算的代价比求模运算小的多，因此在进行这种计算时用位运算的话能带来更高的性能。<br>确定桶下标的最后一步是将 key 的 hash 值对桶个数取模：hash%capacity，如果能保证 capacity 为 2 的 n 次方，那么就可以将这个操作转换为位运算。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">static int indexFor(int h, int length) &#123;</div><div class="line">    return h &amp; (length-1);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="5-扩容-基本原理"><a href="#5-扩容-基本原理" class="headerlink" title="5.扩容-基本原理"></a>5.扩容-基本原理</h4><p>设 HashMap 的 table 长度为 M，需要存储的键值对数量为 N，如果哈希函数满足均匀性的要求，那么每条链表的长度大约为 N/M，因此平均查找次数的复杂度为 O(N/M)。<br>为了让查找的成本降低，应该尽可能使得 N/M 尽可能小，因此需要保证 M 尽可能大，也就是说 table 要尽可能大。HashMap 采用动态扩容来根据当前的 N 值来调整 M 值，使得空间效率和时间效率都能得到保证。<br>和扩容相关的参数主要有：capacity、size、threshold 和 load_factor。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>capacity</td>
+<td>table 的容量大小，默认为 16。需要注意的是 capacity 必须保证为 2 的 n 次方。</td>
+</tr>
+<tr>
+<td>size</td>
+<td>table 的实际使用量。</td>
+</tr>
+<tr>
+<td>threshold</td>
+<td>size 的临界值，size 必须小于 threshold，如果大于等于，就必须进行扩容操作。</td>
+</tr>
+<tr>
+<td>loadFactor</td>
+<td>装载因子，table 能够使用的比例，threshold = capacity * loadFactor。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">static final int DEFAULT_INITIAL_CAPACITY = 16;</div><div class="line">static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;</div><div class="line">static final float DEFAULT_LOAD_FACTOR = 0.75f;</div><div class="line">transient Entry[] table;</div><div class="line">transient int size;</div><div class="line">int threshold;</div><div class="line">final float loadFactor;</div><div class="line">transient int modCount;</div></pre></td></tr></table></figure>
+<p>从下面的添加元素代码中可以看出，当需要扩容时，令 capacity 为原来的两倍。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">void addEntry(int hash, K key, V value, int bucketIndex) &#123;</div><div class="line">    Entry&lt;K,V&gt; e = table[bucketIndex];</div><div class="line">    table[bucketIndex] = new Entry&lt;&gt;(hash, key, value, e);</div><div class="line">    if (size++ &gt;= threshold)</div><div class="line">        resize(2 * table.length);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>扩容使用 resize() 实现，需要注意的是，扩容操作同样需要把 oldTable 的所有键值对重新插入 newTable 中，因此这一步是很费时的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">void resize(int newCapacity) &#123;</div><div class="line">    Entry[] oldTable = table;</div><div class="line">    int oldCapacity = oldTable.length;</div><div class="line">    if (oldCapacity == MAXIMUM_CAPACITY) &#123;</div><div class="line">        threshold = Integer.MAX_VALUE;</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    Entry[] newTable = new Entry[newCapacity];</div><div class="line">    transfer(newTable);</div><div class="line">    table = newTable;</div><div class="line">    threshold = (int)(newCapacity * loadFactor);</div><div class="line">&#125;</div><div class="line"></div><div class="line">void transfer(Entry[] newTable) &#123;</div><div class="line">    Entry[] src = table;</div><div class="line">    int newCapacity = newTable.length;</div><div class="line">    for (int j = 0; j &lt; src.length; j++) &#123;</div><div class="line">        Entry&lt;K,V&gt; e = src[j];</div><div class="line">        if (e != null) &#123;</div><div class="line">            src[j] = null;</div><div class="line">            do &#123;</div><div class="line">                Entry&lt;K,V&gt; next = e.next;</div><div class="line">                int i = indexFor(e.hash, newCapacity);</div><div class="line">                e.next = newTable[i];</div><div class="line">                newTable[i] = e;</div><div class="line">                e = next;</div><div class="line">            &#125; while (e != null);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="6-扩容-重新计算桶下标"><a href="#6-扩容-重新计算桶下标" class="headerlink" title="6.扩容-重新计算桶下标"></a>6.扩容-重新计算桶下标</h4><p>在进行扩容时，需要把键值对重新放到对应的桶上。HashMap 使用了一个特殊的机制，可以降低重新计算桶下标的操作。<br>假设原数组长度 capacity 为 16，扩容之后 new capacity 为 32：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">capacity     : 00010000</div><div class="line">new capacity : 00100000</div></pre></td></tr></table></figure></p>
+<p>对于一个 Key，它的哈希值如果在第 6 位上为 0，那么取模得到的结果和之前一样；如果为 1，那么得到的结果为原来的结果 +16。</p>
+<h4 id="7-扩容-计算数组容量"><a href="#7-扩容-计算数组容量" class="headerlink" title="7.扩容-计算数组容量"></a>7.扩容-计算数组容量</h4><p>HashMap 构造函数允许用户传入的容量不是 2 的 n 次方，因为它可以自动地将传入的容量转换为 2 的 n 次方。<br>先考虑如何求一个数的掩码，对于 10010000，它的掩码为 11111111，可以使用以下方法得到：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mask |= mask &gt;&gt; 1    11011000</div><div class="line">mask |= mask &gt;&gt; 2    11111100</div><div class="line">mask |= mask &gt;&gt; 4    11111111</div></pre></td></tr></table></figure></p>
+<p>mask+1 是大于原始数字的最小的 2 的 n 次方。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">num     10010000</div><div class="line">mask+1 100000000</div></pre></td></tr></table></figure></p>
+<p>以下是 HashMap 中计算数组容量的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">static final int tableSizeFor(int cap) &#123;</div><div class="line">    int n = cap - 1;</div><div class="line">    n |= n &gt;&gt;&gt; 1;</div><div class="line">    n |= n &gt;&gt;&gt; 2;</div><div class="line">    n |= n &gt;&gt;&gt; 4;</div><div class="line">    n |= n &gt;&gt;&gt; 8;</div><div class="line">    n |= n &gt;&gt;&gt; 16;</div><div class="line">    return (n &lt; 0) ? 1 : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="8-链表转红黑树"><a href="#8-链表转红黑树" class="headerlink" title="8. 链表转红黑树"></a>8. 链表转红黑树</h4><p>从 JDK 1.8 开始，一个桶存储的链表长度大于 8 时会将链表转换为红黑树。</p>
+<h4 id="9-与-HashTable-的比较"><a href="#9-与-HashTable-的比较" class="headerlink" title="9. 与 HashTable 的比较"></a>9. 与 HashTable 的比较</h4><ul>
+<li>HashTable 使用 synchronized 来进行同步。</li>
+<li>HashMap 可以插入键为 null 的 Entry。</li>
+<li>HashMap 的迭代器是 fail-fast 迭代器。</li>
+<li>HashMap 不能保证随着时间的推移 Map 中的元素次序是不变的。<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><h4 id="1-存储结构-1"><a href="#1-存储结构-1" class="headerlink" title="1.存储结构"></a>1.存储结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">static final class HashEntry&lt;K,V&gt; &#123;</div><div class="line">    final int hash;</div><div class="line">    final K key;</div><div class="line">    volatile V value;</div><div class="line">    volatile HashEntry&lt;K,V&gt; next;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>ConcurrentHashMap 和 HashMap 实现上类似，最主要的差别是 ConcurrentHashMap 采用了分段锁（Segment），每个分段锁维护着几个桶（HashEntry），多个线程可以同时访问不同分段锁上的桶，从而使其并发度更高（并发度就是 Segment的个数）。<br>Segment 继承自 ReentrantLock。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">static final class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable &#123;</div><div class="line">    private static final long serialVersionUID = 2249069246763182397L;</div><div class="line">    static final int MAX_SCAN_RETRIES =</div><div class="line">        Runtime.getRuntime().availableProcessors() &gt; 1 ? 64 : 1;</div><div class="line">    transient volatile HashEntry&lt;K,V&gt;[] table;</div><div class="line">    transient int count;</div><div class="line">    transient int modCount;</div><div class="line">    transient int threshold;</div><div class="line">    final float loadFactor;</div><div class="line">&#125;</div><div class="line">final Segment&lt;K,V&gt;[] segments;</div></pre></td></tr></table></figure></p>
+<p>默认的并发级别为 16，也就是说默认创建 16 个 Segment。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">static final int DEFAULT_CONCURRENCY_LEVEL = 16;</div></pre></td></tr></table></figure></p>
+<p><img src="/images/concurrentHashMap.png" alt=""></p>
+<h5 id="2-size-操作"><a href="#2-size-操作" class="headerlink" title="2.size 操作"></a>2.size 操作</h5><p>每个 Segment 维护了一个 count 变量来统计该 Segment 中的键值对个数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * The number of elements. Accessed only either within locks</div><div class="line"> * or among other volatile reads that maintain visibility.</div><div class="line"> */</div><div class="line">transient int count;</div></pre></td></tr></table></figure></p>
+<p>在执行 size 操作时，需要遍历所有 Segment 然后把 count 累计起来。<br>ConcurrentHashMap 在执行 size 操作时先尝试不加锁，如果连续两次不加锁操作得到的结果一致，那么可以认为这个结果是正确的。<br>尝试次数使用 RETRIES_BEFORE_LOCK 定义，该值为 2，retries 初始值为 -1，因此尝试次数为 3。<br>如果尝试的次数超过 3 次，就需要对每个 Segment 加锁。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"> * Number of unsynchronized retries in size and containsValue</div><div class="line"> * methods before resorting to locking. This is used to avoid</div><div class="line"> * unbounded retries if tables undergo continuous modification</div><div class="line"> * which would make it impossible to obtain an accurate result.</div><div class="line"> */</div><div class="line">static final int RETRIES_BEFORE_LOCK = 2;</div><div class="line"></div><div class="line">public int size() &#123;</div><div class="line">    // Try a few times to get accurate count. On failure due to</div><div class="line">    // continuous async changes in table, resort to locking.</div><div class="line">    final Segment&lt;K,V&gt;[] segments = this.segments;</div><div class="line">    int size;</div><div class="line">    boolean overflow; // true if size overflows 32 bits</div><div class="line">    long sum;         // sum of modCounts</div><div class="line">    long last = 0L;   // previous sum</div><div class="line">    int retries = -1; // first iteration isn&apos;t retry</div><div class="line">    try &#123;</div><div class="line">        for (;;) &#123;</div><div class="line">            // 超过尝试次数，则对每个 Segment 加锁</div><div class="line">            if (retries++ == RETRIES_BEFORE_LOCK) &#123;</div><div class="line">                for (int j = 0; j &lt; segments.length; ++j)</div><div class="line">                    ensureSegment(j).lock(); // force creation</div><div class="line">            &#125;</div><div class="line">            sum = 0L;</div><div class="line">            size = 0;</div><div class="line">            overflow = false;</div><div class="line">            for (int j = 0; j &lt; segments.length; ++j) &#123;</div><div class="line">                Segment&lt;K,V&gt; seg = segmentAt(segments, j);</div><div class="line">                if (seg != null) &#123;</div><div class="line">                    sum += seg.modCount;</div><div class="line">                    int c = seg.count;</div><div class="line">                    if (c &lt; 0 || (size += c) &lt; 0)</div><div class="line">                        overflow = true;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            // 连续两次得到的结果一致，则认为这个结果是正确的</div><div class="line">            if (sum == last)</div><div class="line">                break;</div><div class="line">            last = sum;</div><div class="line">        &#125;</div><div class="line">    &#125; finally &#123;</div><div class="line">        if (retries &gt; RETRIES_BEFORE_LOCK) &#123;</div><div class="line">            for (int j = 0; j &lt; segments.length; ++j)</div><div class="line">                segmentAt(segments, j).unlock();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return overflow ? Integer.MAX_VALUE : size;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="JDK-1-8-的改动"><a href="#JDK-1-8-的改动" class="headerlink" title="JDK 1.8 的改动"></a>JDK 1.8 的改动</h4><p>JDK 1.7 使用分段锁机制来实现并发更新操作，核心类为 Segment，它继承自重入锁 ReentrantLock，并发度与 Segment 数量相等。<br>JDK 1.8 使用了 CAS 操作来支持更高的并发度，在 CAS 操作失败时使用内置锁 synchronized。<br>并且 JDK 1.8 的实现也在链表过长时会转换为红黑树。</p>
+<h3 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h3><h4 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h4><p>继承自 HashMap，因此具有和 HashMap 一样的快速查找特性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public class LinkedHashMap&lt;K,V&gt; extends HashMap&lt;K,V&gt; implements Map&lt;K,V&gt;</div></pre></td></tr></table></figure></p>
+<p>内存维护了一个双向链表，用来维护插入顺序或者 LRU 顺序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * The head (eldest) of the doubly linked list.</div><div class="line"> */</div><div class="line">transient LinkedHashMap.Entry&lt;K,V&gt; head;</div><div class="line"></div><div class="line">/**</div><div class="line"> * The tail (youngest) of the doubly linked list.</div><div class="line"> */</div><div class="line">transient LinkedHashMap.Entry&lt;K,V&gt; tail;</div></pre></td></tr></table></figure></p>
+<p>accessOrder 决定了顺序，默认为 false，此时维护的是插入顺序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">final boolean accessOrder;</div></pre></td></tr></table></figure></p>
+<p>LinkedHashMap 最重要的是以下用于维护顺序的函数，它们会在 put、get 等方法中调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">void afterNodeAccess(Node&lt;K,V&gt; p) &#123; &#125;</div><div class="line">void afterNodeInsertion(boolean evict) &#123; &#125;</div></pre></td></tr></table></figure></p>
+<h4 id="afterNodeAccess"><a href="#afterNodeAccess" class="headerlink" title="afterNodeAccess()"></a>afterNodeAccess()</h4><p>当一个节点被访问时，如果 accessOrder 为 true，则会将该节点移到链表尾部。也就是说指定为 LRU 顺序之后，在每次访问一个节点时，会将这个节点移到链表尾部，保证链表尾部是最近访问的节点，那么链表首部就是最近最久未使用的节点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">void afterNodeAccess(Node&lt;K,V&gt; e) &#123; // move node to last</div><div class="line">    LinkedHashMap.Entry&lt;K,V&gt; last;</div><div class="line">    if (accessOrder &amp;&amp; (last = tail) != e) &#123;</div><div class="line">        LinkedHashMap.Entry&lt;K,V&gt; p =</div><div class="line">            (LinkedHashMap.Entry&lt;K,V&gt;)e, b = p.before, a = p.after;</div><div class="line">        p.after = null;</div><div class="line">        if (b == null)</div><div class="line">            head = a;</div><div class="line">        else</div><div class="line">            b.after = a;</div><div class="line">        if (a != null)</div><div class="line">            a.before = b;</div><div class="line">        else</div><div class="line">            last = b;</div><div class="line">        if (last == null)</div><div class="line">            head = p;</div><div class="line">        else &#123;</div><div class="line">            p.before = last;</div><div class="line">            last.after = p;</div><div class="line">        &#125;</div><div class="line">        tail = p;</div><div class="line">        ++modCount;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="afterNodeInsertion"><a href="#afterNodeInsertion" class="headerlink" title="afterNodeInsertion()"></a>afterNodeInsertion()</h4><p>在 put 等操作之后执行，当 removeEldestEntry() 方法返回 ture 时会移除最晚的节点，也就是链表首部节点 first。<br>evict 只有在构建 Map 的时候才为 false，在这里为 true。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">void afterNodeInsertion(boolean evict) &#123; // possibly remove eldest</div><div class="line">    LinkedHashMap.Entry&lt;K,V&gt; first;</div><div class="line">    if (evict &amp;&amp; (first = head) != null &amp;&amp; removeEldestEntry(first)) &#123;</div><div class="line">        K key = first.key;</div><div class="line">        removeNode(hash(key), key, null, false, true);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>removeEldestEntry() 默认为 false，如果需要让它为 true，需要继承 LinkedHashMap 并且覆盖这个方法的实现，这在实现 LRU 的缓存中特别有用，通过移除最近最久未使用的节点，从而保证缓存空间足够，并且缓存的数据都是热点数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">protected boolean removeEldestEntry(Map.Entry&lt;K,V&gt; eldest) &#123;</div><div class="line">    return false;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="LRU-缓存"><a href="#LRU-缓存" class="headerlink" title="LRU 缓存"></a>LRU 缓存</h4><p>以下是使用 LinkedHashMap 实现的一个 LRU 缓存：<br>设定最大缓存空间 MAX_ENTRIES 为 3；<br>使用 LinkedHashMap 的构造函数将 accessOrder 设置为 true，开启 LRU 顺序；<br>覆盖 removeEldestEntry() 方法实现，在节点多于 MAX_ENTRIES 就会将最近最久未使用的数据移除。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public class LRUCache&lt;K,V&gt; extends LinkedHashMap&lt;K,V&gt; &#123;</div><div class="line">    private static final int MAX_ENTRIES = 3;</div><div class="line">    LRUCache ()&#123;</div><div class="line">        super(MAX_ENTRIES, 0.75f, true);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected boolean removeEldestEntry(Map.Entry&lt;K, V&gt; eldest) &#123;</div><div class="line">        return size() &gt; MAX_ENTRIES;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        LRUCache&lt;Integer, String&gt; cache = new LRUCache&lt;&gt;();</div><div class="line">        cache.put(1, &quot;a&quot;);</div><div class="line">        cache.put(2, &quot;b&quot;);</div><div class="line">        cache.put(3, &quot;c&quot;);</div><div class="line">//        cache.put(4, &quot;d&quot;);</div><div class="line">        cache.get(1);</div><div class="line">        cache.put(5, &quot;e&quot;);</div><div class="line">        System.out.println(cache.keySet());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">结果 [3, 1, 5]</div></pre></td></tr></table></figure>
+<h3 id="WeekHashMap"><a href="#WeekHashMap" class="headerlink" title="WeekHashMap"></a>WeekHashMap</h3><h4 id="存储结构-1"><a href="#存储结构-1" class="headerlink" title="存储结构"></a>存储结构</h4><p>WeakHashMap 的 Entry 继承自 WeakReference，被 WeakReference 关联的对象在下一次垃圾回收时会被回收。<br>WeakHashMap 主要用来实现缓存，通过使用 WeakHashMap来引用缓存对象，由 JVM 对这部分缓存进行回收。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">private static class Entry&lt;K,V&gt; extends WeakReference&lt;Object&gt; implements Map.Entry&lt;K,V&gt;</div></pre></td></tr></table></figure></p>
+<h4 id="ConcurrentCache"><a href="#ConcurrentCache" class="headerlink" title="ConcurrentCache"></a>ConcurrentCache</h4><p>Tomcat 中的 ConcurrentCache 使用了 WeakHashMap 来实现缓存功能。<br>ConcurrentCache 采取的是分代缓存：</p>
+<ul>
+<li>经常使用的对象放入eden 中，eden 使用 ConcurrentHashMap 实现，不用担心会被回收（伊甸园）；</li>
+<li>不常用的对象放入 longterm，longterm 使用 WeakHashMap 实现，这些老对象会被垃圾收集器回收。</li>
+<li>当调用 get() 方法时，会先从 eden 区获取，如果没有找到的话再到 longterm 获取，当从 longterm 获取到就把对象放入 eden 中，从而保证经常被访问的节点不容易被回收。</li>
+<li>当调用 put() 方法时，如果 eden 的大小超过了 size，那么就将 eden 中的所有对象都放入 longterm 中，利用虚拟机回收掉一部分不经常使用的对象。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public final class ConcurrentCache&lt;K, V&gt; &#123;</div><div class="line"></div><div class="line">    private final int size;</div><div class="line"></div><div class="line">    private final Map&lt;K, V&gt; eden;</div><div class="line"></div><div class="line">    private final Map&lt;K, V&gt; longterm;</div><div class="line"></div><div class="line">    public ConcurrentCache(int size) &#123;</div><div class="line">        this.size = size;</div><div class="line">        this.eden = new ConcurrentHashMap&lt;&gt;(size);</div><div class="line">        this.longterm = new WeakHashMap&lt;&gt;(size);</div><div class="line">    &#125;</div><div class="line">    public V get(K k) &#123;</div><div class="line">        V v = this.eden.get(k);</div><div class="line">        if (v == null) &#123;</div><div class="line">            v = this.longterm.get(k);</div><div class="line">            if (v != null)</div><div class="line">                this.eden.put(k, v);</div><div class="line">        &#125;</div><div class="line">        return v;</div><div class="line">    &#125;</div><div class="line">    public void put(K k, V v) &#123;</div><div class="line">        if (this.eden.size() &gt;= size) &#123;</div><div class="line">            this.longterm.putAll(this.eden);</div><div class="line">            this.eden.clear();</div><div class="line">        &#125;</div><div class="line">        this.eden.put(k, v);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java-容器/" rel="tag"># java 容器</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/12/Spring 问题/" rel="next" title="Spring 问题">
+                <i class="fa fa-chevron-left"></i> Spring 问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/12/最近的总结/" rel="prev" title="工作总结20180907">
+                工作总结20180907 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/08/12/Java 容器/"
+           data-title="Java 容器分析" data-url="http://guilongyue.github.io/2018/08/12/Java 容器/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java容器分析"><span class="nav-number">1.</span> <span class="nav-text">Java容器分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Collection"><span class="nav-number">1.1.</span> <span class="nav-text">Collection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Set"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-List"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Queue"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.Queue</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">1.2.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器中的设计模式"><span class="nav-number">1.3.</span> <span class="nav-text">容器中的设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器模式"><span class="nav-number">1.3.1.</span> <span class="nav-text">适配器模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">1.4.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayList"><span class="nav-number">1.4.1.</span> <span class="nav-text">ArrayList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vector"><span class="nav-number">1.4.2.</span> <span class="nav-text">Vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">1.4.3.</span> <span class="nav-text">CopyOnWriteArrayList</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#读写分离"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适用场景"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">适用场景</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedList"><span class="nav-number">1.4.4.</span> <span class="nav-text">LinkedList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap"><span class="nav-number">1.4.5.</span> <span class="nav-text">HashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-存储结构"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">1.存储结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-拉链法的工作原理"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">2.拉链法的工作原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-put-操作"><span class="nav-number">1.4.5.3.</span> <span class="nav-text">3.put 操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-确定桶下标"><span class="nav-number">1.4.5.4.</span> <span class="nav-text">4.确定桶下标</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#（一）计算-hash-值"><span class="nav-number">1.4.5.4.1.</span> <span class="nav-text">（一）计算 hash 值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#（二）取模"><span class="nav-number">1.4.5.4.2.</span> <span class="nav-text">（二）取模</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-扩容-基本原理"><span class="nav-number">1.4.5.5.</span> <span class="nav-text">5.扩容-基本原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-扩容-重新计算桶下标"><span class="nav-number">1.4.5.6.</span> <span class="nav-text">6.扩容-重新计算桶下标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-扩容-计算数组容量"><span class="nav-number">1.4.5.7.</span> <span class="nav-text">7.扩容-计算数组容量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-链表转红黑树"><span class="nav-number">1.4.5.8.</span> <span class="nav-text">8. 链表转红黑树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-与-HashTable-的比较"><span class="nav-number">1.4.5.9.</span> <span class="nav-text">9. 与 HashTable 的比较</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">1.4.6.</span> <span class="nav-text">ConcurrentHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-存储结构-1"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">1.存储结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-size-操作"><span class="nav-number">1.4.6.1.1.</span> <span class="nav-text">2.size 操作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDK-1-8-的改动"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">JDK 1.8 的改动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashMap"><span class="nav-number">1.4.7.</span> <span class="nav-text">LinkedHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#存储结构"><span class="nav-number">1.4.7.1.</span> <span class="nav-text">存储结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#afterNodeAccess"><span class="nav-number">1.4.7.2.</span> <span class="nav-text">afterNodeAccess()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#afterNodeInsertion"><span class="nav-number">1.4.7.3.</span> <span class="nav-text">afterNodeInsertion()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LRU-缓存"><span class="nav-number">1.4.7.4.</span> <span class="nav-text">LRU 缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WeekHashMap"><span class="nav-number">1.4.8.</span> <span class="nav-text">WeekHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#存储结构-1"><span class="nav-number">1.4.8.1.</span> <span class="nav-text">存储结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConcurrentCache"><span class="nav-number">1.4.8.2.</span> <span class="nav-text">ConcurrentCache</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

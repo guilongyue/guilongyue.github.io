@@ -1,0 +1,743 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,Cookie," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Java 状态管理将客户端与服务器之间多次交互当做一个整体来看待，并且将多次交互中涉及的数据保存下来，提供给后续的交互进行数据的管理即状态管理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Servlet 状态管理">
+<meta property="og:url" content="http://guilongyue.github.io/2017/06/09/Java 状态管理/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Java 状态管理将客户端与服务器之间多次交互当做一个整体来看待，并且将多次交互中涉及的数据保存下来，提供给后续的交互进行数据的管理即状态管理。">
+<meta property="og:updated_time" content="2017-06-09T03:14:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Servlet 状态管理">
+<meta name="twitter:description" content="Java 状态管理将客户端与服务器之间多次交互当做一个整体来看待，并且将多次交互中涉及的数据保存下来，提供给后续的交互进行数据的管理即状态管理。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/06/09/Java 状态管理/"/>
+
+
+
+
+
+  <title> Java Servlet 状态管理 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/06/09/Java 状态管理/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java Servlet 状态管理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-09T10:11:27+08:00">
+                2017-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/09/Java 状态管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/09/Java 状态管理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java-状态管理"><a href="#Java-状态管理" class="headerlink" title="Java 状态管理"></a>Java 状态管理</h1><p>将客户端与服务器之间多次交互当做一个整体来看待，并且将多次交互中涉及的数据保存下来，提供给后续的交互进行数据的管理即状态管理。<br><a id="more"></a></p>
+<h3 id="状态管理"><a href="#状态管理" class="headerlink" title="状态管理"></a>状态管理</h3><p>HTTP协议是无状态协议，即一次请求对应一次响应，响应结束后连接即断开，同一个用户的不同请求对于服务器端来讲并不会认为这两个请求有什么关联性，并不会以此区分不同的客户端。但实际情况中还是需要服务器端能够区分不同的客户端以及记录与客户端相关的一些数据，所以状态管理能够做到不同客户端的身份识别。</p>
+<blockquote>
+<p>如果将数据存储在客户端，每次向服务器端发请求时都将存在客户端的数据随着请求发送到服务器端，修改后再发回到客户端保存的这种模式叫做Cookie。<br>如果将数据存储在服务器端，并且为这组数据标示一个编号，只将编号发回给客户端。当客户端向服务器发送请求时只需要将这个编号发过来，服务器端按照这个编号找到对应的数据进行管理的这种模式叫做Session——会话。</p>
+</blockquote>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><p>如果客户端向服务器端AddServlet发送请求，遇到创建Cookie的代码时，<strong>那么一小段文本信息就会随着response响应中的头信息被传递会客户端。如图中Set-Cookie：uname=xxx就是从服务器端传递回客户端的文本信息。</strong>当文本信息到达客户端以后，会被保存在客户端的内存或硬盘上，存在内存中会随着内存的释放而消失，存在硬盘上则会保存更长的时间。<br>一旦客户端存有服务器发回的文本信息，那么当浏览器再次向服务器发起请求时，如请求FindServlet这个组件，<strong>那么存储的文本信息会随着请求数据包的消息头以Cookie：uname=xxx这样的形式将文本信息发送到服务器端。</strong>只要Cookie的生命周期没有结束，那么不管是存在内存还是硬盘上的信息都会在客户端向服务器端发出请求时自动的随着消息头发送过去。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">创建Cookie</div><div class="line">Cookie c = new Cookie(String name,String value);</div><div class="line">response.addCookie(c);</div><div class="line">查询Cookie</div><div class="line">由于客户端是可以存放多个Cookie的，所以request提供的获取Cookie的方法的返回值是Cookie数组，如果想进一步获取某一个Cookie信息可以通过遍历数组，分别获取每一个Cookie的name和value。代码如下：</div><div class="line">Cookie[] cookies =  request.getCookies();</div><div class="line">String Cookie.getName();</div><div class="line">String Cookie.getValue();</div><div class="line">查找修改</div><div class="line">Cookie[] c1 = req.getCookies();</div><div class="line">for(Cookie coo:c1)&#123;</div><div class="line">	if(&quot;aaaa&quot;.equals(coo.getName()))&#123;</div><div class="line">		coo.setValue(&quot;1111&quot;);</div><div class="line">		res.addCookie(coo);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">其中response.addCookie（coo）是非常重要的语句，如果没有这一行代码，那么就算是使用setValue方法修改了Cookie的值，但是不发回到客户端的话，也不会实现数值的改变。所以只要见到response.addCookie这行代码，即服务器端发回了带有Set-Cookie消息头的信息。</div></pre></td></tr></table></figure></p>
+<h4 id="Cookie的生存时间"><a href="#Cookie的生存时间" class="headerlink" title="Cookie的生存时间"></a>Cookie的生存时间</h4><p>默认情况下，Cookie会被浏览器保存在内存中，此时Cookie的生命周期由浏览器决定，只要不关闭浏览器Cookie就会一直存在。<br>如果希望关闭浏览器后Cookie仍存在，则可以通过设置过期时间使得Cookie存在硬盘上得以保存更长的时间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">该方法是Cookie提供的实例方法。参数seconds的单位为秒，但精度不是很高。</div><div class="line">seconds &gt; 0 ：代表Cookie保存在硬盘上的时长</div><div class="line">seconds = 0 ： 代表Cookie的生命时长为现在，而这一刻稍纵即逝，所以马上Cookie就等同于过了生存时间，所以会被立即删除。这也是删除Cookie的实现方式。</div><div class="line">seconds &lt; 0 ：缺省值，浏览器会将Cookie保存在内存中。</div><div class="line">以下代码实现了Cookie保存在硬盘上40秒：</div></pre></td></tr></table></figure></p>
+<h4 id="Cookie编码"><a href="#Cookie编码" class="headerlink" title="Cookie编码"></a>Cookie编码</h4><p>Cookie作为在网络传输的一段字符串文本，只能保存合法的ASCII字符，如果要保存中文需要将中文变成合法的ASCII字符，即编码。使用如下代码可以实现将中文保存到Cookie中。<br><code>Cookie c2= new Cookie(&quot;aa&quot;,URLEncoder.encode(&quot;你好&quot;, &quot;utf-8&quot;));</code><br>服务器读取客户端经过编码之后的信息时，要想能够正确显示需要将信息解码后才能输出。使用URLDecoder的decode（）方法即可。实现解码的完整代码如下:</p>
+<h4 id="Cookie的路径问题"><a href="#Cookie的路径问题" class="headerlink" title="Cookie的路径问题"></a>Cookie的路径问题</h4><p>客户端存储Cookie之后，并不是针对同一个应用访问任何资源时都自动发送Cookie到服务器端，而是会进行路径的判断。只有符合路径规范的请求才会发送Cookie到服务器端。</p>
+<ul>
+<li>客户端在接受Cookie时会为该Cookie记录一个默认路径，这个路径记录的是添加这个Cookie的Web组件的路径。如，当客户端向 <a href="http://localhost:8080/test/file/addCookie.jsp发送请求时创建了" target="_blank" rel="external">http://localhost:8080/test/file/addCookie.jsp发送请求时创建了</a></li>
+<li>cookie，那么该cookie的路径就是 /test/file.<br>只有当访问的地址是Cookie的路径或者其子路径时，浏览器才发送Cookie到服务器端。如，Cookie的路径是 /test/file，那么如果访问的是 /test/file/a.jsp 或者 /test/file/b/c.jsp时，都会发送Cookie。<br>如果访问的是 /test/d.jsp，则浏览器不会发送Cookie。</li>
+<li>设置Cookie的路径可以使用Cookie的API方法，setPath(String uri);如以下代码就实现了设置Cookie的路径为应用的顶级目录，这样所有资源路径要么与此路径相等，要么是子路径，从而实现了客户端发送任何请求时都会发送Cookie。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Cookie c  = new Cookie(“uname”，“jack”);</div><div class="line">c.setPath(“/test”);</div><div class="line">response.addCookie(c);</div><div class="line">如以下代码就实现了设置Cookie的路径为应用的顶级目录，这样所有资源路径要么与此路径相等，要么是子路径，从而实现了客户端发送任何请求时都会发送Cookie。</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Cookie的限制"><a href="#Cookie的限制" class="headerlink" title="Cookie的限制"></a>Cookie的限制</h4><blockquote>
+<p>Cookie由于存放的位置在客户端，所以可以通过修改设置被用户禁止。Cookie本质就是一小段文本，一小段说的是只能保存少量数据，长度是有限制的，一般为4kb左右。文本说的是只能保存字符串，不能保留复杂的对象类型数据。<br>作为网络中传输的内容，Cookie安全性很低，非常容易通过截取数据包来获取，在没有加密的情况下不要用于存放敏感数据。<br>就算是能够存放的长度很短，但作为网络中传输的内容也会增加网络的传输量影响带宽。在服务器处理大量请求的时候，Cookie的传递无疑会增加网络的负载量。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/Cookie/" rel="tag"># Cookie</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/05/java Servlet/" rel="next" title="Java Servlet 工作原理解析">
+                <i class="fa fa-chevron-left"></i> Java Servlet 工作原理解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/09/Java 状态管理2/" rel="prev" title="Java 状态管理2">
+                Java 状态管理2 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/09/Java 状态管理/"
+           data-title="Java Servlet 状态管理" data-url="http://guilongyue.github.io/2017/06/09/Java 状态管理/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-状态管理"><span class="nav-number">1.</span> <span class="nav-text">Java 状态管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#状态管理"><span class="nav-number">1.0.1.</span> <span class="nav-text">状态管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie"><span class="nav-number">1.0.2.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie的生存时间"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">Cookie的生存时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie编码"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">Cookie编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie的路径问题"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">Cookie的路径问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie的限制"><span class="nav-number">1.0.2.4.</span> <span class="nav-text">Cookie的限制</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

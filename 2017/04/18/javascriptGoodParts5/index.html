@@ -1,0 +1,782 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,javascript语言精粹," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="继承伪类他不让对象直接从其他对象继承，而插入了一个中间层，从而使构造器函数产生对象。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javascript good parts 继承">
+<meta property="og:url" content="http://guilongyue.github.io/2017/04/18/javascriptGoodParts5/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="继承伪类他不让对象直接从其他对象继承，而插入了一个中间层，从而使构造器函数产生对象。">
+<meta property="og:updated_time" content="2017-04-18T10:03:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javascript good parts 继承">
+<meta name="twitter:description" content="继承伪类他不让对象直接从其他对象继承，而插入了一个中间层，从而使构造器函数产生对象。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/04/18/javascriptGoodParts5/"/>
+
+
+
+
+
+  <title> javascript good parts 继承 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/04/18/javascriptGoodParts5/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                javascript good parts 继承
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-18T17:50:54+08:00">
+                2017-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/18/javascriptGoodParts5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/18/javascriptGoodParts5/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><h3 id="伪类"><a href="#伪类" class="headerlink" title="伪类"></a>伪类</h3><p>他不让对象直接从其他对象继承，而插入了一个中间层，从而使构造器函数产生对象。<br><a id="more"></a><br>当一个函数被创建时Function构造器生成的函数对象会运行一些类似这样的code。<br>this.prototype = {constructor:this}<br>新的对象被赋予一个prototype属性，其值是一个包含constructor属性且值为该新函数的对象。该prototype对象是存放继承特征的地方，因为js每一种方法来确定那些函数是用来做构造器的，<strong>所以每个函数都会得到一个prototype对象。</strong><br>当采用构造器调用模式，即用new前缀去调用一个函数时，这将修改函数执行的方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Function.method(&apos;new&apos;,function()&#123;</div><div class="line">	var that = Object.beget(this.prototype);</div><div class="line">	var other = this.apply(that,arguments);</div><div class="line">	return (typeof other ===&apos;object&apos;&amp;&amp; other)||that</div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>我们可以定义一个构造器并扩充他的原型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var Mammal = function (name)&#123;</div><div class="line">	this.name = name;</div><div class="line">&#125;</div><div class="line">Mammal.prototype.get_name = function ()&#123;</div><div class="line">	return this.name;</div><div class="line">&#125;</div><div class="line">Mammal.prototype.says = function()&#123;</div><div class="line">	return this.saying || &apos;&apos;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>现在我们构建一个实例</p>
+<h3 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h3><p>我们先用对象字面量构造一个有用的对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var myAn = &#123;name:&apos;herb&apos;,get_name:function()&#123;return this.name;&#125;,says:function()&#123;return this.saying || &apos;&apos;&#125;&#125;;</div></pre></td></tr></table></figure></p>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>继承模式没法保护隐私，对象的所有属性都是可见的，我们无法得到私有函数和变量。幸运的是，我们有一个更好的选择，那就是应用模块模式。<br>我们冲构造一个生成对象的函数开始。我们以小写字母开头来命名它，因为他不需要使用new 前缀。</p>
+<ol>
+<li>创建一个新对象。</li>
+<li>有选择的定义私有实例变量和方法。这些就是函数中通过var语句定义的普通变量。</li>
+<li>给这个新对象扩充方法，这些方法拥有特权去访问参数，以及在第二步中通过var语句定义的变量。</li>
+<li>返回这个新对象。<br>这是一个函数化构造器的代码模板。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var constructor = function(spec,my)&#123;</div><div class="line">	var that,其他私有实例变量。</div><div class="line">	my = my || &#123;&#125;;</div><div class="line">	把共享的变量核函数加到my中。</div><div class="line">	that = 一个新对象。</div><div class="line">	添加给that的特权方法</div><div class="line">	return that;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>spec对象包含构造器需要构造一个新实例的所有信息，spec的内容可能被复制到私有变量中，或者被其他函数改变，或者方法可以在需要的时候访问spec的信息。(一个简化的方法是替换spec为一个单一的值。当构造对象的构成中并不需要整个spec对象的时候，这是有用的。)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var mammal = function(spec)&#123;var that = &#123;&#125;;that.get_name=function()&#123;return spec.name;&#125;;that.says=function()&#123;return spec.saying||&apos;&apos;;&#125;;return that;&#125;</div><div class="line">var myMamm = mammal(&#123;name:&apos;Herb&apos;&#125;);</div></pre></td></tr></table></figure></p>
+<h1 id="js原型链"><a href="#js原型链" class="headerlink" title="js原型链"></a>js原型链</h1><p>prototype属性<br>constructor 属性<br>instanceof 运算符<br>相关的属性和方法<br>Object.prototype.hasOwnProperty()<br>Object.prototype.isPropertyOf()<br>Object.getPrototypeOf()<br>Object.setPrototypeOf()<br>Object.create()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function Person(name,gender)&#123;this.name = name;this.gender=gender;this.sayHello=function()&#123;console.log(&apos;Hello,I am&apos;,this.name,&apos;I \&apos;am a&apos;,this.gender)&#125;&#125; </div><div class="line">var zs = new Person(&apos;a&apos;,&apos;male&apos;);</div><div class="line">var xh = new Person(&apos;meimei&apos;,&apos;female&apos;);</div><div class="line">zs.sayHello(); Hello,I am a I &apos;am a male</div><div class="line">xh.sayHello(); Hello,I am meimei I &apos;am a female</div><div class="line">zs.sayHello === xh.sayHello; 实际上是两个截然不同的接口。</div></pre></td></tr></table></figure></p>
+<p>面向对象的思想，js中通过prototype属性来实现类似的作用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Person.prototype.sayHello = function ()&#123;console.log(&apos;Hello,I am&apos;,this.name,&apos;.I \&apos;m a &apos;,this.gender);&#125;;</div><div class="line">function ()&#123;console.log(&apos;Hello,I am&apos;,this.name,&apos;.I \&apos;m a &apos;,this.gender);&#125;</div><div class="line">zs.sayHello();</div><div class="line"> Hello,I am  .I &apos;m a  male</div><div class="line">xh.sayHello();</div><div class="line"> Hello,I am  .I &apos;m a  female</div><div class="line">zs.sayHello === xh.sayHello;</div><div class="line">true</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Person<br>    gender: “male”<br>    name: “zhang san”<br>    <strong>proto</strong>: Object<br>        constructor: function Person(name, gender)<br>            arguments: null<br>            caller: null<br>            length: 2<br>            name: “Person”<br>            prototype: Object<br>        sayHello:function()<br>            arguments:null<br>            caller:null<br>            length:0<br>            name:””<br>            prototype:Object<br>zs这个对象只有两个自身的属性gender和name，这和其构造函数Person的模板相同，并且可以在Person对象的<strong>proto</strong>属性下找到sayHello方法。那么这个<strong>proto</strong>是什么呢？它是浏览器环境下部署的一个对象，它指的是当前对象的原型对象，也就是构造函数的prototype属性。<br>现在就可以明白了，我们给构造函数Person对象的prototype属性添加了sayHello方法，zs和xh这两个通过Person构造函数产生的对象，是可访问到Person对象的prototype属性的，所以我们定义在prototype下的sayHello方法，Person的实例对象都可以访问到。</p>
+</blockquote>
+<p>prototype下有一个属性constructor，默认指向此prototype对象所在的构造函数。<br>如上例中的zs下<strong>proto</strong>的constructor值为function Person(name, gender)。<br>由于此属性定义在prototype属性上，所以它可以在所有的实例对象中获取到。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">zs.constructor;</div><div class="line">// function Person(name, gender) &#123;</div><div class="line">//     this.name = name;</div><div class="line">//     this.gender = gender;</div><div class="line">// &#125;</div><div class="line"></div><div class="line">zs.hasOwnProperty(&apos;constructor&apos;); // false</div><div class="line">zs.constructor === Person; // true</div><div class="line">zs.constructor === Function; // false</div><div class="line">zs.constructor === Object; // false</div></pre></td></tr></table></figure></p>
+<p>将constructor属性放在prototype属性中的一个作用是，可以通过这个属性来判断这个对象是由哪个构造函数产生的，上面代码中，zs是由Person构造函数产生的，而不是Function或者Object构造函数产生。<br>constructor属性的另一个作用就是:提供了一种继承的实现模式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function Super() &#123;</div><div class="line">    // ...</div><div class="line">&#125;</div><div class="line">function Sub() &#123;</div><div class="line">    Sub.superclass.constructor.call(this);</div><div class="line">    // ...</div><div class="line">&#125;</div><div class="line">Sub.superclass = new Super();</div><div class="line">上面代码中，Super和Sub都是构造函数，在Sub内部的this上调用Super，就会形成Sub继承Super的效果，miniui中是这样实现继承的:</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mini.Control = function(el) &#123;    </div><div class="line">    mini.Control.superclass.constructor.apply(this, arguments);</div><div class="line">    // ...</div><div class="line">&#125;</div><div class="line">// 其中的superclass指代父类的prototype属性</div></pre></td></tr></table></figure>
+<p>我们自己写一个例子:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">// 父类</div><div class="line">function Animal(name) &#123;</div><div class="line">    this.name = name;</div><div class="line">    this.introduce = function() &#123;</div><div class="line">        console.log(&apos;Hello , My name is&apos;, this.name);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">Animal.prototype.sayHello = function() &#123;</div><div class="line">    console.log(&apos;Hello, I am:&apos;, this.name);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 子类</div><div class="line">function Person(name, gender) &#123;</div><div class="line">    Person.superclass.constructor.apply(this, arguments);</div><div class="line">    this.gender = gender;</div><div class="line">&#125;</div><div class="line">Person.superclass = new Animal();</div><div class="line"></div><div class="line">// 子类</div><div class="line">function Dog(name) &#123;</div><div class="line">    Dog.superclass.constructor.apply(this, arguments);  </div><div class="line">&#125;</div><div class="line">Dog.superclass = new Animal();</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">基本原理就是在子类中使用父类的构造函数。在Person和Dog中均没有对name属性和introduce方法进行操作，只是使用了父类Animal的构造函数，就可以将name属性和introduce方法继承来，请看下面例子:</div><div class="line"></div><div class="line">var zs = new Person(&apos;zhang san&apos;, &apos;male&apos;);</div><div class="line"></div><div class="line">zs; // Person &#123;name: &quot;zhang san&quot;, gender: &quot;male&quot;&#125;</div><div class="line">zs.sayHello(); // Uncaught TypeError: zs.sayHello is not a function(…)</div><div class="line">zs.introduce(); // Hello , My name is zhang san</div><div class="line"></div><div class="line">var wangCai = new Dog(&quot;旺财&quot;);</div><div class="line"></div><div class="line">wangCai; // Dog &#123;name: &quot;旺财&quot;&#125;</div><div class="line">wangCai.introduce(); // Hello , My name is 旺财</div><div class="line">确实实现了我们需要的效果。可是我们发现在调用zs.sayHello()时报错了。为什么呢？</div><div class="line">其实不难发现问题，我们的Person.superclass是Animal的一个实例，是有sayHello方法的，但是我们在Perosn构造函数的内部，只是使用了Person.superclass.constructor。而Person.superclass.constructor指的仅仅是Animal构造函数本身，并没有包括Animal.prototype，所以没有sayHello方法。</div></pre></td></tr></table></figure>
+<p>JavaScript的所有对象都有构造函数，而所有构造函数都有prototype属性（其实是所有函数都有prototype属性），所以所有对象都有自己的原型对象。<br>对象的属性和方法，有可能是定义在自身，也有可能是定义在它的原型对象。由于原型本身也是对象，又有自己的原型，所以形成了一条原型链（prototype chain）。<br>例如上面的zs对象，它的原型对象是Person的prototype属性，而Person的prototype本身也是一个对象，它的原型对象是Object.prototype。<br>zs本身没有sayHello方法，JavaScript通过原型链向上继续寻找，在Person.prototype上找到了sayHello方法。toString方法在zs对象本身上没有，Person.prototype上也没有，因此继续沿原型链查找，最终可以在Object.prototype上找到了toString方法。<br>而Object.prototype的原型指向null，由于null没有任何属性，因此原型链到Object.prototype终止，所以Object.prototype是原型链的最顶端。<br>原型链”的作用是，读取对象的某个属性时，JavaScript引擎先寻找对象本身的属性，如果找不到，就到它的原型去找，如果还是找不到，就到原型的原型去找。如果直到最顶层的Object.prototype还是找不到，则返回undefined。<br>如果对象自身和它的原型，都定义了一个同名属性，那么优先读取对象自身的属性，这叫做“覆盖”（overiding）。<br>JavaScript中通过原型链实现了类似面向对象编程语言中的继承，我们在复制一个对象时，只用复制其自身的属性即可，无需将整个原型链进行一次复制，Object.prototype下的hasOwnProperty方法可以判断一个属性是否是该对象自身的属性。<br>实例对象、构造函数、prototype之间的关系可用下图表示:</p>
+<h3 id="instranceof-运算符"><a href="#instranceof-运算符" class="headerlink" title="instranceof 运算符"></a>instranceof 运算符</h3><p>运算符返回一个布尔值，表示指定对象是否为某个构造函数的实例。由于原型链的关系，所谓的实例并不一定是某个构造函数的直接实例，更准确的描述，应该是:返回一个后者的原型对象是否在前者的原型链上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">zs instanceof Person; // true</div><div class="line">zs instanceof Object ;// true </div><div class="line">var d = new Date();</div><div class="line">d instanceof Date; // true</div><div class="line">d instanceof Object; // true</div></pre></td></tr></table></figure></p>
+<h3 id="Object-prototype-hasOwnProperty"><a href="#Object-prototype-hasOwnProperty" class="headerlink" title="Object.prototype.hasOwnProperty()"></a>Object.prototype.hasOwnProperty()</h3><p>hasOwnProperty()方法用来判断某个对象是否含有指定的自身属性。这个方法可以用来检测一个对象是否含有特定的自身属性，和 in 运算符不同，该方法会忽略掉那些从原型链上继承到的属性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">zs.hasOwnProperty(&apos;name&apos;); // true</div><div class="line">zs.hasOwnProperty(&apos;gender&apos;); // true</div><div class="line">zs.hasOwnProperty(&apos;sayHello&apos;); // fasle</div><div class="line">Person.prototype.hasOwnProperty(&apos;sayHello&apos;); // true </div><div class="line">zs.hasOwnProperty(&apos;toString&apos;); // fasle</div><div class="line">Object.prototype.hasOwnProperty(&apos;toString&apos;); // true</div></pre></td></tr></table></figure></p>
+<h3 id="Object-prototype-isPrototypeOf"><a href="#Object-prototype-isPrototypeOf" class="headerlink" title="Object.prototype.isPrototypeOf()"></a>Object.prototype.isPrototypeOf()</h3><p>对象实例的isPrototypeOf方法，用来判断一个对象是否是另一个对象的原型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var o1 = &#123;&#125;;</div><div class="line">var o2 = Object.create(o1);</div><div class="line">var o3 = Object.create(o2);</div><div class="line">o2.isPrototypeOf(o3) // true</div><div class="line">o1.isPrototypeOf(o3) // true</div></pre></td></tr></table></figure></p>
+<p>上面代码表明，只要某个对象处在原型链上，isProtypeOf都返回true。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Object.prototype.isPrototypeOf(&#123;&#125;) // true</div><div class="line">Object.prototype.isPrototypeOf([]) // true</div><div class="line">Object.prototype.isPrototypeOf(/xyz/) // true</div><div class="line">Object.prototype.isPrototypeOf(Object.create(null)) // false</div></pre></td></tr></table></figure></p>
+<p>看起来这个方法和instanceof运算符作用类似，但实际使用是不一样的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">zs instanceof Person ; // true;</div><div class="line">Person.isPrototypeOf(zs);// false</div><div class="line">Person.prototype.isPrototypeOf(zs); // true</div><div class="line">zs instanceof Person可理解为判断Person.prototype在不在zs的原型链上。 而Person.isPrototypeOf(zs)指的就是Person本身在不在zs的原型链上，所以返回false，只有Person.prototype.isPrototypeOf(zs)才为true。</div></pre></td></tr></table></figure></p>
+<h3 id="Object-getPrototypeOf"><a href="#Object-getPrototypeOf" class="headerlink" title="Object.getPrototypeOf()"></a>Object.getPrototypeOf()</h3><p>ES5Object.getPrototypeOf方法返回一个对象的原型。这是获取原型对象的标准方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// 空对象的原型是Object.prototype</div><div class="line">Object.getPrototypeOf(&#123;&#125;) === Object.prototype</div><div class="line">// true</div><div class="line">// 函数的原型是Function.prototype</div><div class="line">function f() &#123;&#125;</div><div class="line">Object.getPrototypeOf(f) === Function.prototype</div><div class="line">// true</div><div class="line">// f 为 F 的实例对象，则 f 的原型是 F.prototype</div><div class="line">var f = new F();</div><div class="line">Object.getPrototypeOf(f) === F.prototype</div><div class="line">// true</div><div class="line">Object.getPrototypeOf(&quot;foo&quot;);</div><div class="line">// TypeError: &quot;foo&quot; is not an object (ES5 code)</div><div class="line">Object.getPrototypeOf(&quot;foo&quot;);</div><div class="line">// String.prototype                  (ES6 code)</div></pre></td></tr></table></figure></p>
+<p>此方法是ES5方法，需要IE9+。在ES5中，参数只能是对象，否则将抛出异常，而在ES6中，此方法可正确识别原始类型。</p>
+<h3 id="Object-setPrototypeOf"><a href="#Object-setPrototypeOf" class="headerlink" title="Object.setPrototypeOf()"></a>Object.setPrototypeOf()</h3><p>ES5Object.setPrototypeOf方法可以为现有对象设置原型，返回一个新对象。接受两个参数，第一个是现有对象，第二个是原型对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var a = &#123;x: 1&#125;;</div><div class="line">var b = Object.setPrototypeOf(&#123;&#125;, a);</div><div class="line">// 等同于</div><div class="line">// var b = &#123;__proto__: a&#125;;</div><div class="line">b.x // 1</div></pre></td></tr></table></figure></p>
+<p>上面代码中，b对象是Object.setPrototypeOf方法返回的一个新对象。该对象本身为空、原型为a对象，所以b对象可以拿到a对象的所有属性和方法。b对象本身并没有x属性，但是JavaScript引擎找到它的原型对象a，然后读取a的x属性。<br>new命令通过构造函数新建实例对象，实质就是将实例对象的原型，指向构造函数的prototype属性，然后在实例对象上执行构造函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var F = function () &#123;</div><div class="line">  this.foo = &apos;bar&apos;;</div><div class="line">&#125;;</div><div class="line">// var f = new F();等同于下面代码</div><div class="line">var f = Object.setPrototypeOf(&#123;&#125;, F.prototype);</div><div class="line">F.call(f);</div></pre></td></tr></table></figure></p>
+<h3 id="Object-create"><a href="#Object-create" class="headerlink" title="Object.create()"></a>Object.create()</h3><p>ES5Object.create方法用于从原型对象生成新的实例对象，它接收两个参数:第一个为一个对象，新生成的对象完全继承前者的属性(即新生成的对象的原型此对象)；第二个参数为一个属性描述对象，此对象的属性将会被添加到新对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var zs = new Person(&apos;zhang san&apos;, &apos;male&apos;);</div><div class="line">var zs_clone = Object.create(zs);</div><div class="line">zs_clone; // &#123;&#125;</div><div class="line">zs_clone.sayHello(); // Hello,I am zhang san . I&apos;m a male</div><div class="line">zs_clone.__proto__ === zs; // true</div><div class="line">// Person</div><div class="line">//  __proto__: Person</div><div class="line">//      gender: &quot;male&quot;</div><div class="line">//      name: &quot;zhang san&quot;</div><div class="line">//      __proto__: Object</div></pre></td></tr></table></figure></p>
+<p>可以 看出 创建的新对象zs_clone的原型为zs，从而获得了zs的全部属性和方法。但是其自身属性为空，若需要为新对象添加自身属性，则使用第二个参数即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var zs_clone = Object.create(zs, &#123;</div><div class="line">    name: &#123; value: &apos;zhangsan\&apos;s clone&apos; &#125;,</div><div class="line">    gender: &#123; value: &apos;male&apos; &#125;,</div><div class="line">    age: &#123; value: &apos;25&apos; &#125;</div><div class="line">&#125;);</div><div class="line">zs_clone; // Person &#123;name: &quot;zhangsan&apos;s clone&quot;, gender: &quot;male&quot;, age: &quot;25&quot;&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+            <a href="/tags/javascript语言精粹/" rel="tag"># javascript语言精粹</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/10/javascriptGoodParts8/" rel="next" title="javascript good parts 方法">
+                <i class="fa fa-chevron-left"></i> javascript good parts 方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/19/java Annotation注解机制/" rel="prev" title="Java Annotation注释机制">
+                Java Annotation注释机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/18/javascriptGoodParts5/"
+           data-title="javascript good parts 继承" data-url="http://guilongyue.github.io/2017/04/18/javascriptGoodParts5/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#继承"><span class="nav-number">1.</span> <span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#伪类"><span class="nav-number">1.0.1.</span> <span class="nav-text">伪类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型"><span class="nav-number">1.0.2.</span> <span class="nav-text">原型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数"><span class="nav-number">1.0.3.</span> <span class="nav-text">函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#js原型链"><span class="nav-number">2.</span> <span class="nav-text">js原型链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#instranceof-运算符"><span class="nav-number">2.0.1.</span> <span class="nav-text">instranceof 运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-prototype-hasOwnProperty"><span class="nav-number">2.0.2.</span> <span class="nav-text">Object.prototype.hasOwnProperty()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-prototype-isPrototypeOf"><span class="nav-number">2.0.3.</span> <span class="nav-text">Object.prototype.isPrototypeOf()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-getPrototypeOf"><span class="nav-number">2.0.4.</span> <span class="nav-text">Object.getPrototypeOf()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-setPrototypeOf"><span class="nav-number">2.0.5.</span> <span class="nav-text">Object.setPrototypeOf()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-create"><span class="nav-number">2.0.6.</span> <span class="nav-text">Object.create()</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,EL、JSTL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="EL、JSTL表达式EL表达式JSP的产生在一定程度上将Servlet中负责表现的功能抽取了出来，但JSP页内嵌入的Java代码也破坏了页面中负责表现的页面结构，特别是当运算逻辑稍微复杂一点的话，那么JSP页面中大量的Java代码增加了页面维护的难度。所以使用简单的标签来表现复杂的逻辑以及使用简单的形式表现运算的关系就是EL表达式和JSP标签出现的原因。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EL、JSTL表达式">
+<meta property="og:url" content="http://guilongyue.github.io/2017/06/29/El、JSTL/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="EL、JSTL表达式EL表达式JSP的产生在一定程度上将Servlet中负责表现的功能抽取了出来，但JSP页内嵌入的Java代码也破坏了页面中负责表现的页面结构，特别是当运算逻辑稍微复杂一点的话，那么JSP页面中大量的Java代码增加了页面维护的难度。所以使用简单的标签来表现复杂的逻辑以及使用简单的形式表现运算的关系就是EL表达式和JSP标签出现的原因。">
+<meta property="og:updated_time" content="2017-06-29T03:09:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EL、JSTL表达式">
+<meta name="twitter:description" content="EL、JSTL表达式EL表达式JSP的产生在一定程度上将Servlet中负责表现的功能抽取了出来，但JSP页内嵌入的Java代码也破坏了页面中负责表现的页面结构，特别是当运算逻辑稍微复杂一点的话，那么JSP页面中大量的Java代码增加了页面维护的难度。所以使用简单的标签来表现复杂的逻辑以及使用简单的形式表现运算的关系就是EL表达式和JSP标签出现的原因。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/06/29/El、JSTL/"/>
+
+
+
+
+
+  <title> EL、JSTL表达式 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/06/29/El、JSTL/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                EL、JSTL表达式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-29T09:56:22+08:00">
+                2017-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/29/El、JSTL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/29/El、JSTL/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="EL、JSTL表达式"><a href="#EL、JSTL表达式" class="headerlink" title="EL、JSTL表达式"></a>EL、JSTL表达式</h1><h3 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h3><p>JSP的产生在一定程度上将Servlet中负责表现的功能抽取了出来，但JSP页内嵌入的Java代码也破坏了页面中负责表现的页面结构，特别是当运算逻辑稍微复杂一点的话，那么JSP页面中大量的Java代码增加了页面维护的难度。所以使用简单的标签来表现复杂的逻辑以及使用简单的形式表现运算的关系就是EL表达式和JSP标签出现的原因。<br><a id="more"></a><br>EL（Expression Language）是从 JavaScript 脚本语言得到启发的一种表达式语言，它借鉴了 JavaScript 多类型转换无关性的特点。在使用 EL 从 scope 中得到参数时可以自动转换类型，因此对于类型的限制更加宽松。 Web 服务器对于 request 请求参数通常会以 String 类型来发送，在得到时使用的 Java 语言脚本就应该是request.getParameter(“XXX”) ，这样的话，对于实际应用还必须进行强制类型转换。而 EL 就将用户从这种类型转换的繁琐工作脱离出来，允许用户直接使用EL 表达式取得的值，而不用关心它是什么类型。</p>
+<h4 id="访问Bean属性"><a href="#访问Bean属性" class="headerlink" title="访问Bean属性"></a>访问Bean属性</h4><p>在JSP页面中经常要输出系统定义的对象的属性，而按照以往的写法需要自己去对象域中获取、转换再输出，使用EL表达式可以非常明显的简化过程。<br>Bean：指的是一个公共的类，按照固定的方式提供属性的get/set访问方式。针对这种特殊类型的属性访问使用EL表达式实现有两种方式，如下。</p>
+<ul>
+<li>方式一：${对象名.属性名}<br>${user.name}  执行的过程为：从pageContext、request、session、application中依次查找绑定名为“user”的对象，找到后调用“getName”方法，将返回值输出。<br>假定在session中绑定了一个对象，如下：<br>这种繁琐的取值，转换，输出的过程就都由系统代劳了。而且表达式比以上繁琐代码更会处理null。如果没有为name属性赋过值，页面输出“”，不会输出null。如果取值时绑定名写错，如${obj.name}，页面也会输出“”，而不是报空指针异常。但属性名写错会报错，如${user.naaa}.</li>
+<li>方式二：${对象名[“属性名”]}<br>表达式也支持属性名的动态读取，这时需要采用方式二${user[“name”]}的形式。</li>
+</ul>
+<h4 id="指定对象的查找范围"><a href="#指定对象的查找范围" class="headerlink" title="指定对象的查找范围"></a>指定对象的查找范围</h4><p>在书写表达式时，如果没有指定搜索范围，那么系统会依次调用pageContext、request、session、application的getAttribute（）方法。这样不限定查找范围的代码不利于排错，所以这种取值的操作可以限定对象的查找范围。如：<br><code>${sessionScope.user.name}</code><br>一旦指定了对象所在的范围，那么只会在范围内查找绑定对象，不会在找不到的时候再去其他区域中查找了。<br>sessionScope的位置还可以填写pageScope、requestScope、applicationScope。</p>
+<h4 id="使用EL表达式进行计算"><a href="#使用EL表达式进行计算" class="headerlink" title="使用EL表达式进行计算"></a>使用EL表达式进行计算</h4><p>使用EL表达式可以单独进行运算得出结果并直接输出，如下代码所示，EL进行算术运算，逻辑运算，关系运算，及empty运算。空运算主要用于判断字符串，集合是否为空，是空或为null及找不到值时都会输出true。</p>
+<h4 id="使用EL表达式获取请求参数值"><a href="#使用EL表达式获取请求参数值" class="headerlink" title="使用EL表达式获取请求参数值"></a>使用EL表达式获取请求参数值</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$&#123;param.username&#125; 与 request.getParameter(“username”);</div><div class="line">$&#123;paramValues.city&#125; 与request.getParameterValues(&quot;city&quot;)；</div></pre></td></tr></table></figure>
+<h3 id="JSTL表达式"><a href="#JSTL表达式" class="headerlink" title="JSTL表达式"></a>JSTL表达式</h3><p>Sun 公司 Java 标准规范的 JSTL 由 apache组织负责维护。作为开源的标准技术，它一直在不断地完善。 JSTL 的发布包有两个版本： Standard-1.0 Taglib 、 Standard-1.1 Taglib ，它们在使用时是不同的。<br>将标签库对应的jar包拷贝到WEB-INF/lib目录下，以便于系统可以加载所需要的类。使用taglib指令在页面上引入标签的命名空间和前缀，帮助系统定位对应的类。<br><code>&lt;%@taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;</code></p>
+<ul>
+<li>核心标签-if标签 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;%</div><div class="line">        User user = new User();</div><div class="line">        user.setName(&quot;胡萝卜&quot;);</div><div class="line">        user.setGender(&quot;f&quot;);</div><div class="line">        request.setAttribute(&quot;user&quot;,user);</div><div class="line">    %&gt;</div><div class="line">        姓名:$&#123;user.name&#125;&lt;br/&gt;</div><div class="line">        性别:</div><div class="line">&lt;c:if test=&quot;$&#123;user.gender ==&apos;m&apos;&#125;&quot;      var=&quot;rs&quot; scope=&quot;request&quot;&gt;男&lt;/c:if&gt;</div><div class="line">        &lt;c:if test=&quot;$&#123;!rs&#125;&quot;&gt;女&lt;/c:if&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>核心标签-choose标签<br>使用choose标签简化多个if标签的判断。代码如下所示：<br>var属性指定一个绑定名称。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;%</div><div class="line">            User user = new User();</div><div class="line">            user.setName(&quot;胡萝卜&quot;);</div><div class="line">            user.setGender(&quot;x&quot;);</div><div class="line">            request.setAttribute(&quot;user&quot;,user);</div><div class="line">    %&gt;</div><div class="line">        性别:</div><div class="line">&lt;c:choose&gt;</div><div class="line">            &lt;c:when test=&quot;$&#123;user.gender == &apos;m&apos;&#125;&quot;&gt;男&lt;/c:when&gt;</div><div class="line">            &lt;c:when test=&quot;$&#123;user.gender ==&apos;f&apos;&#125;&quot;&gt;女&lt;/c:when&gt;</div><div class="line">            &lt;c:otherwise&gt;未知&lt;/c:otherwise&gt;</div><div class="line">        &lt;/c:choose&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>核心标签-forEach标签<br>使用forEach标签完成对集合的遍历输出。<br>其中items属性为要遍历的集合，var属性为每次取出来的一个对象，varStatus指定当前迭代的状态。代码如下： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;table&gt;</div><div class="line">            &lt;tr&gt;</div><div class="line">                &lt;td&gt;序号&lt;/td&gt;</div><div class="line">                &lt;td&gt;姓名&lt;/td&gt;</div><div class="line">                &lt;td&gt;年龄&lt;/td&gt;</div><div class="line">            &lt;/tr&gt;</div><div class="line">            &lt;c:forEach items=&quot;$&#123;users&#125;&quot; var=&quot;u&quot; varStatus=&quot;s&quot;&gt;</div><div class="line">                &lt;tr&gt;</div><div class="line">                    &lt;td&gt;$&#123;s.count&#125;&lt;/td&gt;</div><div class="line">                    &lt;td&gt;$&#123;u.name&#125;&lt;/td&gt;</div><div class="line">                    &lt;td&gt;$&#123;u.age&#125;&lt;/td&gt;</div><div class="line">                &lt;/tr&gt;</div><div class="line">            &lt;/c:forEach&gt;</div><div class="line">&lt;/table&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>varStatus属性，制定一个绑定名称，绑定值是容器创建的对象，该对象封装了当前迭代的状态<br>index 从0开始，count 从1开始。</p>
+<h4 id="标签的运行原理"><a href="#标签的运行原理" class="headerlink" title="标签的运行原理"></a>标签的运行原理</h4><p>容器依据JSP页面中的uri找到tld文件(依据标签中的<c1:hello>hello这个名字找到标签类tag.HelloTag。接下来实例化该标签，同时属性值赋给参数，调用doTag方法。</c1:hello></p>
+<h4 id="自定义标签"><a href="#自定义标签" class="headerlink" title="自定义标签"></a>自定义标签</h4><ol>
+<li>编写java类，继承SimpleTagSupport</li>
+<li>在doTag方法添加处理逻辑</li>
+<li>配置标签说明文件</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/EL、JSTL/" rel="tag"># EL、JSTL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/24/SQL执行顺序/" rel="next" title="SQL执行顺序">
+                <i class="fa fa-chevron-left"></i> SQL执行顺序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/01/java 集合Map/" rel="prev" title="java 集合Map">
+                java 集合Map <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/29/El、JSTL/"
+           data-title="EL、JSTL表达式" data-url="http://guilongyue.github.io/2017/06/29/El、JSTL/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EL、JSTL表达式"><span class="nav-number">1.</span> <span class="nav-text">EL、JSTL表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EL表达式"><span class="nav-number">1.0.1.</span> <span class="nav-text">EL表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#访问Bean属性"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">访问Bean属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定对象的查找范围"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">指定对象的查找范围</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用EL表达式进行计算"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">使用EL表达式进行计算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用EL表达式获取请求参数值"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">使用EL表达式获取请求参数值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSTL表达式"><span class="nav-number">1.0.2.</span> <span class="nav-text">JSTL表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#标签的运行原理"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">标签的运行原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义标签"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">自定义标签</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

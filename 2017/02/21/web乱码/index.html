@@ -1,0 +1,932 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,编码," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="java web乱码GET请求时的乱码处理产生乱码的原因是，以GET方式提交的数据存在于提交的消息头中URL中，HTTP协议对于URI的编码方式为UTF-8，但是URI后面的查询字符串的编码方式却是ISO-8859-1。到了服务器端，容器针对URI的解码方式是ISO-8859-1，依然解析不了中文，所以，会出现乱码。为了能够支持地址中查询字符串的中文格式，需要在浏览器端和服务器端同时进行支持UTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java web乱码问题">
+<meta property="og:url" content="http://guilongyue.github.io/2017/02/21/web乱码/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="java web乱码GET请求时的乱码处理产生乱码的原因是，以GET方式提交的数据存在于提交的消息头中URL中，HTTP协议对于URI的编码方式为UTF-8，但是URI后面的查询字符串的编码方式却是ISO-8859-1。到了服务器端，容器针对URI的解码方式是ISO-8859-1，依然解析不了中文，所以，会出现乱码。为了能够支持地址中查询字符串的中文格式，需要在浏览器端和服务器端同时进行支持UTF">
+<meta property="og:updated_time" content="2017-02-21T01:20:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java web乱码问题">
+<meta name="twitter:description" content="java web乱码GET请求时的乱码处理产生乱码的原因是，以GET方式提交的数据存在于提交的消息头中URL中，HTTP协议对于URI的编码方式为UTF-8，但是URI后面的查询字符串的编码方式却是ISO-8859-1。到了服务器端，容器针对URI的解码方式是ISO-8859-1，依然解析不了中文，所以，会出现乱码。为了能够支持地址中查询字符串的中文格式，需要在浏览器端和服务器端同时进行支持UTF">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/02/21/web乱码/"/>
+
+
+
+
+
+  <title> java web乱码问题 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/02/21/web乱码/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java web乱码问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-21T09:19:07+08:00">
+                2017-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/21/web乱码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/21/web乱码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="java-web乱码"><a href="#java-web乱码" class="headerlink" title="java web乱码"></a>java web乱码</h1><h2 id="GET请求时的乱码处理"><a href="#GET请求时的乱码处理" class="headerlink" title="GET请求时的乱码处理"></a>GET请求时的乱码处理</h2><p>产生乱码的原因是，以GET方式提交的数据存在于提交的消息头中URL中，HTTP协议对于URI的编码方式为UTF-8，但是URI后面的查询字符串的编码方式却是ISO-8859-1。到了服务器端，容器针对URI的解码方式是ISO-8859-1，依然解析不了中文，所以，会出现乱码。为了能够支持地址中查询字符串的中文格式，需要在浏览器端和服务器端同时进行支持UTF-8格式编码、解码的设置。<br><a id="more"></a><br>修改tomcat安装路径下conf/server.xml文件。找到Connector节点后，增加URIEncoding=“UTF-8“这个属性即可。如图-26所示。</p>
+<p>新建regist01.html文件，表单内容参考regist.html，Ajax的请求修改为GET方式，为了让URL整体都使用UTF-8的方式进行编码，需要使用JavaScript语言中的encodeURI（）方法，所以在open方法创建请求时，第二个URI参数要使用encodeURI方法进行编码。如图-27所示。</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;regist01.html&lt;/title&gt;
+&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;js/my.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    function check_name(){            
+        var uname = document.getElementById(&quot;uname&quot;);
+        var uri = &quot;check_name.do?uname=&quot;+uname.value;            
+        var xhr = getXhr();            
+xhr.onreadystatechange=function(){
+            if(xhr.readyState==4 &amp;&amp; xhr.status==200){                    
+                document.getElementById(&quot;name_msg&quot;).innerHTML 
+                = xhr.responseText;
+            }
+        };
+        xhr.open(&quot;get&quot;,encodeURI(uri),true);                    
+        document.getElementById(&quot;name_msg&quot;).innerHTML=&quot;正在检查。。。&quot;;
+            xhr.send(null);
+    }   
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!-- GET方式提交中文用户名进行验证 --&gt;
+&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;注册信息&lt;/legend&gt;
+        用户名：&lt;input name=&quot;uname&quot; id=&quot;uname&quot;/&gt;
+        &lt;input type=&quot;button&quot; value=&quot;检查一下吧&quot; onclick=&quot;check_name()&quot;/&gt;
+        &lt;span id=&quot;name_msg&quot; style=&quot;color:red;&quot;&gt;&lt;/span&gt;
+        &lt;br/&gt;&lt;br/&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;注册&quot;/&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>java文件</p>
+<pre><code>package web;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class ActionServlet extends HttpServlet {
+    public void service(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType(&quot;text/html;charset=UTF-8&quot;);
+        request.setCharacterEncoding(&quot;UTF-8&quot;);
+        PrintWriter out = response.getWriter();
+        //获取请求资源路径
+        String uri = request.getRequestURI();
+        String path = uri.substring(
+                uri.lastIndexOf(&quot;/&quot;),
+                uri.lastIndexOf(&quot;.&quot;));
+        if(path.equals(&quot;/get_text&quot;)){//get请求
+            out.println(&quot;来自星星的你&quot;);
+        }else if(path.equals(&quot;/post_text&quot;)){//post请求
+            String name = request.getParameter(&quot;uname&quot;);
+            System.out.println(name);
+            out.println(&quot;又来了一次的&quot; + name);
+        }else if(path.equals(&quot;/check_name&quot;)){//检查用户名
+            String name = request.getParameter(&quot;uname&quot;);
+            //模拟一个耗时的操作
+            if(1==1){
+                try {
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }            
+            System.out.println(name);
+            if(&quot;Luffy&quot;.equals(name)){                
+                out.println(&quot;该用户名不可用&quot;);
+            }else{
+                out.println(&quot;可以使用！&quot;);
+            }
+        }
+        out.close();
+    }
+}
+</code></pre><h2 id="POST请求时的乱码处理"><a href="#POST请求时的乱码处理" class="headerlink" title="POST请求时的乱码处理"></a>POST请求时的乱码处理</h2><p>在上例中，如果填写的用户名为中文信息时，就会出现如图-22所示的结果。在控制台中打印服务器端获取的数据为乱码。但火狐浏览器提交的中文可以被服务器端正确识别。原因是火狐会告诉服务器端以什么方式解码。而IE浏览器和Chrome浏览器提交的数据，到了服务器端都是以默认解码方式ISO-8859-1来解析的，而提交时浏览器依据meta标记指定的UTF-8的方式进行的编码，编码解码不一致就会导致乱码出现。如何解决？</p>
+<p>在获取表单提交的数据之前，设置服务器端的解码方式为UTF-8即可。</p>
+<p>request.setCharacterEncoding(“utf-8”);</p>
+<p>A 开发和编译代码时指定字符集为UTF-8。JBuilder和Eclipse都可以在项目属性中设置。 </p>
+<p>B 使用过滤器，如果所有请求都经过一个Servlet控制分配器，那么使用Servlet的filter执行语句，将所有来自浏览器的请求（request）转换为UTF-8，因为浏览器发过来的请求包根据浏览器所在的操作系统编码，可能是各种形式编码。关键一句： </p>
+<p>request.setCharacterEncoding(“UTF-8”)。 </p>
+<p>网上有此filter的源码，Jdon框架源码中com.jdon.util.SetCharacterEncodingFilter ，需要配置web.xml 激活该Filter。 </p>
+<p>C 在JSP头部声明：。 </p>
+<p>D 在Jsp的html代码中，声明UTF-8: </p>
+<p>E 设定数据库连接方式是UTF-8。例如连接MYSQL时配置URL如下： </p>
+<p>jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8 </p>
+<p>一般数据库都可以通过管理设置设定UTF-8 </p>
+<p>F 其他和外界交互时能够设定编码时就设定UTF-8，例如读取文件，操作XML等。</p>
+<p>在Web应用中，通常都包括了浏览器、Web服务器、Web应用程序和数据库等部分。若不指定编码格式，浏览器会根据本地系统默认的字符集（如：GB2312）提交数据，而Web容器默认采用的是ISO-8859-1的编码方式解析Post数据，另外JDBC驱动程序多数也采用ISO-8859-1的编码方式，因此，在Web应用程序运行过程中，输入的中文字符往往需要在不同的字符集之间来回转换，这就导致了中文乱码问题的频繁出现。</p>
+<p> 在web.xml中添加一个全局过滤器</p>
+<pre><code>类文件为：org.springframework.web.filter.CharacterEncodingFilter
+初始参数名：encoding
+参数值：utf-8
+
+示例：
+</code></pre><p>Xml代码  收藏代码</p>
+<pre><code>&lt;!– 配置spring的过滤器 –&gt;  
+&lt;filter&gt;  
+&lt;filter-name&gt;spring filter&lt;/filter-name&gt;  
+&lt;filter-class&gt;  
+org.springframework.web.filter.CharacterEncodingFilter  
+&lt;/filter-class&gt;  
+&lt;init-param&gt;  
+&lt;param-name&gt;encoding&lt;/param-name&gt;  
+&lt;param-value&gt;utf-8&lt;/param-value&gt;  
+&lt;/init-param&gt;  
+&lt;/filter&gt;  
+&lt;filter-mapping&gt;  
+&lt;filter-name&gt;spring filter&lt;/filter-name&gt;  
+&lt;url-pattern&gt;/*&lt;/url-pattern&gt;  
+&lt;/filter-mapping&gt;  
+</code></pre><p>3.2表单get提交方式的乱码处理方式。</p>
+<p>如果使用get方式提交中文，接受参数的页面也会出现乱码，这个乱码的原因也是tomcat的内部编码格式iso8859-1导致。Tomcat会以get的缺省编码方式iso8859-1对汉字进行编码，编码后追加到url，导致接受页面得到的参数为乱码。</p>
+<p>解决办法：</p>
+<p>A， 使用上例中的第一种方式，对接受到的字符进行解码，再转码。</p>
+<p>B， Get走的是url提交，而在进入url之前已经进行了iso8859-1的编码处理。要想影响这个编码则需要在server.xml的Connector节点增加useBodyEncodingForURI=”true” </p>
+<p>属性配置，即可控制tomcat对get方式的汉字编码方式，上面这个属性控制get提交也是用request.setCharacterEncoding (“UTF-8”)所设置的编码格式进行编码。所以自动编码为utf-8，接受页面正常接受就可以了。但我认为真正的编码过程是，tomcat又要根据</p>
+<connector port="8080" maxthreads="150" minsparethreads="25" maxsparethreads="75" enablelookups="false" redirectport="8443" acceptcount="100" debug="0" connectiontimeout="20000" usebodyencodingforuri="true" disableuploadtimeout="true" uriencoding="”UTF-8”/">
+
+<p>里面所设置的URIEncoding=”UTF-8”再进行一次编码，但是由于已经编码为utf-8，再编码也不会有变化了。如果是从url获取编码，接受页面则是根据URIEncoding=”UTF-8”来进行解码的。</p>
+<p>3.3表单使用Post方式提交后接收到的乱码问题</p>
+<p>这个问题也是一个常见的问题。这个乱码也是tomcat的内部编码格式iso8859-1在捣乱，也就是说post提交时，如果没有设置提交的编码格式，则 会以iso8859-1方式进行提交，接受的jsp却以utf-8的方式接受。导致乱码。既然这样的原因，下面有几种解决方式，并比较。</p>
+<p>A， 接受参数时进行编码转换</p>
+<p>String str = new String(request.getParameter(“something”).getBytes(“ISO-8859-1”),”utf-8”) ； 这样的话，每一个参数都必须这样进行转码。很麻烦。但确实可以拿到汉字。</p>
+<p>B， 接受此参数的页面，执行请求的编码代码， request.setCharacterEncoding(“UTF-8”)，把提交内容的字符集设为UTF－8。这样的话，直接使用</p>
+<p>String str = request.getParameter(“something”)；即可得到汉字参数。但每页都需要执行这句话。这个方法也就对post提交的有效 果，对于get提交和上传文件时的enctype=”multipart/form-data”是无效的。稍后下面单独对这个两个的乱码情况再进行说明。</p>
+<p>C， 为了避免每页都要写request.setCharacterEncoding(“UTF-8”)，建议使用过滤器对所有jsp进行编码处理。如：</p>
+<p>在web.xml里面加</p>
+<pre><code>&lt;filter&gt;
+    &lt;filter-name&gt;char&lt;/filter-name&gt;
+    &lt;filter-class&gt;com.bbs.common.CharacterFilter&lt;/filter-class&gt;
+&lt;/filter&gt;
+
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;char&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+
+CharacterFilter类
+
+package com.bbs.common;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+
+import javax.servlet.FilterChain;
+
+import javax.servlet.FilterConfig;
+
+import javax.servlet.ServletException;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+public class CharacterFilter implements Filter {
+    public void destroy() {
+    }
+    public void doFilter(ServletRequest request, ServletResponse response,
+            FilterChain chain) throws IOException, ServletException {
+        System.out.println(&quot;filter....&quot;);
+        request.setCharacterEncoding(&quot;UTF-8&quot;);
+        chain.doFilter(request, response);
+    }
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
+}
+</code></pre><p>3.4数据库中的中文 </p>
+<p>对于大多数数据库的JDBC驱动程序，在Java程序和数据库之间传递数据都是以ISO-8859-1为默认编码格式，所以，在程序中向数据库存储包含中文的数据时，驱动程序受限把程序内部Unicode编码格式的数据转换为ISO-8859-1编码，然后传递到数据库中；在数据库保持数据时，默认即以ISO-8859-1保持，这就是为什么常常在数据库中读取中文数据时，读到的是乱码。</p>
+<p>要解决上述问题 只需要将数据库默认的编码格式改为GBK或GB2312即可。</p>
+<p>4.总结</p>
+<p>其实Servate/JSP的中文encoding并没有想象的那么复杂，虽然问题产生的原因多种多样，然而只要我们理解了字符编码的转换过程，仔细分析乱码产生的原因，找到问题的关键，就能对症下药，解决问题。不过，随着中文字符集的变化，不仅仅是Java编程，中文信息处理中的问题还是会存在一段时间的。</p>
+<p>概要</p>
+<p>中文乱码问题可谓是困扰中国码农阶级的一大烦人的题目，我会把我遇到的所有乱码问题在这里汇总的，当然主要是web方面的。<br>产生乱码的原理<br>其实乱码产生的原理是很简单的：编码和解码不一致。你可能说说起来简单，但是改起来确实不好弄，因为有时不知道是怎么编码的。是的，的确是这样的因为这里面还涉及一些默认编码规则是我们不知道的，比如window默认编码GBK，linux默认编码utf-8，tomcat默认解码ios885901,下面就说说一些乱码的场景和解决方案。<br>乱码场景</p>
+<blockquote>
+<p>Jsp（使用utf-8编码）中通过get方式提交（表单提交或者action提交等等），url中包含中文，后台url中文显示”？？？？？”，应用服务器为tomcat。<br>简单说明：如果是get方式表单提交，也就是获取参数时乱码；如果springmvc提交，而中文也作为mapping的value，那么很有可能出现 no mapping……错误<br>分析：这个问题很明显，就是在解析url的时候产生的乱码，前面提到了，编码使用的utf-8，那么当前解码肯定不是。这个解码的工作是由tomcat完成的。在tomcat的doc中有这一段话：URIEncoding：This specifies the character encoding used to decode the URI bytes, after %xx decoding the URL. If not specified, ISO-8859-1 will be used.这句话的意思：这个规定的字符集用来解码URI字节，如果没有规定默认使用ISO-8859-1.<br>原因定位：编码使用了utf-8，由于解析url没有指定字符集，默认使用了iso-8859-1，编码与解码不一致。<br>解决思路：修改tomcat默认的URIEncoding。<br>    修改文件：D:\software\apache-tomcat-6.0.44\conf\server.xml<br>            修改内容：<connector port="80" protocol="HTTP/1.1" connectiontimeout="20000" redirectport="8443" uriencoding="UTF-8"> 红色字体是本次增加的<br>            重启后这个问题就可以解决了。 </connector></p>
+</blockquote>
+<p>一个项目中jsp使用utf-8编码，java使用GBK编码。在windows环境中使用没有问题，但是在linux环境中时，前台显示后台传过来的数据都是乱码。<br>简单说明：这个项目使用ant自动部署，即编译和打包都在linux下进行的。<br>分析：发现只要后来传过来的就有问题，在jsp中的alert中文没有问题。问题应该在后台。于是查看了class文件，一看吓一跳。Class中就是乱码。那么class是怎么来的呢，聪明的你会想到，java-&gt;class。好吧问题就出在从java转换到class的过程中。在进行javac过程中如果没有指定encoding参数，windows使用GBK进行编码，而linux则使用UTF-8编码。前面说了这个项目java文件使用了GBK，在linux下造成了编码与解码不一致。<br>原因定位：java编译成class时，没有指定encoding操作，导致了GBK的java文件使用了UTF-8编码，产生了乱码<br>解决思路：javac时增加参数encoding为GBK<br>疑问：我还有个疑问：class是GBK的，jsp是utf-8的，现在在jsp中已经正常显示了，那么是怎么做到的呢？ </p>
+</connector>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/编码/" rel="tag"># 编码</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/16/servlet-文件上传例子/" rel="next" title="FileUpload">
+                <i class="fa fa-chevron-left"></i> FileUpload
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/21/javascriptGoodParts2/" rel="prev" title="javascript good parts 语法">
+                javascript good parts 语法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/21/web乱码/"
+           data-title="java web乱码问题" data-url="http://guilongyue.github.io/2017/02/21/web乱码/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java-web乱码"><span class="nav-number">1.</span> <span class="nav-text">java web乱码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GET请求时的乱码处理"><span class="nav-number">1.1.</span> <span class="nav-text">GET请求时的乱码处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POST请求时的乱码处理"><span class="nav-number">1.2.</span> <span class="nav-text">POST请求时的乱码处理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

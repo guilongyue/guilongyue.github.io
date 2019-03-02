@@ -1,0 +1,746 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js,调用," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="妙用Javascript中apply、call、bindbind()是es5中的方法，他也是用来实现上下文绑定，看它的函数名就知道。bind()和call与apply不同。bind是新创建一个函数，然后把它的上下文绑定到bind()括号中的参数上，然后将它返回。所以，bind后函数不会执行，而只是返回一个改变了上下文的函数副本，而call和apply是直接执行函数。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="妙用Javascript中apply、call、bind">
+<meta property="og:url" content="http://guilongyue.github.io/2017/05/04/Javascript中apply、call、bind/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="妙用Javascript中apply、call、bindbind()是es5中的方法，他也是用来实现上下文绑定，看它的函数名就知道。bind()和call与apply不同。bind是新创建一个函数，然后把它的上下文绑定到bind()括号中的参数上，然后将它返回。所以，bind后函数不会执行，而只是返回一个改变了上下文的函数副本，而call和apply是直接执行函数。">
+<meta property="og:updated_time" content="2017-05-05T07:43:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="妙用Javascript中apply、call、bind">
+<meta name="twitter:description" content="妙用Javascript中apply、call、bindbind()是es5中的方法，他也是用来实现上下文绑定，看它的函数名就知道。bind()和call与apply不同。bind是新创建一个函数，然后把它的上下文绑定到bind()括号中的参数上，然后将它返回。所以，bind后函数不会执行，而只是返回一个改变了上下文的函数副本，而call和apply是直接执行函数。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/05/04/Javascript中apply、call、bind/"/>
+
+
+
+
+
+  <title> 妙用Javascript中apply、call、bind | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/05/04/Javascript中apply、call、bind/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                妙用Javascript中apply、call、bind
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-04T18:27:54+08:00">
+                2017-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/04/Javascript中apply、call、bind/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/04/Javascript中apply、call、bind/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="妙用Javascript中apply、call、bind"><a href="#妙用Javascript中apply、call、bind" class="headerlink" title="妙用Javascript中apply、call、bind"></a>妙用Javascript中apply、call、bind</h1><p>bind()是es5中的方法，他也是用来实现上下文绑定，看它的函数名就知道。bind()和call与apply不同。bind是新创建一个函数，然后把它的上下文绑定到bind()括号中的参数上，然后将它返回。<br>所以，bind后函数不会执行，而只是返回一个改变了上下文的函数副本，而call和apply是直接执行函数。<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var button = document.getElementById(&quot;button&quot;),</div><div class="line">    text = document.getElementById(&quot;text&quot;);</div><div class="line">button.onclick = function() &#123;</div><div class="line">    alert(this.id); // 弹出text</div><div class="line">&#125;.bind(text);</div></pre></td></tr></table></figure></p>
+<p>但由于ie6~ie8不支持该方法，所以若想在这几个浏览器中使用，我们就要模拟该方法，这也是面试常考的问题，模拟的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">if (!function() &#123;&#125;.bind) &#123;</div><div class="line">    Function.prototype.bind = function(context) &#123;</div><div class="line">        var self = this</div><div class="line">            , args = Array.prototype.slice.call(arguments);</div><div class="line">        return function() &#123;</div><div class="line">            return self.apply(context, args.slice(1));    </div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>就是这段代码，纠正了我长久以来的一个误区。下面来讲一下这段代码<br>首先，我们判断是否存在bind方法，然后，若不存在，向Function对象的原型中添加自定义的bind方法。<br>这里面var self = this这段代码让我很困扰，按理说，prototype是一个对象，对象的this应该指向对象本身，也就是prototype，但真的是这样吗。看看下面的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function a()&#123;&#125;;</div><div class="line">a.prototype.testThis = function()&#123;console.log(a.prototype == this);&#125;;</div><div class="line">var b = new a();</div><div class="line">b.testThis();//false</div></pre></td></tr></table></figure></p>
+<p>显然，this不指向prototype，而经过测试，它也不指向a，而指向b。所以原型中的this值就明朗了。指向调用它的对象。<br>Array.prototype.slice.call(arguments);<br>接下来就是上面这段代码，它会将一个类数组形式的变量转化为真正的数组。为啥呢，其实书上并没有说slice还有这样的用法，也不知道是谁发明的。slice的用法可以顺便上网查一下，就能查到。但要更正一点，网上的介绍说slice有两个参数，第一个参数不能省略。然而我不知道是我理解的问题还是咋地，上面这段代码tmd不就是典型的没传参数吗！！！arguments是传给call的那个上下文，前面讲过，不要弄混(由于arguments自己没有slice方法，这里属于借用Array原型的slice方法)。而且经过测试，若果你不给slice传参数，那就等于传了个0给它，结果就是返回一个和原来数组一模一样的副本。<br>这之后的代码就很好理解，返回一个函数，该函数把传给bind的第一个参数当做执行上下文，由于args已经是一个数组，排除第一项，将之后的部分作为第二部分参数传给apply，前面讲过apply的用法。<br>如此，我们自己的这个bind函数的行为就同es5中的bind一样了。</p>
+<h3 id="apply、call"><a href="#apply、call" class="headerlink" title="　apply、call"></a>　apply、call</h3><p>在 javascript 中，call 和 apply 都是为了改变某个函数运行时的上下文（context）而存在的，换句话说，就是为了改变函数体内部 this 的指向。<br>JavaScript 的一大特点是，函数存在「定义时上下文」和「运行时上下文」以及「上下文是可以改变的」这样的概念。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function fruits() &#123;&#125;</div><div class="line">fruits.prototype = &#123;</div><div class="line">    color: &quot;red&quot;,</div><div class="line">    say: function() &#123;</div><div class="line">        console.log(&quot;My color is &quot; + this.color);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">var apple = new fruits;</div><div class="line">apple.say();    //My color is red</div><div class="line">但是如果我们有一个对象banana= &#123;color : &quot;yellow&quot;&#125; ,我们不想对它重新定义 say 方法，那么我们可以通过 call 或 apply 用 apple 的 say 方法：</div><div class="line">banana = &#123;</div><div class="line">    color: &quot;yellow&quot;</div><div class="line">&#125;</div><div class="line">apple.say.call(banana);     //My color is yellow</div><div class="line">apple.say.apply(banana);    //My color is yellow</div><div class="line">所以，可以看出 call 和 apply 是为了动态改变 this 而出现的，当一个 object 没有某个方法（本栗子中banana没有say方法），但是其他的有（本栗子中apple有say方法），我们可以借助call或apply用其它对象的方法来操作。</div></pre></td></tr></table></figure></p>
+<h4 id="apply、call-的区别"><a href="#apply、call-的区别" class="headerlink" title="apply、call 的区别"></a>apply、call 的区别</h4><p>对于 apply、call 二者而言，作用完全一样，只是接受参数的方式不太一样。例如，有一个函数定义如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var func = function(arg1, arg2) &#123;</div><div class="line">&#125;;</div><div class="line">　　就可以通过如下方式来调用：</div><div class="line">func.call(this, arg1, arg2);</div><div class="line">func.apply(this, [arg1, arg2])</div></pre></td></tr></table></figure></p>
+<p>其中 this 是你想指定的上下文，他可以是任何一个 JavaScript 对象(JavaScript 中一切皆对象)，call 需要把参数按顺序传递进去，而 apply 则是把参数放在数组里。<br>JavaScript 中，某个函数的参数数量是不固定的，因此要说适用条件的话，当你的参数是明确知道数量时用 call 。<br>而不确定的时候用 apply，然后把参数 push 进数组传递进去。当参数数量不确定时，函数内部也可以通过 arguments 这个数组来遍历所有的参数。<br>为了巩固加深记忆，下面列举一些常用用法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">1、数组之间追加</div><div class="line">var array1 = [12 , &quot;foo&quot; , &#123;name &quot;Joe&quot;&#125; , -2458]; </div><div class="line">var array2 = [&quot;Doe&quot; , 555 , 100]; </div><div class="line">Array.prototype.push.apply(array1, array2); </div><div class="line">/* array1 值为  [12 , &quot;foo&quot; , &#123;name &quot;Joe&quot;&#125; , -2458 , &quot;Doe&quot; , 555 , 100] */</div><div class="line">2、获取数组中的最大值和最小值</div><div class="line">var  numbers = [5, 458 , 120 , -215 ]; </div><div class="line">var maxInNumbers = Math.max.apply(Math, numbers),   //458</div><div class="line">    maxInNumbers = Math.max.call(Math,5, 458 , 120 , -215); //458</div><div class="line">　　number 本身没有 max 方法，但是 Math 有，我们就可以借助 call 或者 apply 使用其方法。</div><div class="line"></div><div class="line">3、验证是否是数组（前提是toString()方法没有被重写过）</div><div class="line">functionisArray(obj)&#123; </div><div class="line">    returnObject.prototype.toString.call(obj) === &apos;[object Array]&apos; ;</div><div class="line">&#125;</div><div class="line">4、类（伪）数组使用数组方法</div><div class="line">var domNodes = Array.prototype.slice.call(document.getElementsByTagName(&quot;*&quot;));</div><div class="line">Javascript中存在一种名为伪数组的对象结构。比较特别的是 arguments 对象，还有像调用 getElementsByTagName , document.childNodes 之类的，它们返回NodeList对象都属于伪数组。不能应用 Array下的 push , pop 等方法。</div><div class="line">但是我们能通过 Array.prototype.slice.call 转换为真正的数组的带有 length 属性的对象，这样 domNodes 就可以应用 Array 下的所有方法了。</div></pre></td></tr></table></figure></p>
+<h3 id="深入理解运用apply、call"><a href="#深入理解运用apply、call" class="headerlink" title="深入理解运用apply、call"></a>深入理解运用apply、call</h3><p>下面就借用一道面试题，来更深入的去理解下 apply 和 call 。<br>定义一个 log 方法，让它可以代理 console.log 方法，常见的解决方法是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function log(msg)　&#123;</div><div class="line">  console.log(msg);</div><div class="line">&#125;</div><div class="line">log(1);    //1</div><div class="line">log(1,2);  //1</div></pre></td></tr></table></figure></p>
+<p>上面方法可以解决最基本的需求，但是当传入参数的个数是不确定的时候，上面的方法就失效了，这个时候就可以考虑使用 apply 或者 call，注意这里传入多少个参数是不确定的，所以使用apply是最好的，方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function log()&#123;</div><div class="line">  console.log.apply(console, arguments);</div><div class="line">&#125;;</div><div class="line">log(1);    //1</div><div class="line">log(1,2);    //1 2</div><div class="line">接下来的要求是给每一个 log 消息添加一个&quot;(app)&quot;的前辍，比如：</div><div class="line">log(&quot;hello world&quot;);    //(app)hello world</div><div class="line">该怎么做比较优雅呢?这个时候需要想到arguments参数是个伪数组，通过 Array.prototype.slice.call 转化为标准数组，再使用数组方法unshift，像这样：</div><div class="line">function log()&#123;</div><div class="line">  var args = Array.prototype.slice.call(arguments);</div><div class="line">  args.unshift(&apos;(app)&apos;);</div><div class="line">  </div><div class="line">  console.log.apply(console, args);</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>说完了 apply 和 call ，再来说说bind。bind() 方法与 apply 和 call 很相似，也是可以改变函数体内 this 的指向。<br>MDN的解释是：bind()方法会创建一个新函数，称为绑定函数，当调用这个绑定函数时，绑定函数会以创建它时传入 bind()方法的第一个参数作为 this，传入 bind() 方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。<br>直接来看看具体如何使用，在常见的单体模式中，通常我们会使用 _this , that , self 等保存 this ，这样我们可以在改变了上下文之后继续引用到它。 像这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var foo = &#123;</div><div class="line">    bar : 1,</div><div class="line">    eventBind: function()&#123;</div><div class="line">        var _this = this;</div><div class="line">        $(&apos;.someClass&apos;).on(&apos;click&apos;,function(event) &#123;</div><div class="line">            /* Act on the event */</div><div class="line">            console.log(_this.bar);     //1</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">由于 Javascript 特有的机制，上下文环境在 eventBind:function()&#123; &#125; 过渡到 $(&apos;.someClass&apos;).on(&apos;click&apos;,function(event) &#123; &#125;) 发生了改变，上述使用变量保存 this 这些方式都是有用的，也没有什么问题。当然使用 bind() 可以更加优雅的解决这个问题：</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">var foo = &#123;</div><div class="line">    bar : 1,</div><div class="line">    eventBind: function()&#123;</div><div class="line">        $(&apos;.someClass&apos;).on(&apos;click&apos;,function(event) &#123;</div><div class="line">            /* Act on the event */</div><div class="line">            console.log(this.bar);      //1</div><div class="line">        &#125;.bind(this));</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">在上述代码里，bind() 创建了一个函数，当这个click事件绑定在被调用的时候，它的 this 关键词会被设置成被传入的值（这里指调用bind()时传入的参数）。因此，这里我们传入想要的上下文 this(其实就是 foo )，到 bind() 函数中。然后，当回调函数被执行的时候， this 便指向 foo 对象。再来一个简单的栗子：</div><div class="line">var bar = function()&#123;</div><div class="line">	console.log(this.x);</div><div class="line">&#125;</div><div class="line">var foo = &#123;</div><div class="line">	x:3</div><div class="line">&#125;</div><div class="line">bar(); // undefined</div><div class="line">var func = bar.bind(foo);</div><div class="line">func(); // 3</div></pre></td></tr></table></figure>
+<p>这里我们创建了一个新的函数 func，当使用 bind() 创建一个绑定函数之后，它被执行的时候，它的 this 会被设置成 foo ， 而不是像我们调用 bar() 时的全局作用域。<br>有个有趣的问题，如果连续 bind() 两次，亦或者是连续 bind() 三次那么输出的值是什么呢？像这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">var bar = function()&#123;</div><div class="line">    console.log(this.x);</div><div class="line">&#125;</div><div class="line">var foo = &#123;</div><div class="line">    x:3</div><div class="line">&#125;</div><div class="line">var sed = &#123;</div><div class="line">    x:4</div><div class="line">&#125;</div><div class="line">var func = bar.bind(foo).bind(sed);</div><div class="line">func(); //?</div><div class="line">  </div><div class="line">var fiv = &#123;</div><div class="line">    x:5</div><div class="line">&#125;</div><div class="line">var func = bar.bind(foo).bind(sed).bind(fiv);</div><div class="line">func(); //?</div></pre></td></tr></table></figure></p>
+<p>答案是，两次都仍将输出 3 ，而非期待中的 4 和 5 。原因是，在Javascript中，多次 bind() 是无效的。更深层次的原因， bind() 的实现，相当于使用函数在内部包了一个 call / apply ，第二次 bind() 相当于再包住第一次 bind() ,故第二次以后的 bind 是无法生效的。</p>
+<h3 id="apply、call、bind比较"><a href="#apply、call、bind比较" class="headerlink" title="apply、call、bind比较"></a>apply、call、bind比较</h3><p>那么 apply、call、bind 三者相比较，之间又有什么异同呢？何时使用 apply、call，何时使用 bind 呢。简单的一个栗子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var obj = &#123;</div><div class="line">    x: 81,</div><div class="line">&#125;;</div><div class="line">var foo = &#123;</div><div class="line">    getX: function() &#123;</div><div class="line">        return this.x;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">console.log(foo.getX.bind(obj)());  //81</div><div class="line">console.log(foo.getX.call(obj));    //81</div><div class="line">console.log(foo.getX.apply(obj));   //81</div></pre></td></tr></table></figure></p>
+<p>三个输出的都是81，但是注意看使用 bind() 方法的，他后面多了对括号。<br>也就是说，区别是，当你希望改变上下文环境之后并非立即执行，而是回调执行的时候，使用 bind() 方法。而 apply/call 则会立即执行函数。</p>
+<ul>
+<li>apply 、 call 、bind 三者都是用来改变函数的this对象的指向的；</li>
+<li>apply 、 call 、bind 三者第一个参数都是this要指向的对象，也就是想指定的上下文；</li>
+<li>apply 、 call 、bind 三者都可以利用后续参数传参；</li>
+<li>bind 是返回对应函数，便于稍后调用；apply 、call 则是立即调用 。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/调用/" rel="tag"># 调用</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/04/5个经典的前端面试问题/" rel="next" title="5个js面试问题">
+                <i class="fa fa-chevron-left"></i> 5个js面试问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/06/Hibernate/" rel="prev" title="Hibernate">
+                Hibernate <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/05/04/Javascript中apply、call、bind/"
+           data-title="妙用Javascript中apply、call、bind" data-url="http://guilongyue.github.io/2017/05/04/Javascript中apply、call、bind/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#妙用Javascript中apply、call、bind"><span class="nav-number">1.</span> <span class="nav-text">妙用Javascript中apply、call、bind</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#apply、call"><span class="nav-number">1.0.1.</span> <span class="nav-text">　apply、call</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#apply、call-的区别"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">apply、call 的区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深入理解运用apply、call"><span class="nav-number">1.0.2.</span> <span class="nav-text">深入理解运用apply、call</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bind"><span class="nav-number">1.1.</span> <span class="nav-text">bind</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#apply、call、bind比较"><span class="nav-number">1.1.1.</span> <span class="nav-text">apply、call、bind比较</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

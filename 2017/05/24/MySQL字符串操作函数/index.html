@@ -1,0 +1,917 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MySQL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="MySQL 字符串操作函数
+
+
+id
+name
+job
+sex
+hobby
+
+
+
+
+1
+tank
+农民工
+1
+军棋,游戏,fishing
+
+
+2
+zhang
+DUCK
+0
+fly,make firend
+
+
+3
+ying
+no job
+1
+flying,driving,testing
+
+
+4
+tankzhang
+love your love
+1
+i love you">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL字符串">
+<meta property="og:url" content="http://guilongyue.github.io/2017/05/24/MySQL字符串操作函数/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="MySQL 字符串操作函数
+
+
+id
+name
+job
+sex
+hobby
+
+
+
+
+1
+tank
+农民工
+1
+军棋,游戏,fishing
+
+
+2
+zhang
+DUCK
+0
+fly,make firend
+
+
+3
+ying
+no job
+1
+flying,driving,testing
+
+
+4
+tankzhang
+love your love
+1
+i love you">
+<meta property="og:updated_time" content="2017-05-24T01:39:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL字符串">
+<meta name="twitter:description" content="MySQL 字符串操作函数
+
+
+id
+name
+job
+sex
+hobby
+
+
+
+
+1
+tank
+农民工
+1
+军棋,游戏,fishing
+
+
+2
+zhang
+DUCK
+0
+fly,make firend
+
+
+3
+ying
+no job
+1
+flying,driving,testing
+
+
+4
+tankzhang
+love your love
+1
+i love you">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/05/24/MySQL字符串操作函数/"/>
+
+
+
+
+
+  <title> MySQL字符串 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/05/24/MySQL字符串操作函数/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL字符串
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-24T09:36:06+08:00">
+                2017-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/24/MySQL字符串操作函数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/24/MySQL字符串操作函数/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL-字符串操作函数"><a href="#MySQL-字符串操作函数" class="headerlink" title="MySQL 字符串操作函数"></a>MySQL 字符串操作函数</h1><table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>job</th>
+<th>sex</th>
+<th>hobby</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>tank</td>
+<td>农民工</td>
+<td>1</td>
+<td>军棋,游戏,fishing</td>
+</tr>
+<tr>
+<td>2</td>
+<td>zhang</td>
+<td>DUCK</td>
+<td>0</td>
+<td>fly,make firend</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ying</td>
+<td>no job</td>
+<td>1</td>
+<td>flying,driving,testing</td>
+</tr>
+<tr>
+<td>4</td>
+<td>tankzhang</td>
+<td>love your love</td>
+<td>1</td>
+<td>i love you</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h2 id="UPPER和UCASE"><a href="#UPPER和UCASE" class="headerlink" title="UPPER和UCASE"></a>UPPER和UCASE</h2><h2 id="LOWER和LCASE"><a href="#LOWER和LCASE" class="headerlink" title="LOWER和LCASE"></a>LOWER和LCASE</h2><h2 id="FIND-IN-SET-str-strlist"><a href="#FIND-IN-SET-str-strlist" class="headerlink" title="FIND_IN_SET(str,strlist)"></a>FIND_IN_SET(str,strlist)</h2><p>如果字符串str在由N子串组成的表strlist之中，返回一个1到N的值。一个字符串表是被“,”分隔的子串组成的一个字符串。如果第一个参数是一个常数字符串并且第二个参数是一种类型为SET的列，FIND_IN_SET()函数被优化而使用位运算！如果str不是在strlist里面或如果 strlist是空字符串，返回0。如果任何一个参数是NULL，返回NULL。如果第一个参数包含一个“,”，该函数将工作不正常。</p>
+<h2 id="REPLACE-str-from-str-to-str"><a href="#REPLACE-str-from-str-to-str" class="headerlink" title="REPLACE(str,from_str,to_str)"></a>REPLACE(str,from_str,to_str)</h2><p>返回字符串str，其字符串from_str的所有出现由字符串to_str代替。</p>
+<h2 id="REPEAT-str-count"><a href="#REPEAT-str-count" class="headerlink" title="REPEAT(str,count)"></a>REPEAT(str,count)</h2><p>返回由重复countTimes次的字符串str组成的一个字符串。如果count &lt;= 0，返回一个空字符串。如果str或count是NULL，返回NULL。</p>
+<h2 id="REVERSE-str"><a href="#REVERSE-str" class="headerlink" title="REVERSE(str)"></a>REVERSE(str)</h2><p>返回颠倒字符顺序的字符串str。</p>
+<h2 id="INSERT-str-pos-len-newstr"><a href="#INSERT-str-pos-len-newstr" class="headerlink" title="INSERT(str,pos,len,newstr)"></a>INSERT(str,pos,len,newstr)</h2><p>返回字符串str，在位置pos起始的子串且len个字符长得子串由字符串newstr代替。</p>
+<h2 id="SUBSTRING-str-FROM-pos"><a href="#SUBSTRING-str-FROM-pos" class="headerlink" title="SUBSTRING(str FROM pos)"></a>SUBSTRING(str FROM pos)</h2><p>从字符串str的起始位置pos返回一个子串。下面的sub2没有值，因为mysql数据库的下标是从1开始的。</p>
+<h2 id="SUBSTRING-INDEX-str-delim-count"><a href="#SUBSTRING-INDEX-str-delim-count" class="headerlink" title="SUBSTRING_INDEX(str,delim,count)"></a>SUBSTRING_INDEX(str,delim,count)</h2><p>返回从字符串str的第count个出现的分隔符delim之后的子串。如果count是正数，返回最后的分隔符到左边(从左边数) 的所有字符。如果count是负数，返回最后的分隔符到右边的所有字符(从右边数)。<br><strong>Oracle 有substr函数，js也有。<br>oracle的substr函数的用法<br>取得字符串中指定起始位置和长度的字符串   substr( string, start_position, [ length ] )</strong></p>
+<h2 id="LTRIM-str"><a href="#LTRIM-str" class="headerlink" title="LTRIM(str)"></a>LTRIM(str)</h2><h2 id="RTRIM-str"><a href="#RTRIM-str" class="headerlink" title="RTRIM(str)"></a>RTRIM(str)</h2><h2 id="TRIM-BOTH-LEADING-TRAILING-remstr-FROM-str"><a href="#TRIM-BOTH-LEADING-TRAILING-remstr-FROM-str" class="headerlink" title="TRIM([[BOTH | LEADING | TRAILING] [remstr] FROM] str)"></a>TRIM([[BOTH | LEADING | TRAILING] [remstr] FROM] str)</h2><p>返回字符串str，其所有remstr前缀或后缀被删除了。如果没有修饰符BOTH、LEADING或TRAILING给出，BOTH被假定。如果remstr没被指定，空格被删除。</p>
+<h2 id="MID-str-pos-len"><a href="#MID-str-pos-len" class="headerlink" title="MID(str,pos,len)"></a>MID(str,pos,len)</h2><p>从字符串str返回一个len个字符的子串，从位置pos开始。使用FROM的变种形式是ANSI SQL92语法。</p>
+<h2 id="LPAD-str-len-padstr"><a href="#LPAD-str-len-padstr" class="headerlink" title="LPAD   (str,len,padstr)"></a>LPAD   (str,len,padstr)</h2><p>返回字符串str，左面用字符串padstr填补直到str是len个字符长。</p>
+<h2 id="RPAD-str-len-padstr"><a href="#RPAD-str-len-padstr" class="headerlink" title="RPAD   (str,len,padstr)"></a>RPAD   (str,len,padstr)</h2><p>返回字符串str，右面用字符串padstr填补直到str是len个字符长。</p>
+<h2 id="LEFT-str-len"><a href="#LEFT-str-len" class="headerlink" title="LEFT(str,len)"></a>LEFT(str,len)</h2><p>返回字符串str的最左面len个字符。</p>
+<h2 id="RIGHT-str-len"><a href="#RIGHT-str-len" class="headerlink" title="RIGHT(str,len)"></a>RIGHT(str,len)</h2><p>返回字符串str的最右面len个字符。</p>
+<h2 id="位置控制函数"><a href="#位置控制函数" class="headerlink" title="位置控制函数"></a>位置控制函数</h2><p>POSITION(substr IN str)<br>返回子串substr在字符串str第一个出现的位置，如果substr不是在str里面，返回0.<br>LOCATE(substr,str,pos)<br>返回子串substr在字符串str第一个出现的位置，从位置pos开始。如果substr不是在str里面，返回0。<br>INSTR(str,substr)<br>返回子串substr在字符串str中的第一个出现的位置。这与有2个参数形式的LOCATE()相同，除了参数被颠倒。</p>
+<h2 id="得到字符串长度的函数"><a href="#得到字符串长度的函数" class="headerlink" title="得到字符串长度的函数"></a>得到字符串长度的函数</h2><p>LENGTH(str),OCTET_LENGTH(str),CHAR_LENGTH(str),CHARACTER_LENGTH(str)</p>
+<h2 id="合并多个字符串，或者表中的多个字段"><a href="#合并多个字符串，或者表中的多个字段" class="headerlink" title="合并多个字符串，或者表中的多个字段"></a>合并多个字符串，或者表中的多个字段</h2><p>CONCAT(str1,str2,…)<br>返回来自于参数连结的字符串。如果任何参数是NULL，返回NULL。可以有超过2个的参数。一个数字参数被变换为等价的字符串形式。</p>
+<h2 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h2><p>BIN(N)<br>返回二进制值N的一个字符串表示，在此N是一个长整数(BIGINT)数字，这等价于CONV(N,10,2)。如果N是NULL，返回NULL。<br>OCT(N)<br>返回八进制值N的一个字符串的表示，在此N是一个长整型数字，这等价于CONV(N,10,8)。如果N是NULL，返回NULL。<br>HEX(N)<br>返回十六进制值N一个字符串的表示，在此N是一个长整型(BIGINT)数字，这等价于CONV(N,10,16)。如果N是NULL，返回NULL。<br>ASCII(str)<br>返回字符串str的最左面字符的ASCII代码值。如果str是空字符串，返回0。如果str是NULL，返回NULL。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT SUBSTR(NAME,1,1) NAME FROM person</div><div class="line">SELECT SUBSTRING(NAME,1,2) NAME FROM person</div><div class="line">SELECT MID(NAME,1,2) NAME FROM person</div></pre></td></tr></table></figure></p>
+<h3 id="从字符串的第-4-个字符位置（倒数）开始取，直到结束。"><a href="#从字符串的第-4-个字符位置（倒数）开始取，直到结束。" class="headerlink" title="从字符串的第 4 个字符位置（倒数）开始取，直到结束。"></a>从字符串的第 4 个字符位置（倒数）开始取，直到结束。</h3><p>mysql&gt; select substring(‘example.com’, -4);<br>从字符串的第 4 个字符位置（倒数）开始取，只取 2 个字符。<br>mysql&gt; select substring(‘example.com’, -4, 2);</p>
+<h3 id="字符串截取：substring-index-str-delim-count"><a href="#字符串截取：substring-index-str-delim-count" class="headerlink" title="字符串截取：substring_index(str,delim,count)"></a>字符串截取：substring_index(str,delim,count)</h3><p>截取第二个 ‘.’ 之前的所有字符。<br>mysql&gt; select substring_index(‘www.example.com’, ‘.’, 2);截取第二个 ‘.’ （倒数）之后的所有字符。<br>mysql&gt; select substring_index(‘www.example.com’, ‘.’, -2);<br>如果在字符串中找不到 delim 参数指定的值，就返回整个字符串<br>mysql&gt; select substring_index(‘www.example.com’, ‘.coc’, 1);</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/20/Javascript 事件中级/" rel="next" title="JS事件中级 21">
+                <i class="fa fa-chevron-left"></i> JS事件中级 21
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/27/Javascript 75team/" rel="prev" title="写好原生js  0">
+                写好原生js  0 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/05/24/MySQL字符串操作函数/"
+           data-title="MySQL字符串" data-url="http://guilongyue.github.io/2017/05/24/MySQL字符串操作函数/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL-字符串操作函数"><span class="nav-number">1.</span> <span class="nav-text">MySQL 字符串操作函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UPPER和UCASE"><span class="nav-number">1.1.</span> <span class="nav-text">UPPER和UCASE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LOWER和LCASE"><span class="nav-number">1.2.</span> <span class="nav-text">LOWER和LCASE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FIND-IN-SET-str-strlist"><span class="nav-number">1.3.</span> <span class="nav-text">FIND_IN_SET(str,strlist)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REPLACE-str-from-str-to-str"><span class="nav-number">1.4.</span> <span class="nav-text">REPLACE(str,from_str,to_str)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REPEAT-str-count"><span class="nav-number">1.5.</span> <span class="nav-text">REPEAT(str,count)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REVERSE-str"><span class="nav-number">1.6.</span> <span class="nav-text">REVERSE(str)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INSERT-str-pos-len-newstr"><span class="nav-number">1.7.</span> <span class="nav-text">INSERT(str,pos,len,newstr)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SUBSTRING-str-FROM-pos"><span class="nav-number">1.8.</span> <span class="nav-text">SUBSTRING(str FROM pos)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SUBSTRING-INDEX-str-delim-count"><span class="nav-number">1.9.</span> <span class="nav-text">SUBSTRING_INDEX(str,delim,count)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LTRIM-str"><span class="nav-number">1.10.</span> <span class="nav-text">LTRIM(str)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RTRIM-str"><span class="nav-number">1.11.</span> <span class="nav-text">RTRIM(str)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TRIM-BOTH-LEADING-TRAILING-remstr-FROM-str"><span class="nav-number">1.12.</span> <span class="nav-text">TRIM([[BOTH | LEADING | TRAILING] [remstr] FROM] str)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MID-str-pos-len"><span class="nav-number">1.13.</span> <span class="nav-text">MID(str,pos,len)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LPAD-str-len-padstr"><span class="nav-number">1.14.</span> <span class="nav-text">LPAD   (str,len,padstr)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPAD-str-len-padstr"><span class="nav-number">1.15.</span> <span class="nav-text">RPAD   (str,len,padstr)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LEFT-str-len"><span class="nav-number">1.16.</span> <span class="nav-text">LEFT(str,len)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RIGHT-str-len"><span class="nav-number">1.17.</span> <span class="nav-text">RIGHT(str,len)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#位置控制函数"><span class="nav-number">1.18.</span> <span class="nav-text">位置控制函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#得到字符串长度的函数"><span class="nav-number">1.19.</span> <span class="nav-text">得到字符串长度的函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并多个字符串，或者表中的多个字段"><span class="nav-number">1.20.</span> <span class="nav-text">合并多个字符串，或者表中的多个字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进制转换"><span class="nav-number">1.21.</span> <span class="nav-text">进制转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从字符串的第-4-个字符位置（倒数）开始取，直到结束。"><span class="nav-number">1.21.1.</span> <span class="nav-text">从字符串的第 4 个字符位置（倒数）开始取，直到结束。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串截取：substring-index-str-delim-count"><span class="nav-number">1.21.2.</span> <span class="nav-text">字符串截取：substring_index(str,delim,count)</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
