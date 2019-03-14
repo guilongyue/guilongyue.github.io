@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://guilongyue.github.io/2019/02/03/工作常用的SQL/index.html">
 <meta property="og:site_name" content="沉默的风">
 <meta property="og:description" content="开发中常用到的Sql知识体系构建，关注关键细节。">
-<meta property="og:updated_time" content="2019-02-20T03:33:33.764Z">
+<meta property="og:updated_time" content="2019-03-13T11:20:11.458Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="开发中常用到的Sql">
 <meta name="twitter:description" content="开发中常用到的Sql知识体系构建，关注关键细节。">
@@ -370,6 +370,9 @@
 <p>那么如果我们也要查询所有列，有两种方法，一种是id&gt;=的形式，另一种就是利用join，看下实际情况：</p>
 <p>SELECT * FROM product WHERE ID &gt; =(select id from product limit 866613, 1) limit 20<br>查询时间为0.2秒，简直是一个质的飞跃啊，哈哈</p>
 <p>另一种写法<br>SELECT * FROM product a JOIN (select id from product limit 866613, 20) b ON a.ID = b.id<br>查询时间也很短，赞！</p>
+<h3 id="表中增加字段"><a href="#表中增加字段" class="headerlink" title="表中增加字段"></a>表中增加字段</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ALTER TABLE test ADD COLUMN id INT UNSIGNED NOT NULL auto_increment PRIMARY KEY FIRST</div><div class="line">给表添加列是一个常用的操作,MySQL增加列的时候可以指定此列的位置</div><div class="line">给指定位置加列需要两个关键字:</div><div class="line">FIRST和AFTER</div><div class="line">FIRST表示增加此列为第一个列</div><div class="line">AFTER表示增加在某个列之后</div><div class="line">注意MySQL增加列指定位置时没有BEFORE的用法,第一列可以使用FIRST,非第一列使用AFTER。</div></pre></td></tr></table></figure>
+<h4 id="增加自动更新的时间字段"><a href="#增加自动更新的时间字段" class="headerlink" title="增加自动更新的时间字段"></a>增加自动更新的时间字段</h4><p>mysql 5.6 datetime 和timestamp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">alter table t1  add column create_time  timestamp DEFAULT CURRENT_TIMESTAMP COMMENT &apos;HY创建时间&apos;;</div><div class="line"></div><div class="line">alter table t1  add column last_update_time  timestamp DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP COMMENT &apos;HY最后更新时间&apos;;</div><div class="line"></div><div class="line">update t1 set name = &apos;ygl&apos; where id = 2</div><div class="line"></div><div class="line">INSERT into t1 (id,name)  values (5,&apos;ygl1&apos;)</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -490,7 +493,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">100</span>
+                <span class="site-state-item-count">102</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -508,7 +511,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">99</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -584,7 +587,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开发中常用到的Sql"><span class="nav-number">1.</span> <span class="nav-text">开发中常用到的Sql</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开发中用到的Sql"><span class="nav-number">1.1.</span> <span class="nav-text">开发中用到的Sql</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库中-表的数量"><span class="nav-number">1.1.1.</span> <span class="nav-text">查询数据库中 表的数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分组拼接字段"><span class="nav-number">1.1.2.</span> <span class="nav-text">分组拼接字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对limit分页问题的性能优化方法"><span class="nav-number">1.1.3.</span> <span class="nav-text">对limit分页问题的性能优化方法</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开发中常用到的Sql"><span class="nav-number">1.</span> <span class="nav-text">开发中常用到的Sql</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开发中用到的Sql"><span class="nav-number">1.1.</span> <span class="nav-text">开发中用到的Sql</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库中-表的数量"><span class="nav-number">1.1.1.</span> <span class="nav-text">查询数据库中 表的数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分组拼接字段"><span class="nav-number">1.1.2.</span> <span class="nav-text">分组拼接字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对limit分页问题的性能优化方法"><span class="nav-number">1.1.3.</span> <span class="nav-text">对limit分页问题的性能优化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表中增加字段"><span class="nav-number">1.1.4.</span> <span class="nav-text">表中增加字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#增加自动更新的时间字段"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">增加自动更新的时间字段</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
