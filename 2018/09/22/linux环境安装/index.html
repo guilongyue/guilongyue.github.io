@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://guilongyue.github.io/2018/09/22/linux环境安装/index.html">
 <meta property="og:site_name" content="沉默的风">
 <meta property="og:description" content="Linux环境安装准备自己安装 常用的开发环境 tomcat redis zookeeper kafka mysql 等，记录一些自身的遇到的问题。">
-<meta property="og:updated_time" content="2018-09-23T05:13:38.116Z">
+<meta property="og:updated_time" content="2019-04-01T06:51:08.409Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux环境安装">
 <meta name="twitter:description" content="Linux环境安装准备自己安装 常用的开发环境 tomcat redis zookeeper kafka mysql 等，记录一些自身的遇到的问题。">
@@ -366,7 +366,7 @@
 <p>可使用”iptables –L –n”查看当前iptables规则<br>添加指定端口到防火墙中<br>iptables -I INPUT -p 协议 –dport 端口号 -j ACCEPT<br>iptables -I INPUT -p udp –dport 161 -j ACCEPT<br>iptables -I INPUT -p tcp –dport 8080 -j ACCEPT</p>
 <p>查询防火墙状态:<br>[root@localhost ~]# service   iptables status<br>停止防火墙:<br>[root@localhost ~]# service   iptables stop<br>启动防火墙:<br>[root@localhost ~]# service   iptables start<br>重启防火墙:<br>[root@localhost ~]# service   iptables restart<br>永久关闭防火墙:<br>[root@localhost ~]# chkconfig   iptables off<br>永久关闭后启用:<br>[root@localhost ~]# chkconfig   iptables on</p>
 </blockquote>
-
+<h3 id="查看日志-查看关键词附近日志"><a href="#查看日志-查看关键词附近日志" class="headerlink" title="查看日志 查看关键词附近日志"></a>查看日志 查看关键词附近日志</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">grep -A 5 可以显示匹配内容以及后面的5行内容</div><div class="line">grep -B 5 可以显示匹配内容以及前面的5行内容</div><div class="line">grep -C 5 可以显示匹配内容以及前后面的5行内容</div></pre></td></tr></table></figure>
       
     </div>
 
@@ -408,8 +408,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/10/07/Redis/" rel="prev" title="Redis 相关知识总结">
-                Redis 相关知识总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/10/07/SpringBoot 总结/" rel="prev" title="SpringBoot 相关知识总结">
+                SpringBoot 相关知识总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -484,7 +484,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">102</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -502,7 +502,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">101</span>
+                <span class="site-state-item-count">104</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -578,7 +578,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux环境安装"><span class="nav-number">1.</span> <span class="nav-text">Linux环境安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat"><span class="nav-number">1.1.</span> <span class="nav-text">Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-下载"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-因为原有系统中安装了tomcat。需要重新修改环境变量。"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 因为原有系统中安装了tomcat。需要重新修改环境变量。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#当前没有开启防火墙"><span class="nav-number">1.1.3.</span> <span class="nav-text">当前没有开启防火墙</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux环境安装"><span class="nav-number">1.</span> <span class="nav-text">Linux环境安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat"><span class="nav-number">1.1.</span> <span class="nav-text">Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-下载"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-因为原有系统中安装了tomcat。需要重新修改环境变量。"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 因为原有系统中安装了tomcat。需要重新修改环境变量。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#当前没有开启防火墙"><span class="nav-number">1.1.3.</span> <span class="nav-text">当前没有开启防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看日志-查看关键词附近日志"><span class="nav-number">1.1.4.</span> <span class="nav-text">查看日志 查看关键词附近日志</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

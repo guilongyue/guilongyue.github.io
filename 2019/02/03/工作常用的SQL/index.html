@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://guilongyue.github.io/2019/02/03/工作常用的SQL/index.html">
 <meta property="og:site_name" content="沉默的风">
 <meta property="og:description" content="开发中常用到的Sql知识体系构建，关注关键细节。">
-<meta property="og:updated_time" content="2019-03-13T11:20:11.458Z">
+<meta property="og:updated_time" content="2019-03-29T03:41:41.481Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="开发中常用到的Sql">
 <meta name="twitter:description" content="开发中常用到的Sql知识体系构建，关注关键细节。">
@@ -373,6 +373,16 @@
 <h3 id="表中增加字段"><a href="#表中增加字段" class="headerlink" title="表中增加字段"></a>表中增加字段</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ALTER TABLE test ADD COLUMN id INT UNSIGNED NOT NULL auto_increment PRIMARY KEY FIRST</div><div class="line">给表添加列是一个常用的操作,MySQL增加列的时候可以指定此列的位置</div><div class="line">给指定位置加列需要两个关键字:</div><div class="line">FIRST和AFTER</div><div class="line">FIRST表示增加此列为第一个列</div><div class="line">AFTER表示增加在某个列之后</div><div class="line">注意MySQL增加列指定位置时没有BEFORE的用法,第一列可以使用FIRST,非第一列使用AFTER。</div></pre></td></tr></table></figure>
 <h4 id="增加自动更新的时间字段"><a href="#增加自动更新的时间字段" class="headerlink" title="增加自动更新的时间字段"></a>增加自动更新的时间字段</h4><p>mysql 5.6 datetime 和timestamp</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">alter table t1  add column create_time  timestamp DEFAULT CURRENT_TIMESTAMP COMMENT &apos;HY创建时间&apos;;</div><div class="line"></div><div class="line">alter table t1  add column last_update_time  timestamp DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP COMMENT &apos;HY最后更新时间&apos;;</div><div class="line"></div><div class="line">update t1 set name = &apos;ygl&apos; where id = 2</div><div class="line"></div><div class="line">INSERT into t1 (id,name)  values (5,&apos;ygl1&apos;)</div></pre></td></tr></table></figure>
+<h3 id="字符串截取"><a href="#字符串截取" class="headerlink" title="字符串截取"></a>字符串截取</h3><p>MySQL 字符串截取函数：left(), right(), substring(), substring_index()。还有 mid(), substr()。其中，mid(), substr() 等价于 substring() 函数，substring() 的功能非常强大和灵活。</p>
+<ul>
+<li>从左开始截取字符串<br>left（str, length）<br>说明：left（被截取字段，截取长度）<br>例：select left（content,200） as abstract from my_content_t </li>
+<li>从右开始截取字符串<br>right（str, length）<br>说明：right（被截取字段，截取长度）<br>例：select right（content,200） as abstract from my_content_t </li>
+<li>截取字符串<br>substring（str, pos）<br>substring（str, pos, length）<br>说明：substring（被截取字段，从第几位开始截取）<br>substring（被截取字段，从第几位开始截取，截取长度）<br>例：select substring（content,5） as abstract from my_content_t<br>select substring（content,5,200） as abstract from my_content_t<br>（注：如果位数是负数 如-5 则是从后倒数位数，到字符串结束或截取的长度） </li>
+<li>按关键字截取字符串<br>substring_index（str,delim,count）<br>说明：substring_index（被截取字段，关键字，关键字出现的次数）<br>例：select substring_index（”blog.jb51.net”，”。”，2） as abstract from my_content_t<br>结果：blog.jb51<br>（注：如果关键字出现的次数是负数 如-2 则是从后倒数，到字符串结束） </li>
+</ul>
+<blockquote>
+<p>函数简介：<br>SUBSTRING(str,pos) , SUBSTRING(str FROM pos) SUBSTRING(str,pos,len) , SUBSTRING(str FROM pos FOR len)<br>不带有len 参数的格式从字符串str返回一个子字符串，起始于位置 pos。带有len参数的格式从字符串str返回一个长度同len字符相同的子字符串，起始于位置 pos。 使用 FROM的格式为标准 SQL 语法。也可能对pos使用一个负值。假若这样，则子字符串的位置起始于字符串结尾的pos 字符，而不是字符串的开头位置。在以下格式的函数中可以对pos 使用一个负值。</p>
+</blockquote>
 
       
     </div>
@@ -407,8 +417,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/03/HTTP 与HTTPS /" rel="next" title="HTTP 与HTTPS">
-                <i class="fa fa-chevron-left"></i> HTTP 与HTTPS
+              <a href="/2019/02/03/Spring 多数据源学习/" rel="next" title="Spring 多数据源配置学习">
+                <i class="fa fa-chevron-left"></i> Spring 多数据源配置学习
               </a>
             
           </div>
@@ -417,8 +427,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/03/Spring 多数据源学习/" rel="prev" title="Spring 多数据源配置学习">
-                Spring 多数据源配置学习 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/02/04/单用户登录session /" rel="prev" title="Session单用户登录">
+                Session单用户登录 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -493,7 +503,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">102</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -511,7 +521,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">101</span>
+                <span class="site-state-item-count">104</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -587,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开发中常用到的Sql"><span class="nav-number">1.</span> <span class="nav-text">开发中常用到的Sql</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开发中用到的Sql"><span class="nav-number">1.1.</span> <span class="nav-text">开发中用到的Sql</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库中-表的数量"><span class="nav-number">1.1.1.</span> <span class="nav-text">查询数据库中 表的数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分组拼接字段"><span class="nav-number">1.1.2.</span> <span class="nav-text">分组拼接字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对limit分页问题的性能优化方法"><span class="nav-number">1.1.3.</span> <span class="nav-text">对limit分页问题的性能优化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表中增加字段"><span class="nav-number">1.1.4.</span> <span class="nav-text">表中增加字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#增加自动更新的时间字段"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">增加自动更新的时间字段</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开发中常用到的Sql"><span class="nav-number">1.</span> <span class="nav-text">开发中常用到的Sql</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开发中用到的Sql"><span class="nav-number">1.1.</span> <span class="nav-text">开发中用到的Sql</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库中-表的数量"><span class="nav-number">1.1.1.</span> <span class="nav-text">查询数据库中 表的数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分组拼接字段"><span class="nav-number">1.1.2.</span> <span class="nav-text">分组拼接字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对limit分页问题的性能优化方法"><span class="nav-number">1.1.3.</span> <span class="nav-text">对limit分页问题的性能优化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表中增加字段"><span class="nav-number">1.1.4.</span> <span class="nav-text">表中增加字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#增加自动更新的时间字段"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">增加自动更新的时间字段</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串截取"><span class="nav-number">1.1.5.</span> <span class="nav-text">字符串截取</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
