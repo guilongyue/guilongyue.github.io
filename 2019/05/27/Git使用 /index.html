@@ -1,0 +1,761 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Git," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Git版本回退最近提交代码后，因中间临时版本上线，需要回退版本记录下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git使用">
+<meta property="og:url" content="http://guilongyue.github.io/2019/05/27/Git使用 /index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="Git版本回退最近提交代码后，因中间临时版本上线，需要回退版本记录下">
+<meta property="og:updated_time" content="2019-05-28T03:39:09.073Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git使用">
+<meta name="twitter:description" content="Git版本回退最近提交代码后，因中间临时版本上线，需要回退版本记录下">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2019/05/27/Git使用 /"/>
+
+
+
+
+
+  <title> Git使用 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2019/05/27/Git使用 /">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Git使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-27T15:04:36+08:00">
+                2019-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/27/Git使用 /#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/05/27/Git使用 /" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Git版本回退"><a href="#Git版本回退" class="headerlink" title="Git版本回退"></a>Git版本回退</h1><p>最近提交代码后，因中间临时版本上线，需要回退版本记录下</p>
+<a id="more"></a>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">回退到某个版本（最后的一串字符是 版本变更编号，通常这个编号可以在 git 后台看到，也可以通过  $ git log -300 显示最近300次提交记录）</div><div class="line"></div><div class="line">git reset --hard 139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96 </div><div class="line"></div><div class="line">强制提交到master分支（具体哪个分支请酌情修改）</div><div class="line">git push -f -u origin master</div><div class="line"></div><div class="line">git log --pretty=oneline</div><div class="line">或者更简单的做法(恢复上一个版本)是：</div><div class="line">git reset --hard HEAD~1 </div><div class="line"></div><div class="line">git add . </div><div class="line"></div><div class="line">git commit ‘roll-back’ </div><div class="line"></div><div class="line">git push -f origin master</div></pre></td></tr></table></figure>
+<h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">$ git reset --hard HEAD^</div><div class="line">HEAD is now at e475afc add distributed</div><div class="line">--hard参数有啥意义？这个后面再讲，现在你先放心使用。</div><div class="line"></div><div class="line"></div><div class="line">1、在gitlab上找到要恢复的版本号，如：</div><div class="line"></div><div class="line">139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96 </div><div class="line"></div><div class="line">2、在客户端执行如下命令（执行前，先将本地代码切换到对应分支）：</div><div class="line"></div><div class="line">git reset --hard 139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96 </div><div class="line"></div><div class="line">3、强制push到对应的远程分支（如提交到develop分支）</div><div class="line"></div><div class="line">git push -f -u origin develop</div><div class="line"></div><div class="line">OK，现在到服务器上看到的代码就已经被还原回去了。这种操作存在一个问题，服务器上的代码虽然被还原了，但假如有多个人在使用，他们本地的版本依然是比服务器上的版本高的，所以，别人再重新提交代码的话，你撤销的操作又会被重新，你上面的操作也就白操作了。解决办法是，让别人把本地的分支先删掉，然后重新从服务器上拉取分支</div></pre></td></tr></table></figure>
+<h2 id="revert"><a href="#revert" class="headerlink" title="revert"></a>revert</h2><p>操作步骤如下：</p>
+<p>1、找到你误提交之前的版本号<br>2、git revert -n 版本号<br>3、git commit -m xxxx 提交<br>4、git push 推送到远程<br>OK，版本还原了，通知其他人更新一下代码吧</p>
+<h2 id="Idea-操作"><a href="#Idea-操作" class="headerlink" title="Idea 操作"></a>Idea 操作</h2><ol>
+<li>在“Show History”中找到当前版本（取名：newVersion）和想要回退到的版本（oldVersion） </li>
+<li>选择newVersion和oldVersion点击“Copy Revision Number”复制两个版本的版本号：<br>newVersion：2746f428a3d3d000bd1b0e886ef8167e1f73ec9c<br>oldVersion ：6bc5691cbe7304cb185b70fbc0dd975c7de86e8a</li>
+<li>右击项目依次选中：Git-&gt;Repository-&gt;Reset HEAD </li>
+<li>选中Reset Type:Hard, To Commit:6bc5691cbe7304cb185b70fbc0dd975c7de86e8a；然后点击Reset按钮   <strong>老版本</strong></li>
+<li>这时本地代码已经回退到oldVersion，这时候如果直接push到远程仓库，会提示版本冲突，点击“cancel”取消。 </li>
+<li>下面有两种解决冲突的方法<br>方法一 ：不解决，直接强制提交：<br>a. 打开Terminal，切换到项目所在目录<br>b. 执行：spring-mvc $git push -f<br>方法二：<br>a. 右击项目依次选中：Git-&gt;Repository-&gt;Reset HEAD<br>b. 选中Reset Type:Mixed, To Commit:2746f428a3d3d000bd1b0e886ef8167e1f73ec9c；然后点击Reset按钮  <strong>新版本</strong><br>c. 这时你会发现，最新版本有回到newVersion。但是代码还是oldVersion的代码，这时候重push到远程仓库就不会版本冲突了 </li>
+</ol>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>方法是可用的，第一次回退后没有需要提交的内容。</p>
+<p>这个时候相当于备份做好了，接下来就可以删除本地及远端的master分支<br>git branch -d master<br>git push –delete origin master</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>Git恢复之前版本的两种方法reset、revert<br><a href="https://blog.csdn.net/yxlshk/article/details/79944535" target="_blank" rel="external">https://blog.csdn.net/yxlshk/article/details/79944535</a></p>
+<p>Git(二):版本回退及分支<br><a href="https://blog.csdn.net/loganwz/article/details/82729913" target="_blank" rel="external">https://blog.csdn.net/loganwz/article/details/82729913</a></p>
+<p>idea中git回退远程仓库版本<br><a href="https://www.cnblogs.com/gexiaoshan/p/10182135.html" target="_blank" rel="external">https://www.cnblogs.com/gexiaoshan/p/10182135.html</a></p>
+<p>idea中git远程版本回退<br><a href="https://blog.csdn.net/gomeplus/article/details/78241070" target="_blank" rel="external">https://blog.csdn.net/gomeplus/article/details/78241070</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/21/分布式基础-序列化/" rel="next" title="分布式基础-序列化">
+                <i class="fa fa-chevron-left"></i> 分布式基础-序列化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/05/27/Git使用 /"
+           data-title="Git使用" data-url="http://guilongyue.github.io/2019/05/27/Git使用 /">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git版本回退"><span class="nav-number">1.</span> <span class="nav-text">Git版本回退</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用场景"><span class="nav-number">1.1.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考博客"><span class="nav-number">1.2.</span> <span class="nav-text">参考博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#revert"><span class="nav-number">1.3.</span> <span class="nav-text">revert</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Idea-操作"><span class="nav-number">1.4.</span> <span class="nav-text">Idea 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">1.5.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.6.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

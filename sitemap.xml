@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://guilongyue.github.io/2019/05/27/Git%E4%BD%BF%E7%94%A8%20/</loc>
+    
+    <lastmod>2019-05-28T03:39:09.073Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://guilongyue.github.io/2019/03/03/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84Linux%20%E5%91%BD%E4%BB%A4/</loc>
+    
+    <lastmod>2019-04-29T01:32:08.555Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://guilongyue.github.io/2019/04/21/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80-%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</loc>
+    
+    <lastmod>2019-04-25T01:04:47.800Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://guilongyue.github.io/2019/04/21/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80-%E5%BA%8F%E5%88%97%E5%8C%96/</loc>
     
     <lastmod>2019-04-23T01:32:17.142Z</lastmod>
@@ -12,13 +33,6 @@
     <loc>http://guilongyue.github.io/2019/04/14/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E5%B8%B8%E7%94%A8%E5%86%85%E5%AE%B9/</loc>
     
     <lastmod>2019-04-19T02:23:24.047Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://guilongyue.github.io/2019/03/03/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84Linux%20%E5%91%BD%E4%BB%A4/</loc>
-    
-    <lastmod>2019-04-19T01:19:26.234Z</lastmod>
     
   </url>
   
@@ -639,14 +653,14 @@
   </url>
   
   <url>
-    <loc>http://guilongyue.github.io/2017/03/25/java%20Collection/</loc>
+    <loc>http://guilongyue.github.io/2017/03/25/java%20%E6%88%90%E5%91%98%E7%9A%84/</loc>
     
     <lastmod>2017-03-31T03:41:24.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://guilongyue.github.io/2017/03/25/java%20%E6%88%90%E5%91%98%E7%9A%84/</loc>
+    <loc>http://guilongyue.github.io/2017/03/25/java%20Collection/</loc>
     
     <lastmod>2017-03-31T03:41:24.000Z</lastmod>
     
