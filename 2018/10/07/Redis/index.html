@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://guilongyue.github.io/2018/10/07/Redis/index.html">
 <meta property="og:site_name" content="沉默的风">
 <meta property="og:description" content="Redis 相关知识总结Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。">
-<meta property="og:updated_time" content="2018-10-09T02:44:11.736Z">
+<meta property="og:updated_time" content="2019-07-11T09:28:06.176Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis 相关知识总结">
 <meta name="twitter:description" content="Redis 相关知识总结Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。从2013年5月开始，Redis的开发由Pivotal赞助。">
@@ -362,6 +362,7 @@
 <h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>在项目中使用 Redis，主要考虑两个角度：性能和并发。如果只是为了分布式锁这些其他功能，还有其他中间件 Zookpeer 等代替，并非一定要使用 Redis。</p>
 <p>性能：<br>我们在碰到需要执行耗时特别久，且结果不频繁变动的 SQL，就特别适合将运行结果放入缓存。这样，后面的请求就去缓存中读取，使得请求能够迅速响应。<br>特别是在秒杀系统，在同一时间，几乎所有人都在点，都在下单。。。执行的是同一操作———向数据库查数据。<br>根据交互效果的不同，响应时间没有固定标准。在理想状态下，我们的页面跳转需要在瞬间解决，对于页内操作则需要在刹那间解决。</p>
 <p>并发：<br>在大并发的情况下，所有的请求直接访问数据库，数据库会出现连接异常。这个时候，就需要使用 Redis 做一个缓冲操作，让请求先访问到 Redis，而不是直接访问数据库。</p>
+<h2 id="Redis-安装"><a href="#Redis-安装" class="headerlink" title="Redis 安装"></a>Redis 安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ wget http://download.redis.io/releases/redis-2.8.17.tar.gz</div><div class="line">$ tar xzf redis-2.8.17.tar.gz</div><div class="line">$ cd redis-2.8.17</div><div class="line">$ make</div><div class="line"></div><div class="line"></div><div class="line">$ ./redis-server redis.conf</div></pre></td></tr></table></figure>
 <h2 id="使用-Redis-的常见问题"><a href="#使用-Redis-的常见问题" class="headerlink" title="使用 Redis 的常见问题"></a>使用 Redis 的常见问题</h2><p>缓存和数据库双写一致性问题<br>缓存雪崩问题<br>缓存击穿问题<br>缓存的并发竞争问题</p>
 <h2 id="单线程的-Redis-为什么这么快"><a href="#单线程的-Redis-为什么这么快" class="headerlink" title="单线程的 Redis 为什么这么快"></a>单线程的 Redis 为什么这么快</h2><ul>
 <li>纯内存操作</li>
@@ -434,8 +435,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/07/SpringBoot 总结/" rel="next" title="SpringBoot 相关知识总结">
-                <i class="fa fa-chevron-left"></i> SpringBoot 相关知识总结
+              <a href="/2018/09/22/linux环境安装/" rel="next" title="Linux环境安装">
+                <i class="fa fa-chevron-left"></i> Linux环境安装
               </a>
             
           </div>
@@ -444,8 +445,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/03/Spring 多数据源学习/" rel="prev" title="Spring 多数据源配置学习">
-                Spring 多数据源配置学习 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/10/07/SpringBoot 总结/" rel="prev" title="SpringBoot 相关知识总结">
+                SpringBoot 相关知识总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -520,7 +521,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-count">109</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -538,7 +539,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-count">107</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -614,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-相关知识总结"><span class="nav-number">1.</span> <span class="nav-text">Redis 相关知识总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用场景"><span class="nav-number">1.1.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Redis-的常见问题"><span class="nav-number">1.2.</span> <span class="nav-text">使用 Redis 的常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单线程的-Redis-为什么这么快"><span class="nav-number">1.3.</span> <span class="nav-text">单线程的 Redis 为什么这么快</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-的数据类型及使用场景"><span class="nav-number">1.4.</span> <span class="nav-text">Redis 的数据类型及使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">1.4.1.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash"><span class="nav-number">1.4.2.</span> <span class="nav-text">Hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List"><span class="nav-number">1.4.3.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set"><span class="nav-number">1.4.4.</span> <span class="nav-text">Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sorted-Set"><span class="nav-number">1.4.5.</span> <span class="nav-text">Sorted Set</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-的过期策略和内存淘汰机制"><span class="nav-number">1.5.</span> <span class="nav-text">Redis 的过期策略和内存淘汰机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么不用定时删除策略"><span class="nav-number">1.5.1.</span> <span class="nav-text">为什么不用定时删除策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定期删除-惰性删除如何工作"><span class="nav-number">1.5.2.</span> <span class="nav-text">定期删除+惰性删除如何工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采用定期删除-惰性删除就没其他问题了么"><span class="nav-number">1.5.3.</span> <span class="nav-text">采用定期删除+惰性删除就没其他问题了么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#该配置就是配内存淘汰策略的："><span class="nav-number">1.5.3.1.</span> <span class="nav-text">该配置就是配内存淘汰策略的：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-和数据库双写一致性问题"><span class="nav-number">1.6.</span> <span class="nav-text">Redis 和数据库双写一致性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何应对缓存穿透和缓存雪崩问题"><span class="nav-number">1.7.</span> <span class="nav-text">如何应对缓存穿透和缓存雪崩问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存雪崩解决方案："><span class="nav-number">1.7.1.</span> <span class="nav-text">缓存雪崩解决方案：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何解决-Redis-的并发竞争-Key-问题"><span class="nav-number">1.8.</span> <span class="nav-text">如何解决 Redis 的并发竞争 Key 问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如果对这个-Key-操作，不要求顺序"><span class="nav-number">1.8.1.</span> <span class="nav-text">如果对这个 Key 操作，不要求顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如果对这个-Key-操作，要求顺序"><span class="nav-number">1.8.2.</span> <span class="nav-text">如果对这个 Key 操作，要求顺序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.9.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-相关知识总结"><span class="nav-number">1.</span> <span class="nav-text">Redis 相关知识总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用场景"><span class="nav-number">1.1.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-安装"><span class="nav-number">1.2.</span> <span class="nav-text">Redis 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Redis-的常见问题"><span class="nav-number">1.3.</span> <span class="nav-text">使用 Redis 的常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单线程的-Redis-为什么这么快"><span class="nav-number">1.4.</span> <span class="nav-text">单线程的 Redis 为什么这么快</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-的数据类型及使用场景"><span class="nav-number">1.5.</span> <span class="nav-text">Redis 的数据类型及使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">1.5.1.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash"><span class="nav-number">1.5.2.</span> <span class="nav-text">Hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List"><span class="nav-number">1.5.3.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set"><span class="nav-number">1.5.4.</span> <span class="nav-text">Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sorted-Set"><span class="nav-number">1.5.5.</span> <span class="nav-text">Sorted Set</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-的过期策略和内存淘汰机制"><span class="nav-number">1.6.</span> <span class="nav-text">Redis 的过期策略和内存淘汰机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么不用定时删除策略"><span class="nav-number">1.6.1.</span> <span class="nav-text">为什么不用定时删除策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定期删除-惰性删除如何工作"><span class="nav-number">1.6.2.</span> <span class="nav-text">定期删除+惰性删除如何工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采用定期删除-惰性删除就没其他问题了么"><span class="nav-number">1.6.3.</span> <span class="nav-text">采用定期删除+惰性删除就没其他问题了么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#该配置就是配内存淘汰策略的："><span class="nav-number">1.6.3.1.</span> <span class="nav-text">该配置就是配内存淘汰策略的：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-和数据库双写一致性问题"><span class="nav-number">1.7.</span> <span class="nav-text">Redis 和数据库双写一致性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何应对缓存穿透和缓存雪崩问题"><span class="nav-number">1.8.</span> <span class="nav-text">如何应对缓存穿透和缓存雪崩问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存雪崩解决方案："><span class="nav-number">1.8.1.</span> <span class="nav-text">缓存雪崩解决方案：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何解决-Redis-的并发竞争-Key-问题"><span class="nav-number">1.9.</span> <span class="nav-text">如何解决 Redis 的并发竞争 Key 问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如果对这个-Key-操作，不要求顺序"><span class="nav-number">1.9.1.</span> <span class="nav-text">如果对这个 Key 操作，不要求顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如果对这个-Key-操作，要求顺序"><span class="nav-number">1.9.2.</span> <span class="nav-text">如果对这个 Key 操作，要求顺序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.10.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
