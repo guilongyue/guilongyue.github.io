@@ -1,0 +1,803 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Spring,多线程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="多线程理解总结工作中用到线程或锁的机会相对较少，需要多总结学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多线程理解总结">
+<meta property="og:url" content="http://guilongyue.github.io/2017/07/11/多线程-总结/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="多线程理解总结工作中用到线程或锁的机会相对较少，需要多总结学习">
+<meta property="og:updated_time" content="2019-09-25T02:29:01.181Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多线程理解总结">
+<meta name="twitter:description" content="多线程理解总结工作中用到线程或锁的机会相对较少，需要多总结学习">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2017/07/11/多线程-总结/"/>
+
+
+
+
+
+  <title> 多线程理解总结 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2017/07/11/多线程-总结/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                多线程理解总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-11T16:11:22+08:00">
+                2017-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/11/多线程-总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/11/多线程-总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="多线程理解总结"><a href="#多线程理解总结" class="headerlink" title="多线程理解总结"></a>多线程理解总结</h3><p>工作中用到线程或锁的机会相对较少，需要多总结学习<br><a id="more"></a></p>
+<h2 id="service层锁失效"><a href="#service层锁失效" class="headerlink" title="service层锁失效"></a>service层锁失效</h2><p>应为spring事物默认是采用Aop实现的，锁加到Controller 层</p>
+<h2 id="Callable与Runnable"><a href="#Callable与Runnable" class="headerlink" title="Callable与Runnable"></a>Callable与Runnable</h2><p>Runable由于run()方法返回值为void类型，所以在执行完任务之后无法返回任何结果。</p>
+<p>Callable位于java.util.concurrent包下，它也是一个接口，在它里面也只声明了一个方法，只不过这个方法叫做call()：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@FunctionalInterface</div><div class="line">public interface Callable&lt;V&gt; &#123;</div><div class="line">    /**</div><div class="line">     * Computes a result, or throws an exception if unable to do so.</div><div class="line">     *</div><div class="line">     * @return computed result</div><div class="line">     * @throws Exception if unable to compute a result</div><div class="line">     */</div><div class="line">    V call() throws Exception;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，这是一个泛型接口，call()函数返回的类型就是传递进来的V类型。</p>
+<p>那么怎么使用Callable呢？一般情况下是配合ExecutorService来使用的，在ExecutorService接口中声明了若干个submit方法的重载版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);</div><div class="line">&lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result);</div><div class="line">Future&lt;?&gt; submit(Runnable task);</div></pre></td></tr></table></figure></p>
+<p>第一个submit方法里面的参数类型就是Callable。<br>暂时只需要知道Callable一般是和ExecutorService配合来使用的，具体的使用方法讲在后面讲述。<br>一般情况下我们使用第一个submit方法和第三个submit方法，第二个submit方法很少使用。</p>
+<h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>Future就是对于具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果。必要时可以通过get方法获取执行结果，该方法会阻塞直到任务返回结果。<br>Future类位于java.util.concurrent包下，它是一个接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public interface Future&lt;V&gt; &#123;</div><div class="line">    boolean cancel(boolean mayInterruptIfRunning);</div><div class="line">    boolean isCancelled();</div><div class="line">    boolean isDone();</div><div class="line">    V get() throws InterruptedException, ExecutionException;</div><div class="line">    V get(long timeout, TimeUnit unit)</div><div class="line">        throws InterruptedException, ExecutionException, TimeoutException;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>cancel方法用来取消任务，如果取消任务成功则返回true，如果取消任务失败则返回false。参数mayInterruptIfRunning表示是否允许取消正在执行却没有执行完毕的任务，如果设置true，则表示可以取消正在执行过程中的任务。如果任务已经完成，则无论mayInterruptIfRunning为true还是false，此方法肯定返回false，即如果取消已经完成的任务会返回false；如果任务正在执行，若mayInterruptIfRunning设置为true，则返回true，若mayInterruptIfRunning设置为false，则返回false；如果任务还没有执行，则无论mayInterruptIfRunning为true还是false，肯定返回true。</li>
+<li>isCancelled方法表示任务是否被取消成功，如果在任务正常完成前被取消成功，则返回 true。</li>
+<li>isDone方法表示任务是否已经完成，若任务完成，则返回true；</li>
+<li>get()方法用来获取执行结果，这个方法会产生阻塞，会一直等到任务执行完毕才返回。</li>
+<li>get(long timeout, TimeUnit unit)用来获取执行结果，如果在指定时间内，还没获取到结果，就直接返回null。</li>
+</ul>
+<p>也就是说Future提供了三种功能：</p>
+<p>1）判断任务是否完成；<br>2）能够中断任务；<br>3）能够获取任务执行结果。<br>因为Future只是一个接口，所以是无法直接用来创建对象使用的，因此就有了下面的FutureTask。</p>
+<h3 id="FutureTask"><a href="#FutureTask" class="headerlink" title="FutureTask"></a>FutureTask</h3><p>我们先来看一下FutureTask的实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class FutureTask&lt;V&gt; implements RunnableFuture&lt;V&gt;</div><div class="line"> 　　FutureTask类实现了RunnableFuture接口，我们看一下RunnableFuture接口的实现：</div><div class="line"></div><div class="line">public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; &#123;</div><div class="line">    void run();</div><div class="line">&#125;</div><div class="line"></div><div class="line">可以看出RunnableFuture继承了Runnable接口和Future接口，而FutureTask实现了RunnableFuture接口。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。</div><div class="line"></div><div class="line">FutureTask提供了2个构造器：</div><div class="line">public FutureTask(Callable&lt;V&gt; callable) &#123;</div><div class="line">&#125;</div><div class="line">public FutureTask(Runnable runnable, V result) &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>事实上，FutureTask是Future接口的一个唯一实现类。</p>
+<h3 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">	public class MyCallabel implements Callable&lt;String&gt;&#123;</div><div class="line">    private String username;</div><div class="line">    private long sleepTime;</div><div class="line"></div><div class="line"></div><div class="line">    public MyCallabel(String username, long sleepTime) &#123;</div><div class="line">        this.username = username;</div><div class="line">        this.sleepTime = sleepTime;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Computes a result, or throws an exception if unable to do so.</div><div class="line">     *</div><div class="line">     * @return computed result</div><div class="line">     * @throws Exception if unable to compute a result</div><div class="line">     */</div><div class="line">    @Override</div><div class="line">    public String call() throws Exception &#123;</div><div class="line">        System.out.println(&quot;username:&quot; + username);</div><div class="line">        TimeUnit.SECONDS.sleep(sleepTime);</div><div class="line">        return &quot;userName is &quot;+ username;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public static void main(String[] args) throws ExecutionException, InterruptedException &#123;</div><div class="line">        MyCallabel call = new MyCallabel(&quot;aaa&quot;, 5L);</div><div class="line">        FutureTask futureTask = new FutureTask(call);</div><div class="line">        futureTask.run();</div><div class="line">        Object o = futureTask.get();</div><div class="line">        System.out.println(o);</div><div class="line"></div><div class="line">        ExecutorService  executorService = Executors.newFixedThreadPool(4);</div><div class="line">        Future submit = executorService.submit(call);</div><div class="line">        Object res = submit.get();</div><div class="line">        System.out.println(res);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h2><h3 id="ThreadPoolExecutor类可设置的参数主要有："><a href="#ThreadPoolExecutor类可设置的参数主要有：" class="headerlink" title="ThreadPoolExecutor类可设置的参数主要有："></a>ThreadPoolExecutor类可设置的参数主要有：</h3><p>参考 <a href="https://www.cnblogs.com/dwlsxj/p/java-thread-pool-principle.html" target="_blank" rel="external">https://www.cnblogs.com/dwlsxj/p/java-thread-pool-principle.html</a></p>
+<ul>
+<li>corePoolSize：核心线程数<br>核心线程会一直存活，及时没有任务需要执行<ul>
+<li>当线程数小于核心线程数时，即使有线程空闲，线程池也会优先创建新线程处理</li>
+<li>设置allowCoreThreadTimeout=true（默认false）时，核心线程会超时关闭</li>
+</ul>
+</li>
+<li>queueCapacity：任务队列容量（阻塞队列）<br>当核心线程数达到最大时，新任务会放在队列中排队等待执行</li>
+<li>maxPoolSize：最大线程数<ul>
+<li>当线程数&gt;=corePoolSize，且任务队列已满时。线程池会创建新线程来处理任务</li>
+<li>当线程数=maxPoolSize，且任务队列已满时，线程池会拒绝处理任务而抛出异常</li>
+</ul>
+</li>
+<li>keepAliveTime：线程空闲时间<ul>
+<li>当线程空闲时间达到keepAliveTime时，线程会退出，直到线程数量=corePoolSize</li>
+<li>如果allowCoreThreadTimeout=true，则会直到线程数量=0</li>
+</ul>
+</li>
+<li>allowCoreThreadTimeout：允许核心线程超时</li>
+<li>rejectedExecutionHandler：任务拒绝处理器</li>
+</ul>
+<blockquote>
+<p>两种情况会拒绝处理任务：<br>当线程数已经达到maxPoolSize，切队列已满，会拒绝新任务<br>当线程池被调用shutdown()后，会等待线程池里的任务执行完毕，再shutdown。如果在调用shutdown()和线程池真正shutdown之间提交任务，会拒绝新任务<br>线程池会调用rejectedExecutionHandler来处理这个任务。如果没有设置默认是AbortPolicy，会抛出异常</p>
+</blockquote>
+<p>ThreadPoolExecutor类有几个内部实现类来处理这类情况：</p>
+<ul>
+<li>默认值<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">corePoolSize=1</div><div class="line">queueCapacity=Integer.MAX_VALUE</div><div class="line">maxPoolSize=Integer.MAX_VALUE</div><div class="line">keepAliveTime=60s</div><div class="line">allowCoreThreadTimeout=false</div><div class="line">rejectedExecutionHandler=AbortPolicy()</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>还有就是 workQueue：一个阻塞队列，用来存储等待执行的任务，这个参数的选择也很重要，会对线程池的运行过程产生重大影响，一般来说，这里的阻塞队列有以下几种选择：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ArrayBlockingQueue;</div><div class="line">LinkedBlockingQueue;</div><div class="line">SynchronousQueue;</div><div class="line">PriorityBlockingQueue</div></pre></td></tr></table></figure></p>
+<p>ArrayBlockingQueue和PriorityBlockingQueue使用较少，一般使用LinkedBlockingQueue和Synchronous。线程池的排队策略与BlockingQueue有关。</p>
+<p>handler：表示当拒绝处理任务时的策略，有以下四种取值：</p>
+<ul>
+<li>ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。 </li>
+<li>ThreadPoolExecutor.DiscardPolicy：也是丢弃任务，但是不抛出异常。 </li>
+<li>ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）</li>
+<li>ThreadPoolExecutor.CallerRunsPolicy：由调用线程处理该任务</li>
+</ul>
+<p>参数的设置跟系统的负载有直接的关系，下面为系统负载的相关参数：<br>tasks，每秒需要处理的最大任务数量<br>tasktime，处理第个任务所需要的时间<br>responsetime，系统允许任务最大的响应时间，比如每个任务的响应时间不得超过2秒。</p>
+<h3 id="Executors创建的线程池种类"><a href="#Executors创建的线程池种类" class="headerlink" title="Executors创建的线程池种类"></a>Executors创建的线程池种类</h3><p>1.CacheThreadPool<br>这是一个线程数变动性非常强的线程池，默认配置下，它可以开启无限多个线程（Integer.maxSize 和 JVM允许线程数范围内）。且如果该线程池里的线程在60秒内如果是处于空闲状态（即没任务执行），那么该线程就会被回收，不再由线程池维护。如果有新任务进来时，由于之前的线程池里的线程已被回收，那么新的线程也会再次创建。当执行完任务，60秒内依旧无新任务的可执行话，那么该线程又会被再次回收。 </p>
+<p>综合该线程池的特性，我们可以思考下什么情况下应该使用这类线程池。比如：我们的应用服务器上面，会在非固定时间（时间跨域度会尽可能大）和非固定的任务数量。 </p>
+<p>2.FixedThreadPool<br>FixedThreadPool一个固定数量的线程池，且该线程池不会随着任务的变化而增多或减少线程数量。即该线程池下的线程池如果你不主动调用销毁shutdowm、purge之类的方法。那么这些线程将会永远被线程池维护着。</p>
+<p>3.SingleThreadExecutor<br>SingleThreadExecutor是一个固定单线程的线程池，该线程池会永远都保持着一个线程的活动状态，如果该线程池的单线程因某些异常而退出后，线程池会继续创建一个新的线程。</p>
+<p>4.ScheduledThreadPool<br>ScheduledThreadPool是一个支持任务定时调度的线程池。</p>
+<p>以上四种线程池，除了ScheduledThreadPool，其他三种都是通过创建一个ThreadPoolExecutor对象来实现的，只是在构造该对象时候，初始化该内部的成员变量值不同，所以造就了其他三种类型的线程池的存在。下面看看ThreadPoolExecutor都有些什么成员变量，他们又分别有什么意义？</p>
+<ul>
+<li><p>直接提交的队列：SynchronousQueue队列，它是一个没有容量的队列，前面我有对其进行讲解，当线程池进行入队offer操作的时候，本身是无容量的，所以直接返回false，并没有保存下来，而是直接提交给线程来进行执行，如果没有空余的线程则执行拒绝策略。</p>
+</li>
+<li><p>有界的任务队列：可以使用ArrayBlockingQueue队列，因为它内部是基于数组来进行实现的，初始化时必须指定容量参数，当使用有界任务队列时，当有任务进行提交时，线程池的线程数量小于corePoolSize则创建新的线程来执行任务，当线程池的线程数量大于corePoolSize的时候，则将提交的任务放入到队列中，当提交的任务塞满队列后，如果线程池的线程数量没有超过maximumPoolSize，则创建新的线程执行任务，如果超过了maximumPoolSize则执行拒绝策略。</p>
+</li>
+<li><p>无界的任务队列：可以使用LinkedBlockingQueue队列，它内部是基于链表的形式，默认队列的长度是Integer.MAX_VALUE，也可以指定队列的长度，当队列满时进行阻塞操作，当然线程池中采用的是offer方法并不会阻塞线程，当队列满时则返回false，入队成功则则返回true，当使用LinkedBlockingQueue队列时，有任务提交到线程池时，如果线程池的数量小于corePoolSize，线程池会产生新的线程来执行任务，当线程池的线程数量大于corePoolSize时，则将提交的任务放入到队列中，等待执行任务的线程执行完之后进行消费队列中的任务，若后续仍有新的任务提交，而没有空闲的线程时，它会不断往队列中入队提交的任务，直到资源耗尽。</p>
+</li>
+<li><p>优先任务队列：优先任务队列是带有执行优先级的队列，他可以使用PriorityBlockingQueue队列，可以控制任务的执行先后顺序，它是一个无界队列，该队列可以根据任务自身的优先级顺序先后执行，在确保性能的同时，也能有很好的质量保证。</p>
+</li>
+</ul>
+<p>Queue maintenance<br>ThreadPoolExecutor.getQueue允许访问工作队列来完成监视和调试，但强烈不建议开发者使用它来完成其他目的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">RUNNING：接收新任务和处理队列任务 </div><div class="line">SHUTDOWN:不接收新任务，但处理队列里的任务 </div><div class="line">STOP:不接收新任务，也不处理队列任务何中断正在执行的任务 </div><div class="line">TERMINATED：和STOP一样 </div><div class="line">以下是runstate状态的转换过程： </div><div class="line">RUNING-&gt;SHUTDOWN 调用shutdown() </div><div class="line">(RUNNING or SHUTDOWN) -&gt;STOP 调用shutdownnow() </div><div class="line">SHUTDOWN-&gt;TERMINATED 当队列和线程池都是空的 </div><div class="line">STOP-&gt;TERMINATED 当线程池是空的</div></pre></td></tr></table></figure>
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><p>参数runstate<br>RUNNING：接收新任务和处理队列任务<br>SHUTDOWN:不接收新任务，但处理队列里的任务<br>STOP:不接收新任务，也不处理队列任务何中断正在执行的任务<br>TERMINATED：和STOP一样<br>以下是runstate状态的转换过程：<br>RUNING-&gt;SHUTDOWN 调用shutdown()<br>(RUNNING or SHUTDOWN) -&gt;STOP 调用shutdownnow()<br>SHUTDOWN-&gt;TERMINATED 当队列和线程池都是空的<br>STOP-&gt;TERMINATED 当线程池是空的</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/10/Spring MVC实例/" rel="next" title="Spring MVC实例">
+                <i class="fa fa-chevron-left"></i> Spring MVC实例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/11/线程安全/" rel="prev" title="SpringMVC和Struts2并发访问时的线程安全问题">
+                SpringMVC和Struts2并发访问时的线程安全问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/07/11/多线程-总结/"
+           data-title="多线程理解总结" data-url="http://guilongyue.github.io/2017/07/11/多线程-总结/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">114</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程理解总结"><span class="nav-number">1.</span> <span class="nav-text">多线程理解总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#service层锁失效"><span class="nav-number"></span> <span class="nav-text">service层锁失效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Callable与Runnable"><span class="nav-number"></span> <span class="nav-text">Callable与Runnable</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Future"><span class="nav-number">1.</span> <span class="nav-text">Future</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FutureTask"><span class="nav-number">2.</span> <span class="nav-text">FutureTask</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试代码"><span class="nav-number">3.</span> <span class="nav-text">测试代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadPoolExecutor"><span class="nav-number"></span> <span class="nav-text">ThreadPoolExecutor</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadPoolExecutor类可设置的参数主要有："><span class="nav-number">1.</span> <span class="nav-text">ThreadPoolExecutor类可设置的参数主要有：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Executors创建的线程池种类"><span class="nav-number">2.</span> <span class="nav-text">Executors创建的线程池种类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码分析"><span class="nav-number">3.</span> <span class="nav-text">源码分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

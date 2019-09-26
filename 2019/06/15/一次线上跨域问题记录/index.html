@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://guilongyue.github.io/2019/06/15/一次线上跨域问题记录/index.html">
 <meta property="og:site_name" content="沉默的风">
 <meta property="og:description" content="一次线上跨域问题想到的　最近工作比较忙，缺少学习记录。因为CORS 配置问题，导致线上接口无法被访问。">
-<meta property="og:updated_time" content="2019-07-15T07:18:47.082Z">
+<meta property="og:updated_time" content="2019-09-23T09:14:02.707Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一次线上跨域问题想到的">
 <meta name="twitter:description" content="一次线上跨域问题想到的　最近工作比较忙，缺少学习记录。因为CORS 配置问题，导致线上接口无法被访问。">
@@ -365,14 +365,19 @@
 <p>可以说更改document.domain属性的方法是最为直接快速的的方法，也较为常见。通过将从不同域中得到的脚本的document.domain属性设置为同一个值，就可以使得这些脚本之间可以相互交互。例如从“<a href="http://blog.ambergarden.com”得到的网页可以通过执行如下的脚本改变其document.domain属性中记录的所属域：document.domain" target="_blank" rel="external">http://blog.ambergarden.com”得到的网页可以通过执行如下的脚本改变其document.domain属性中记录的所属域：document.domain</a> = ‘ambergarden.com’;那么接下来，该脚本就可以访问ambergarden.com中的数据了。</p>
 <p>这种方法也有其自身的劣势，那就是软件开发人员不可以随便设置document.domain属性的值，至少在一些浏览器上是如此的。</p>
 <p>跨文档消息则是通过向Window实例发送消息来完成的。在使用时，软件开发人员需要通过调用一个Window的postMessage()函数来向该Window实例发送消息。此时Window实例内部的onmessage事件将被触发，进而使得该事件的消息处理函数被调用。但是在接收到消息的时候，消息处理函数首先需要判断消息来源的合法性，以避免恶意用户通过发送消息的方式来非法执行代码。</p>
-<p>JSONP则是通过在文档中嵌入一个<script>标记来从另一个域中返回数据。例如在页面中添加一个如下的<script>标记：</p>
+<p>JSONP则是通过在文档中嵌入一个script 标记来从另一个域中返回数据。例如在页面中添加一个如下的script标记：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">script src=&quot;http://blog.ambergarden.com/someData?callback=some_func&quot;</div></pre></td></tr></table></figure>
-<p>该<script>标记会向<a href="http://blog.ambergarden.com/someData发送一个GET请求。在数据返回到客户端后，some_func()函数将会被调用。当然，这种方法拥有一个显著的缺点，那就是只支持GET操作。">http://blog.ambergarden.com/someData发送一个GET请求。在数据返回到客户端后，some_func()函数将会被调用。当然，这种方法拥有一个显著的缺点，那就是只支持GET操作。</a></p>
+<p>该script标记会向<a href="http://blog.ambergarden.com/someData发送一个GET请求。在数据返回到客户端后，some_func()函数将会被调用。当然，这种方法拥有一个显著的缺点，那就是只支持GET操作。" target="_blank" rel="external">http://blog.ambergarden.com/someData发送一个GET请求。在数据返回到客户端后，some_func()函数将会被调用。当然，这种方法拥有一个显著的缺点，那就是只支持GET操作。</a></p>
 <p>就如您刚刚看到的一样，上面所列出的各个方法各自有各自的缺点及局限性。而相较于这些方法，CORS则没有那么多工作需要去做，也没有那么多限制。因此在本文中，我们将主要对CORS进行讲解。</p>
 <h2 id="CORS运行流程"><a href="#CORS运行流程" class="headerlink" title="CORS运行流程"></a>CORS运行流程</h2><p>现在我们就来看一个通过CORS来进行跨域访问的简单示例。假设ambergarden.com想从一个公有数据平台public-data.com中返回一些数据，那么在页面逻辑中，其可以通过下面的代码向public-data.com发送数据请求：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function retrieveData() &#123;</div><div class="line">     var request = new XMLHttpRequest();</div><div class="line">     request.open(&apos;GET&apos;, &apos;http://public-data.com/someData&apos;, true);</div><div class="line">     request.onreadystatechange = handler;</div><div class="line">     request.send();</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
 <p>在运行这段代码的之后，浏览器会向服务发送如下的请求：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">GET /someData/ HTTP/1.1</div><div class="line">Host: public-data.com</div><div class="line">......</div><div class="line">Referer: http://ambergarden.com/somePage.html</div><div class="line">Origin: http://ambergarden.com</div></pre></td></tr></table></figure></p>
 <p>而一个支持CORS协议的服务可能会给出下面的响应：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 200 OK</div><div class="line">Access-Control-Allow-Origin: http://ambergarden.com</div><div class="line">Content-Type: application/xml</div><div class="line">......</div><div class="line">[Payload Here]</div></pre></td></tr></table></figure></p>
-</script></p>
+<h2 id="项目中加了过滤器处理"><a href="#项目中加了过滤器处理" class="headerlink" title="项目中加了过滤器处理"></a>项目中加了过滤器处理</h2><p>log<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)</div><div class="line">        throws IOException, ServletException &#123;</div><div class="line">    HttpServletResponse response = (HttpServletResponse) res;</div><div class="line">    response.setHeader(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</div><div class="line">    response.setHeader(&quot;Access-Control-Allow-Methods&quot;, &quot;POST, GET, PUT, OPTIONS, DELETE&quot;);</div><div class="line">    response.setHeader(&quot;Access-Control-Max-Age&quot;, &quot;3600&quot;);</div><div class="line">    response.setHeader(&quot;Access-Control-Allow-Headers&quot;,</div><div class="line">            &quot;Origin, X-Requested-With, Content-Type, Accept&quot;);</div><div class="line">    chain.doFilter(req, res);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>网上参考<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Override</div><div class="line">public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException &#123;</div><div class="line"></div><div class="line">    HttpServletRequest request = (HttpServletRequest) servletRequest;</div><div class="line">    HttpServletResponse response = (HttpServletResponse) servletResponse;</div><div class="line">    response.setHeader(&quot;Access-Control-Allow-Origin&quot;, request.getHeader(&quot;Origin&quot;));</div><div class="line">    response.setHeader(&quot;Access-Control-Allow-Methods&quot;, &quot;POST, GET, OPTIONS, DELETE&quot;);</div><div class="line">    response.setHeader(&quot;Access-Control-Max-Age&quot;, &quot;3600&quot;);</div><div class="line">    response.setHeader(&quot;Access-Control-Allow-Headers&quot;, &quot;x-requested-with&quot;);</div><div class="line">    response.setHeader(&quot;Access-Control-Allow-Credentials&quot;,&quot;true&quot;); //是否支持cookie跨域</div><div class="line">    filterChain.doFilter(servletRequest, servletResponse);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="服务器端处理机制"><a href="#服务器端处理机制" class="headerlink" title="服务器端处理机制"></a>服务器端处理机制</h2><p>服务器对于跨域请求的处理流程如下：</p>
+<p>首先查看http头部有无origin字段；<br>如果没有，或者不允许，当成普通请求；<br>如果有且是允许的，再看是否是preflight(method=OPTIONS);<br>如果不是preflight(简单请求)，返回Allow-Origin,Allow-Credential等字段，并返回正常内容；<br>如果是preflight(非简单请求)，返回Allow-Headers,Allow-Methods等；</p>
+<h2 id="与JSONP的比较"><a href="#与JSONP的比较" class="headerlink" title="与JSONP的比较"></a>与JSONP的比较</h2><p>CORS和JSONP都是为了使web浏览器能够跨源请求，使用目的相同，但是比JSONP更强大。JSONP只支持GET请求，而CORS支持所有类型的HTTP请求，不过JSONP的优势在于支持老式浏览器以及可以向不支持CORS的网站跨源请求。</p>
+
       
     </div>
 
@@ -415,6 +420,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/28/maven学习总结/" rel="prev" title="maven学习总结">
+                maven学习总结 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -488,7 +497,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">109</span>
+                <span class="site-state-item-count">114</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -506,7 +515,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -582,7 +591,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一次线上跨域问题想到的"><span class="nav-number">1.</span> <span class="nav-text">一次线上跨域问题想到的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用CORS"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要用CORS</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一次线上跨域问题想到的"><span class="nav-number">1.</span> <span class="nav-text">一次线上跨域问题想到的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用CORS"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要用CORS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CORS运行流程"><span class="nav-number">1.2.</span> <span class="nav-text">CORS运行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目中加了过滤器处理"><span class="nav-number">1.3.</span> <span class="nav-text">项目中加了过滤器处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器端处理机制"><span class="nav-number">1.4.</span> <span class="nav-text">服务器端处理机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与JSONP的比较"><span class="nav-number">1.5.</span> <span class="nav-text">与JSONP的比较</span></a></li></ol></li></ol></div>
             
 
           </div>

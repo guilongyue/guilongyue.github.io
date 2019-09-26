@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://guilongyue.github.io/2018/10/07/SpringBoot 总结/index.html">
 <meta property="og:site_name" content="沉默的风">
 <meta property="og:description" content="SpringBoot 相关知识总结如果如果mapper类没有在Spring Boot主程序可以扫描的包或者子包下面，可以使用如下方式进行配置1234567@SpringBootApplication  @MapperScan(&amp;#123;&amp;quot;com.kfit.*.mapper&amp;quot;,&amp;quot;org.kfit.*.mapper&amp;quot;&amp;#125;)  public class">
-<meta property="og:updated_time" content="2019-03-26T12:27:31.886Z">
+<meta property="og:updated_time" content="2019-09-18T03:10:37.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot 相关知识总结">
 <meta name="twitter:description" content="SpringBoot 相关知识总结如果如果mapper类没有在Spring Boot主程序可以扫描的包或者子包下面，可以使用如下方式进行配置1234567@SpringBootApplication  @MapperScan(&amp;#123;&amp;quot;com.kfit.*.mapper&amp;quot;,&amp;quot;org.kfit.*.mapper&amp;quot;&amp;#125;)  public class">
@@ -358,6 +358,7 @@
 
       
         <h1 id="SpringBoot-相关知识总结"><a href="#SpringBoot-相关知识总结" class="headerlink" title="SpringBoot 相关知识总结"></a>SpringBoot 相关知识总结</h1><p>如果如果mapper类没有在Spring Boot主程序可以扫描的包或者子包下面，可以使用如下方式进行配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication  </div><div class="line">@MapperScan(&#123;&quot;com.kfit.*.mapper&quot;,&quot;org.kfit.*.mapper&quot;&#125;)  </div><div class="line">public class App &#123;  </div><div class="line">    public static void main(String[] args) &#123;  </div><div class="line">       SpringApplication.run(App.class, args);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <h3 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h3><ul>
 <li>RequestMapping 的注解属性</li>
 </ul>
@@ -438,6 +439,24 @@
 </ol>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Column(nullable = true, name = &quot;create_time&quot;)</div><div class="line">    @Temporal(TemporalType.TIMESTAMP)</div><div class="line">private Date createTime;</div><div class="line">@Column(nullable = true, name = &quot;S&quot;, columnDefinition=&quot;bigint&quot;)</div><div class="line">private BigInteger s;</div></pre></td></tr></table></figure>
+<h2 id="Enable-注解的使用"><a href="#Enable-注解的使用" class="headerlink" title="Enable**注解的使用"></a>Enable**注解的使用</h2><p>@EnableAsync或@EnableConfigurationProperties背后的运行原理，是使用了@Import注解。<br>@Import({User.class,Role.class,MyConfiguration.class})，@Import里面可以存放数组类型的。<br>@Import用来导入一个或多个类（bean被spring容器托管）、或者配置类（配置类里面的Bean都会被spring容器托管）。<br>@Enable*其实就是使用了@Import，@Import其实就是导入了配置类。</p>
+<h3 id="Spring自生提供的-Eable-注解："><a href="#Spring自生提供的-Eable-注解：" class="headerlink" title="Spring自生提供的 @Eable* 注解："></a>Spring自生提供的 @Eable* 注解：</h3><p>常用的@Enbale 注解说明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@EnableAspectJAutoProxy：表示开启AOP代理自动配置，如果配@EnableAspectJAutoProxy表示使用cglib进行代理对象的生成；设置@EnableAspectJAutoProxy(exposeProxy=true)表示通过aop框架暴露该代理对象，aopContext能够访问。</div><div class="line"></div><div class="line">@EnableAsync：@EnableAsync注解开启异步方法的支持。参考文章</div><div class="line"></div><div class="line">@EnableScheduling：@EnableScheduling注解开启计划任务的支持。参考文章</div><div class="line"></div><div class="line">@EnableWebMVC：@EnableWebMVC注解用来开启Web MVC的配置支持。</div><div class="line"></div><div class="line">@EnableConfigurationProperties：@EnableConfigurationProperties注解是用来开启对@ConfigurationProperties注解配置Bean的支持。</div><div class="line"></div><div class="line">@EnableJpaRepositories：@EnableJpaRepositories注解开启对Spring Data JPA Repostory的支持。Spring Data JPA 框架，主要针对的就是 Spring 唯一没有简化到的业务逻辑代码，至此，开发者连仅剩的实现持久层业务逻辑的工作都省了，唯一要做的，就只是声明持久层的接口，其他都交给 Spring Data JPA 来帮你完成！</div><div class="line"></div><div class="line">@EnableCaching：@EnableCaching注解开启注解式的缓存支持</div></pre></td></tr></table></figure></p>
+<p>通过这些简单的@Enable*可以开启一项功能的支持，从而避免自己配置大量的代码，很大程度上降低了使用难度。</p>
+<h1 id="1-以如何将配置文件里面的配置注入到bean中。之前贴过了，这里再贴一下，权当自己熟悉了。"><a href="#1-以如何将配置文件里面的配置注入到bean中。之前贴过了，这里再贴一下，权当自己熟悉了。" class="headerlink" title="1.以如何将配置文件里面的配置注入到bean中。之前贴过了，这里再贴一下，权当自己熟悉了。"></a>1.以如何将配置文件里面的配置注入到bean中。之前贴过了，这里再贴一下，权当自己熟悉了。</h1><p>@ConfigurationProperties（prefix=””）<br>@Component </p>
+<p>或者用 @EnableConfigurationProperties(DBConfig.class)</p>
+<h2 id="EnableAutoConfig"><a href="#EnableAutoConfig" class="headerlink" title="EnableAutoConfig"></a>EnableAutoConfig</h2><p>从上面代码可以看出，注解@SpringBootApplication和SpringApplication.run()方法是最为重要的部分。这里主要来看看@SpringBootApplication注解部分。</p>
+<p>虽然定义使用了多个Annotation进行了原信息标注，但实际上重要的只有三个Annotation：</p>
+<p>@Configuration（@SpringBootConfiguration点开查看发现里面还是应用了@Configuration）<br>@EnableAutoConfiguration<br>@ComponentScan</p>
+<p>这三个注解中@Configuration和@ComponentScan对我们来说并不陌生，今天我们的主角是@EnableAutoConfiguration。</p>
+<p>其中最关键的要属@Import(AutoConfigurationImportSelector.class)，借助AutoConfigurationImportSelector，@EnableAutoConfiguration可以帮助SpringBoot应用将所有符合条件的@Configuration配置都加载到当前SpringBoot创建并使用的IoC容器。</p>
+<p>借助于Spring框架原有的一个工具类：SpringFactoriesLoader的支持，@EnableAutoConfiguration可以智能的自动配置功效才得以大功告成！</p>
+<p>在AutoConfigurationImportSelector类中可以看到通过 SpringFactoriesLoader.loadFactoryNames()<br>把 spring-boot-autoconfigure.jar/META-INF/spring.factories中每一个xxxAutoConfiguration文件都加载到容器中，spring.factories文件里每一个xxxAutoConfiguration文件一般都会有下面的条件注解:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@ConditionalOnClass ： classpath中存在该类时起效</div><div class="line">@ConditionalOnMissingClass ： classpath中不存在该类时起效</div><div class="line">@ConditionalOnBean ： DI容器中存在该类型Bean时起效</div><div class="line">@ConditionalOnMissingBean ： DI容器中不存在该类型Bean时起效</div><div class="line">@ConditionalOnSingleCandidate ： DI容器中该类型Bean只有一个或@Primary的只有一个时起效</div><div class="line">@ConditionalOnExpression ： SpEL表达式结果为true时</div><div class="line">@ConditionalOnProperty ： 参数设置或者值一致时起效</div><div class="line">@ConditionalOnResource ： 指定的文件存在时起效</div><div class="line">@ConditionalOnJndi ： 指定的JNDI存在时起效</div><div class="line">@ConditionalOnJava ： 指定的Java版本存在时起效</div><div class="line">@ConditionalOnWebApplication ： Web应用环境下起效</div><div class="line">@ConditionalOnNotWebApplication ： 非Web应用环境下起效</div></pre></td></tr></table></figure>
+<p>SpringFactoriesLoader<br>SpringFactoriesLoader属于Spring框架私有的一种扩展方案(类似于Java的SPI方案java.util.ServiceLoader)，其主要功能就是从指定的配置文件META-INF/spring-factories加载配置，spring-factories是一个典型的java properties文件，只不过Key和Value都是Java类型的完整类名，比如：</p>
+<p>对于@EnableAutoConfiguration来说，SpringFactoriesLoader的用途稍微不同一些，其本意是为了提供SPI扩展的场景，而在@EnableAutoConfiguration场景中，它更多提供了一种配置查找的功能支持，即根据@EnableAutoConfiguration的完整类名org.springframework.boot.autoconfig.EnableAutoConfiguration作为查找的Key，获得对应的一组@Configuration类。</p>
+<p>SpringFactoriesLoader是一个抽象类，类中定义的静态属性定义了其加载资源的路径public static final String FACTORIES_RESOURCE_LOCATION = “META-INF/spring.factories”，此外还有三个静态方法：</p>
+<p>loadFactories：加载指定的factoryClass并进行实例化。<br>loadFactoryNames：加载指定的factoryClass的名称集合。<br>instantiateFactory：对指定的factoryClass进行实例化。<br>在loadFactories方法中调用了loadFactoryNames以及instantiateFactory方法。</p>
+<p>loadFactories方法首先获取类加载器，然后调用loadFactoryNames方法获取所有的指定资源的名称集合、接着调用instantiateFactory方法实例化这些资源类并将其添加到result集合中。最后调用AnnotationAwareOrderComparator.sort方法进行集合的排序。</p>
 
       
     </div>
@@ -480,8 +499,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/03/工作常用的SQL/" rel="prev" title="开发中常用到的Sql">
-                开发中常用到的Sql <i class="fa fa-chevron-right"></i>
+              <a href="/2019/02/03/Spring 多数据源学习/" rel="prev" title="Spring 多数据源配置学习">
+                Spring 多数据源配置学习 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -556,7 +575,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">109</span>
+                <span class="site-state-item-count">114</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -574,7 +593,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -650,7 +669,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-相关知识总结"><span class="nav-number">1.</span> <span class="nav-text">SpringBoot 相关知识总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用注解"><span class="nav-number">1.0.1.</span> <span class="nav-text">常用注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析代码逻辑-通用Controller"><span class="nav-number">1.1.</span> <span class="nav-text">分析代码逻辑- 通用Controller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析代码逻辑-login"><span class="nav-number">1.2.</span> <span class="nav-text">分析代码逻辑- login</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JPA学习"><span class="nav-number">1.3.</span> <span class="nav-text">JPA学习</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-相关知识总结"><span class="nav-number">1.</span> <span class="nav-text">SpringBoot 相关知识总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用注解"><span class="nav-number">1.0.1.</span> <span class="nav-text">常用注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析代码逻辑-通用Controller"><span class="nav-number">1.1.</span> <span class="nav-text">分析代码逻辑- 通用Controller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析代码逻辑-login"><span class="nav-number">1.2.</span> <span class="nav-text">分析代码逻辑- login</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JPA学习"><span class="nav-number">1.3.</span> <span class="nav-text">JPA学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enable-注解的使用"><span class="nav-number">1.4.</span> <span class="nav-text">Enable**注解的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring自生提供的-Eable-注解："><span class="nav-number">1.4.1.</span> <span class="nav-text">Spring自生提供的 @Eable* 注解：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-以如何将配置文件里面的配置注入到bean中。之前贴过了，这里再贴一下，权当自己熟悉了。"><span class="nav-number">2.</span> <span class="nav-text">1.以如何将配置文件里面的配置注入到bean中。之前贴过了，这里再贴一下，权当自己熟悉了。</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EnableAutoConfig"><span class="nav-number">2.1.</span> <span class="nav-text">EnableAutoConfig</span></a></li></ol></li></ol></div>
             
 
           </div>
