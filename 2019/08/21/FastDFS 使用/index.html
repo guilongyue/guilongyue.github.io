@@ -1,0 +1,777 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="FastDFS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="FastDFS学习总结最近项目要重新部署一个新环境，文件存储用到了 FastDFS 中，了解下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FastDFS学习总结">
+<meta property="og:url" content="http://guilongyue.github.io/2019/08/21/FastDFS 使用/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="FastDFS学习总结最近项目要重新部署一个新环境，文件存储用到了 FastDFS 中，了解下。">
+<meta property="og:updated_time" content="2019-09-30T09:21:43.174Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FastDFS学习总结">
+<meta name="twitter:description" content="FastDFS学习总结最近项目要重新部署一个新环境，文件存储用到了 FastDFS 中，了解下。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2019/08/21/FastDFS 使用/"/>
+
+
+
+
+
+  <title> FastDFS学习总结 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2019/08/21/FastDFS 使用/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                FastDFS学习总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-21T19:34:39+08:00">
+                2019-08-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/21/FastDFS 使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/08/21/FastDFS 使用/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="FastDFS学习总结"><a href="#FastDFS学习总结" class="headerlink" title="FastDFS学习总结"></a>FastDFS学习总结</h1><p>最近项目要重新部署一个新环境，文件存储用到了 FastDFS 中，了解下。</p>
+<a id="more"></a>
+<p>FastDFS开源地址：<a href="https://github.com/happyfish100" target="_blank" rel="external">https://github.com/happyfish100</a></p>
+<h2 id="FastDFS介绍"><a href="#FastDFS介绍" class="headerlink" title="FastDFS介绍"></a>FastDFS介绍</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>FastDFS 是一个开源的高性能分布式文件系统（DFS）。 它的主要功能包括：文件存储，文件同步和文件访问，以及高容量和负载平衡。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB &lt; file_size &lt;500MB）为载体的在线服务。</p>
+<p>FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务器(Storage Server)和客户端(Client)。</p>
+<p>Tracker Server：跟踪服务器，主要做调度工作，起到均衡的作用；负责管理所有的 storage server和 group，每个 storage 在启动后会连接 Tracker，告知自己所属 group 等信息，并保持周期性心跳。</p>
+<p>Storage Server：存储服务器，主要提供容量和备份服务；以 group 为单位，每个 group 内可以有多台 storage server，数据互为备份。</p>
+<p>Client：客户端，上传下载数据的服务器，也就是我们自己的项目所部署在的服务器。</p>
+<h3 id="FastDFS的存储策略"><a href="#FastDFS的存储策略" class="headerlink" title="FastDFS的存储策略"></a>FastDFS的存储策略</h3><p>为了支持大容量，存储节点（服务器）采用了分卷（或分组）的组织方式。存储系统由一个或多个卷组成，卷与卷之间的文件是相互独立的，所有卷的文件容量累加就是整个存储系统中的文件容量。一个卷可以由一台或多台存储服务器组成，一个卷下的存储服务器中的文件都是相同的，卷中的多台存储服务器起到了冗余备份和负载均衡的作用。</p>
+<p>在卷中增加服务器时，同步已有的文件由系统自动完成，同步完成后，系统自动将新增服务器切换到线上提供服务。当存储空间不足或即将耗尽时，可以动态添加卷。只需要增加一台或多台服务器，并将它们配置为一个新的卷，这样就扩大了存储系统的容量。</p>
+<h3 id="FastDFS的上传过程"><a href="#FastDFS的上传过程" class="headerlink" title="FastDFS的上传过程"></a>FastDFS的上传过程</h3><p>FastDFS向使用者提供基本文件访问接口，比如upload、download、append、delete等，以客户端库的方式提供给用户使用。</p>
+<p>Storage Server会定期的向Tracker Server发送自己的存储信息。当Tracker Server Cluster中的Tracker Server不止一个时，各个Tracker之间的关系是对等的，所以客户端上传时可以选择任意一个Tracker。</p>
+<p>当Tracker收到客户端上传文件的请求时，会为该文件分配一个可以存储文件的group，当选定了group后就要决定给客户端分配group中的哪一个storage server。当分配好storage server后，客户端向storage发送写文件请求，storage将会为文件分配一个数据存储目录。然后为文件分配一个fileid，最后根据以上的信息生成文件名存储文件。</p>
+<h3 id="FastDFS的文件同步"><a href="#FastDFS的文件同步" class="headerlink" title="FastDFS的文件同步"></a>FastDFS的文件同步</h3><p>写文件时，客户端将文件写至group内一个storage server即认为写文件成功，storage server写完文件后，会由后台线程将文件同步至同group内其他的storage server。</p>
+<p>每个storage写文件后，同时会写一份binlog，binlog里不包含文件数据，只包含文件名等元信息，这份binlog用于后台同步，storage会记录向group内其他storage同步的进度，以便重启后能接上次的进度继续同步；进度以时间戳的方式进行记录，所以最好能保证集群内所有server的时钟保持同步。</p>
+<p>storage的同步进度会作为元数据的一部分汇报到tracker上，tracker在选择读storage的时候会以同步进度作为参考。</p>
+<p>###FastDFS的文件下载<br>客户端uploadfile成功后，会拿到一个storage生成的文件名，接下来客户端根据这个文件名即可访问到该文件。<br>跟upload file一样，在downloadfile时客户端可以选择任意tracker server。tracker发送download请求给某个tracker，必须带上文件名信息，tracke从文件名中解析出文件的group、大小、创建时间等信息，然后为该请求选择一个storage用来服务读请求。</p>
+<h2 id="安装FastDFS环境"><a href="#安装FastDFS环境" class="headerlink" title="安装FastDFS环境"></a>安装FastDFS环境</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>操作环境：CentOS7 X64，以下操作都是单机环境。<br>我把所有的安装包下载到/softpackages/下，解压到当前目录。<br>先做一件事，修改hosts，将文件服务器的ip与域名映射(单机TrackerServer环境)，因为后面很多配置里面都需要去配置服务器地址，ip变了，就只需要修改hosts即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># vim /etc/hosts</div><div class="line">增加如下一行，这是我的IP</div><div class="line">192.168.51.128 file.ljzsg.com</div><div class="line"></div><div class="line">如果要本机访问虚拟机，在C:\Windows\System32\drivers\etc\hosts中同样增加一行</div></pre></td></tr></table></figure></p>
+<h3 id="下载安装-libfastcommon"><a href="#下载安装-libfastcommon" class="headerlink" title="下载安装 libfastcommon"></a>下载安装 libfastcommon</h3><p>libfastcommon是从 FastDFS 和 FastDHT 中提取出来的公共 C 函数库，基础环境，安装即可 。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">下载libfastcommon</div><div class="line"># wget https://github.com/happyfish100/libfastcommon/archive/V1.0.7.tar.gz</div><div class="line">解压</div><div class="line"># tar -zxvf V1.0.7.tar.gz</div><div class="line"># cd libfastcommon-1.0.7</div><div class="line">编译、安装</div><div class="line"># ./make.sh</div><div class="line"># ./make.sh install</div><div class="line"></div><div class="line">libfastcommon.so 安装到了/usr/lib64/libfastcommon.so，但是FastDFS主程序设置的lib目录是/usr/local/lib，所以需要创建软链接。</div><div class="line"># ln -s /usr/lib64/libfastcommon.so /usr/local/lib/libfastcommon.so</div><div class="line"># ln -s /usr/lib64/libfastcommon.so /usr/lib/libfastcommon.so</div><div class="line"># ln -s /usr/lib64/libfdfsclient.so /usr/local/lib/libfdfsclient.so</div><div class="line"># ln -s /usr/lib64/libfdfsclient.so /usr/lib/libfdfsclient.so</div></pre></td></tr></table></figure></p>
+<h3 id="下载安装FastDFS"><a href="#下载安装FastDFS" class="headerlink" title="下载安装FastDFS"></a>下载安装FastDFS</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">下载FastDFS</div><div class="line"># wget https://github.com/happyfish100/fastdfs/archive/V5.05.tar.gz</div><div class="line"></div><div class="line">解压</div><div class="line"># tar -zxvf V5.05.tar.gz</div><div class="line"># cd fastdfs-5.05</div><div class="line">编译、安装</div><div class="line"># ./make.sh</div><div class="line"># ./make.sh install</div><div class="line"></div><div class="line">默认安装方式安装后的相应文件与目录</div><div class="line">A、服务脚本：</div><div class="line"></div><div class="line">/etc/init.d/fdfs_storaged</div><div class="line">/etc/init.d/fdfs_tracker</div><div class="line">B、配置文件（这三个是作者给的样例配置文件） :</div><div class="line">/etc/fdfs/client.conf.sample</div><div class="line">/etc/fdfs/storage.conf.sample</div><div class="line">/etc/fdfs/tracker.conf.sample</div><div class="line">C、命令工具在 /usr/bin/ 目录下：</div><div class="line">fdfs_appender_test</div><div class="line">fdfs_appender_test1</div><div class="line">fdfs_append_file</div><div class="line">fdfs_crc32</div><div class="line">fdfs_delete_file</div><div class="line">fdfs_download_file</div><div class="line">fdfs_file_info</div><div class="line">fdfs_monitor</div><div class="line">fdfs_storaged</div><div class="line">fdfs_test</div><div class="line">fdfs_test1</div><div class="line">fdfs_trackerd</div><div class="line">fdfs_upload_appender</div><div class="line">fdfs_upload_file</div><div class="line">stop.sh</div><div class="line">restart.sh</div></pre></td></tr></table></figure>
+<p>FastDFS 服务脚本设置的 bin 目录是 /usr/local/bin， 但实际命令安装在 /usr/bin/ 下。<br>两种方式：<br>一是修改FastDFS 服务脚本中相应的命令路径，也就是把 /etc/init.d/fdfs_storaged 和 /etc/init.d/fdfs_tracker 两个脚本中的 /usr/local/bin 修改成 /usr/bin。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">　　　　# vim fdfs_trackerd</div><div class="line">　　　　使用查找替换命令进统一修改:%s+/usr/local/bin+/usr/bin</div><div class="line">　　　　# vim fdfs_storaged</div><div class="line">　　　　使用查找替换命令进统一修改:%s+/usr/local/bin+/usr/bin</div></pre></td></tr></table></figure></p>
+<p>二是建立 /usr/bin 到 /usr/local/bin 的软链接，我是用这种方式。　　<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># ln -s /usr/bin/fdfs_trackerd   /usr/local/bin</div><div class="line"># ln -s /usr/bin/fdfs_storaged   /usr/local/bin</div><div class="line"># ln -s /usr/bin/stop.sh         /usr/local/bin</div><div class="line"># ln -s /usr/bin/restart.sh      /usr/local/bin</div></pre></td></tr></table></figure></p>
+<h3 id="配置FastDFS跟踪器-Tracker"><a href="#配置FastDFS跟踪器-Tracker" class="headerlink" title="配置FastDFS跟踪器(Tracker)"></a>配置FastDFS跟踪器(Tracker)</h3><p>配置文件详细说明参考：FastDFS 配置文件详解<br>进入 /etc/fdfs，复制 FastDFS 跟踪器样例配置文件 tracker.conf.sample，并重命名为 tracker.conf。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"># cd /etc/fdfs</div><div class="line"># cp tracker.conf.sample tracker.conf</div><div class="line"># vim tracker.conf</div><div class="line">编辑tracker.conf ，标红的需要修改下，其它的默认即可。</div><div class="line"></div><div class="line"># 配置文件是否不生效，false 为生效</div><div class="line">disabled=false</div><div class="line"></div><div class="line"># 提供服务的端口</div><div class="line">port=22122</div><div class="line"></div><div class="line"># Tracker 数据和日志目录地址(根目录必须存在,子目录会自动创建)</div><div class="line">base_path=/ljzsg/fastdfs/tracker</div><div class="line"></div><div class="line"># HTTP 服务端口</div><div class="line">http.server_port=80</div><div class="line"></div><div class="line">创建tracker基础数据目录，即base_path对应的目录</div><div class="line"></div><div class="line"># mkdir -p /ljzsg/fastdfs/tracker</div><div class="line"></div><div class="line">防火墙中打开跟踪端口（默认的22122）</div><div class="line"># vim /etc/sysconfig/iptables</div><div class="line"></div><div class="line">添加如下端口行：</div><div class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 22122 -j ACCEPT</div><div class="line"></div><div class="line">重启防火墙：</div><div class="line"># service iptables restart</div><div class="line"></div><div class="line">启动Tracker</div><div class="line">初次成功启动，会在 /ljzsg/fdfsdfs/tracker/ (配置的base_path)下创建 data、logs 两个目录。</div><div class="line"></div><div class="line">可以用这种方式启动</div><div class="line"># /etc/init.d/fdfs_trackerd start</div><div class="line"></div><div class="line">也可以用这种方式启动，前提是上面创建了软链接，后面都用这种方式</div><div class="line"># service fdfs_trackerd start</div><div class="line"></div><div class="line">查看 FastDFS Tracker 是否已成功启动 ，22122端口正在被监听，则算是Tracker服务安装成功。</div><div class="line"># netstat -unltp|grep fdfs</div><div class="line"></div><div class="line">关闭Tracker命令：</div><div class="line"># service fdfs_trackerd stop</div><div class="line"></div><div class="line">设置Tracker开机启动</div><div class="line"># chkconfig fdfs_trackerd on</div><div class="line">或者：</div><div class="line"># vim /etc/rc.d/rc.local</div><div class="line">加入配置：</div><div class="line">/etc/init.d/fdfs_trackerd start</div><div class="line"> </div><div class="line">tracker server 目录及文件结构</div><div class="line">Tracker服务启动成功后，会在base_path下创建data、logs两个目录。目录结构如下：</div><div class="line">$&#123;base_path&#125;</div><div class="line">  |__data</div><div class="line">  |   |__storage_groups.dat：存储分组信息</div><div class="line">  |   |__storage_servers.dat：存储服务器列表</div><div class="line">  |__logs</div><div class="line">  |   |__trackerd.log： tracker server 日志文件</div></pre></td></tr></table></figure></p>
+<h3 id="配置-FastDFS-存储-Storage"><a href="#配置-FastDFS-存储-Storage" class="headerlink" title="配置 FastDFS 存储 (Storage)"></a>配置 FastDFS 存储 (Storage)</h3><p>进入 /etc/fdfs 目录，复制 FastDFS 存储器样例配置文件 storage.conf.sample，并重命名为 storage.conf<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line"># cd /etc/fdfs</div><div class="line"># cp storage.conf.sample storage.conf</div><div class="line"># vim storage.conf</div><div class="line"></div><div class="line">编辑storage.conf</div><div class="line">标红的需要修改，其它的默认即可。</div><div class="line"></div><div class="line"># 配置文件是否不生效，false 为生效</div><div class="line">disabled=false </div><div class="line"></div><div class="line"># 指定此 storage server 所在 组(卷)</div><div class="line">group_name=group1</div><div class="line"></div><div class="line"># storage server 服务端口</div><div class="line">port=23000</div><div class="line"></div><div class="line"># 心跳间隔时间，单位为秒 (这里是指主动向 tracker server 发送心跳)</div><div class="line">heart_beat_interval=30</div><div class="line"></div><div class="line"># Storage 数据和日志目录地址(根目录必须存在，子目录会自动生成)</div><div class="line">base_path=/ljzsg/fastdfs/storage</div><div class="line"></div><div class="line"># 存放文件时 storage server 支持多个路径。这里配置存放文件的基路径数目，通常只配一个目录。</div><div class="line">store_path_count=1</div><div class="line"></div><div class="line"></div><div class="line"># 逐一配置 store_path_count 个路径，索引号基于 0。</div><div class="line"># 如果不配置 store_path0，那它就和 base_path 对应的路径一样。</div><div class="line">store_path0=/ljzsg/fastdfs/file</div><div class="line"></div><div class="line"># FastDFS 存储文件时，采用了两级目录。这里配置存放文件的目录个数。 </div><div class="line"># 如果本参数只为 N（如： 256），那么 storage server 在初次运行时，会在 store_path 下自动创建 N * N 个存放文件的子目录。</div><div class="line">subdir_count_per_path=256</div><div class="line"></div><div class="line"># tracker_server 的列表 ，会主动连接 tracker_server</div><div class="line"># 有多个 tracker server 时，每个 tracker server 写一行</div><div class="line">tracker_server=file.ljzsg.com:22122</div><div class="line"></div><div class="line"># 允许系统同步的时间段 (默认是全天) 。一般用于避免高峰同步产生一些问题而设定。</div><div class="line">sync_start_time=00:00</div><div class="line">sync_end_time=23:59</div><div class="line"># 访问端口</div><div class="line">http.server_port=80</div><div class="line"></div><div class="line"></div><div class="line">创建Storage基础数据目录，对应base_path目录</div><div class="line"># mkdir -p /ljzsg/fastdfs/storage</div><div class="line"></div><div class="line"># 这是配置的store_path0路径</div><div class="line"># mkdir -p /ljzsg/fastdfs/file</div><div class="line">防火墙中打开存储器端口（默认的 23000）</div><div class="line"></div><div class="line"></div><div class="line"># vim /etc/sysconfig/iptables</div><div class="line"></div><div class="line">添加如下端口行：</div><div class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 23000 -j ACCEPT</div><div class="line"></div><div class="line">重启防火墙：</div><div class="line"># service iptables restart</div><div class="line"></div><div class="line">启动 Storage</div><div class="line">启动Storage前确保Tracker是启动的。初次启动成功，会在 /ljzsg/fastdfs/storage 目录下创建 data、 logs 两个目录。</div><div class="line"></div><div class="line">可以用这种方式启动</div><div class="line"># /etc/init.d/fdfs_storaged start</div><div class="line"></div><div class="line">也可以用这种方式，后面都用这种</div><div class="line"># service fdfs_storaged start</div><div class="line">查看 Storage 是否成功启动，23000 端口正在被监听，就算 Storage 启动成功。</div><div class="line"># netstat -unltp|grep fdfs</div><div class="line"></div><div class="line">关闭Storage命令：</div><div class="line"># service fdfs_storaged stop</div><div class="line">查看Storage和Tracker是否在通信：</div><div class="line"></div><div class="line">/usr/bin/fdfs_monitor /etc/fdfs/storage.conf</div><div class="line"></div><div class="line">设置 Storage 开机启动</div><div class="line"># chkconfig fdfs_storaged on</div><div class="line">或者：</div><div class="line"># vim /etc/rc.d/rc.local</div><div class="line">加入配置：</div><div class="line">/etc/init.d/fdfs_storaged start</div><div class="line"></div><div class="line">Storage 目录</div><div class="line"></div><div class="line">同 Tracker，Storage 启动成功后，在base_path 下创建了data、logs目录，记录着 Storage Server 的信息。</div><div class="line"></div><div class="line">在 store_path0 目录下，创建了N*N个子目录：</div></pre></td></tr></table></figure></p>
+<h3 id="文件上传测试"><a href="#文件上传测试" class="headerlink" title="文件上传测试"></a>文件上传测试</h3><p>修改 Tracker 服务器中的客户端配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"># cd /etc/fdfs</div><div class="line"># cp client.conf.sample client.conf</div><div class="line"># vim client.conf</div><div class="line">修改如下配置即可，其它默认。</div><div class="line"></div><div class="line"># Client 的数据和日志目录</div><div class="line">base_path=/ljzsg/fastdfs/client</div><div class="line"></div><div class="line"># Tracker端口</div><div class="line">tracker_server=file.ljzsg.com:22122</div><div class="line"></div><div class="line">在linux内部执行如下命令上传 namei.jpeg 图片</div><div class="line"></div><div class="line"># /usr/bin/fdfs_upload_file /etc/fdfs/client.conf namei.jpeg</div><div class="line">上传成功后返回文件ID号：group1/M00/00/00/wKgz6lnduTeAMdrcAAEoRmXZPp870.jpeg</div><div class="line"></div><div class="line">返回的文件ID由group、存储目录、两级子目录、fileid、文件后缀名（由客户端指定，主要用于区分文件类型）拼接而成。</div><div class="line">可以成功访问</div><div class="line">http://192.168.135.108/group1/M00/00/00/wKiHbF153nmADR1bAAAAB3--x-8110.txt</div></pre></td></tr></table></figure></p>
+<h2 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h2><p>上面将文件上传成功了，但我们无法下载。因此安装Nginx作为服务器以支持Http方式访问文件。同时，后面安装FastDFS的Nginx模块也需要Nginx环境。</p>
+<p>Nginx只需要安装到StorageServer所在的服务器即可，用于访问文件。我这里由于是单机，TrackerServer和StorageServer在一台服务器上。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">安装nginx所需环境　　</div><div class="line">gcc 安装</div><div class="line"></div><div class="line"># yum install gcc-c++</div><div class="line"> PCRE pcre-devel 安装</div><div class="line"></div><div class="line"># yum install -y pcre pcre-devel</div><div class="line"> zlib 安装</div><div class="line"></div><div class="line"># yum install -y zlib zlib-devel</div><div class="line"> OpenSSL 安装</div><div class="line"></div><div class="line"># yum install -y openssl openssl-devel</div><div class="line">2、安装Nginx</div><div class="line">下载nginx</div><div class="line"></div><div class="line"># wget -c https://nginx.org/download/nginx-1.12.1.tar.gz</div><div class="line">解压</div><div class="line"></div><div class="line"># tar -zxvf nginx-1.12.1.tar.gz</div><div class="line"># cd nginx-1.12.1</div><div class="line"></div><div class="line">使用默认配置</div><div class="line"># ./configure</div><div class="line">编译、安装</div><div class="line"># make</div><div class="line"># make install</div><div class="line"></div><div class="line">启动nginx</div><div class="line"># cd /usr/local/nginx/sbin/</div><div class="line"># ./nginx </div><div class="line"></div><div class="line">其它命令</div><div class="line"># ./nginx -s stop</div><div class="line"># ./nginx -s quit</div><div class="line"># ./nginx -s reload</div><div class="line"></div><div class="line"></div><div class="line">设置开机启动</div><div class="line"># vim /etc/rc.local</div><div class="line"></div><div class="line">添加一行：</div><div class="line">/usr/local/nginx/sbin/nginx</div><div class="line"></div><div class="line"># 设置执行权限</div><div class="line"># chmod 755 rc.local</div><div class="line">复制代码</div><div class="line">查看nginx的版本及模块</div><div class="line"></div><div class="line">/usr/local/nginx/sbin/nginx -V</div><div class="line"></div><div class="line"></div><div class="line">防火墙中打开Nginx端口（默认的 80） </div><div class="line"></div><div class="line">添加后就能在本机使用80端口访问了。</div><div class="line"></div><div class="line"></div><div class="line"># vim /etc/sysconfig/iptables</div><div class="line"></div><div class="line">添加如下端口行：</div><div class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT</div><div class="line"></div><div class="line">重启防火墙：</div><div class="line"># service iptables restart</div><div class="line"></div><div class="line">3、访问文件</div><div class="line">简单的测试访问文件</div><div class="line"></div><div class="line">修改nginx.conf</div><div class="line"># vim /usr/local/nginx/conf/nginx.conf</div><div class="line"></div><div class="line">添加如下行，将 /group1/M00 映射到 /ljzsg/fastdfs/file/data</div><div class="line">location /group1/M00 &#123;</div><div class="line">    alias /ljzsg/fastdfs/file/data;</div><div class="line">&#125;</div><div class="line"></div><div class="line"># 重启nginx</div><div class="line"># /usr/local/nginx/sbin/nginx -s reload</div></pre></td></tr></table></figure>
+<h3 id="FastDFS-配置-Nginx-模块"><a href="#FastDFS-配置-Nginx-模块" class="headerlink" title="FastDFS 配置 Nginx 模块"></a>FastDFS 配置 Nginx 模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line">1、安装配置Nginx模块</div><div class="line">fastdfs-nginx-module 模块说明</div><div class="line"></div><div class="line">FastDFS 通过 Tracker 服务器，将文件放在 Storage 服务器存储， 但是同组存储服务器之间需要进行文件复制， 有同步延迟的问题。</div><div class="line"></div><div class="line">假设 Tracker 服务器将文件上传到了 192.168.51.128，上传成功后文件 ID已经返回给客户端。</div><div class="line">此时 FastDFS 存储集群机制会将这个文件同步到同组存储 192.168.51.129，在文件还没有复制完成的情况下，客户端如果用这个文件 ID 在 192.168.51.129 上取文件,就会出现文件无法访问的错误。</div><div class="line">而 fastdfs-nginx-module 可以重定向文件链接到源服务器取文件，避免客户端由于复制延迟导致的文件无法访问错误。</div><div class="line"></div><div class="line">下载 fastdfs-nginx-module、解压</div><div class="line"></div><div class="line"># 这里为啥这么长一串呢，因为最新版的master与当前nginx有些版本问题。</div><div class="line"># wget https://github.com/happyfish100/fastdfs-nginx-module/archive/5e5f3566bbfa57418b5506aaefbe107a42c9fcb1.zip</div><div class="line"></div><div class="line"># 解压</div><div class="line"># unzip 5e5f3566bbfa57418b5506aaefbe107a42c9fcb1.zip</div><div class="line"></div><div class="line"># 重命名</div><div class="line"># mv fastdfs-nginx-module-5e5f3566bbfa57418b5506aaefbe107a42c9fcb1  fastdfs-nginx-module-master</div><div class="line"></div><div class="line">配置Nginx</div><div class="line">在nginx中添加模块</div><div class="line"></div><div class="line"># 先停掉nginx服务</div><div class="line"># /usr/local/nginx/sbin/nginx -s stop</div><div class="line"></div><div class="line">进入解压包目录</div><div class="line"># cd /softpackages/nginx-1.12.1/</div><div class="line"></div><div class="line"># 添加模块</div><div class="line"># ./configure --add-module=../fastdfs-nginx-module-master/src</div><div class="line"></div><div class="line">重新编译、安装</div><div class="line"># make &amp;&amp; make install</div><div class="line"></div><div class="line">查看Nginx的模块</div><div class="line"># /usr/local/nginx/sbin/nginx -V</div><div class="line">有下面这个就说明添加模块成功</div><div class="line"></div><div class="line">复制 fastdfs-nginx-module 源码中的配置文件到/etc/fdfs 目录， 并修改</div><div class="line"># cd /softpackages/fastdfs-nginx-module-master/src</div><div class="line"># cp mod_fastdfs.conf /etc/fdfs/</div><div class="line">修改如下配置，其它默认</div><div class="line"></div><div class="line"># 连接超时时间</div><div class="line">connect_timeout=10</div><div class="line"></div><div class="line"># Tracker Server</div><div class="line">tracker_server=file.ljzsg.com:22122</div><div class="line"></div><div class="line"># StorageServer 默认端口</div><div class="line">storage_server_port=23000</div><div class="line"></div><div class="line"># 如果文件ID的uri中包含/group**，则要设置为true</div><div class="line">url_have_group_name = true</div><div class="line"></div><div class="line"># Storage 配置的store_path0路径，必须和storage.conf中的一致</div><div class="line">store_path0=/ljzsg/fastdfs/file</div><div class="line"></div><div class="line">复制 FastDFS 的部分配置文件到/etc/fdfs 目录</div><div class="line"># cd /softpackages/fastdfs-5.05/conf/</div><div class="line"></div><div class="line"># cp anti-steal.jpg http.conf mime.types /etc/fdfs/</div><div class="line"></div><div class="line">配置nginx，修改nginx.conf</div><div class="line"># vim /usr/local/nginx/conf/nginx.conf</div><div class="line">修改配置，其它的默认</div><div class="line"></div><div class="line">在80端口下添加fastdfs-nginx模块</div><div class="line">location ~/group([0-9])/M00 &#123;</div><div class="line">    ngx_fastdfs_module;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">注意：</div><div class="line"></div><div class="line">listen 80 端口值是要与 /etc/fdfs/storage.conf 中的 http.server_port=80 (前面改成80了)相对应。如果改成其它端口，则需要统一，同时在防火墙中打开该端口。</div><div class="line"></div><div class="line">location 的配置，如果有多个group则配置location ~/group([0-9])/M00 ，没有则不用配group。</div><div class="line"></div><div class="line">在/ljzsg/fastdfs/file 文件存储目录下创建软连接，将其链接到实际存放数据的目录，这一步可以省略。</div><div class="line"></div><div class="line"># ln -s /ljzsg/fastdfs/file/data/ /ljzsg/fastdfs/file/data/M00 </div><div class="line"></div><div class="line">启动nginx</div><div class="line"># /usr/local/nginx/sbin/nginx</div><div class="line">打印处如下就算配置成功</div><div class="line"></div><div class="line">在地址栏访问。</div><div class="line">能下载文件就算安装成功。注意和第三点中直接使用nginx路由访问不同的是，这里配置 fastdfs-nginx-module 模块，可以重定向文件链接到源服务器取文件。</div><div class="line">http://file.ljzsg.com/group1/M00/00/00/wKgz6lnduTeAMdrcAAEoRmXZPp870.jpeg</div></pre></td></tr></table></figure>
+<h3 id="Java客户端"><a href="#Java客户端" class="headerlink" title="Java客户端"></a>Java客户端</h3><h4 id="首先需要搭建-FastDFS-客户端Java开发环境"><a href="#首先需要搭建-FastDFS-客户端Java开发环境" class="headerlink" title="首先需要搭建 FastDFS 客户端Java开发环境"></a>首先需要搭建 FastDFS 客户端Java开发环境</h4><p>项目中使用maven进行依赖管理，可以在pom.xml中引入如下依赖即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">   &lt;groupId&gt;net.oschina.zcx7878&lt;/groupId&gt;</div><div class="line">   &lt;artifactId&gt;fastdfs-client-java&lt;/artifactId&gt;</div><div class="line">   &lt;version&gt;1.27.0.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line"></div><div class="line">其它的方式，参考官方文档：https://github.com/happyfish100/fastdfs-client-java</div><div class="line"></div><div class="line">引入配置文件</div><div class="line">可直接复制包下的 fastdfs-client.properties.sample 或者 fdfs_client.conf.sample，到你的项目中，去掉.sample。</div><div class="line"></div><div class="line">我这里直接复制 fastdfs-client.properties.sample 中的配置到项目配置文件 config.properties 中，修改tracker_servers。只需要加载这个配置文件即可</div><div class="line"></div><div class="line">客户端API</div><div class="line">个人封装的FastDFS Java API以同步到github：https://github.com/bojiangzhou/lyyzoo-fastdfs-java.git</div></pre></td></tr></table></figure></p>
+<h3 id="权限控制"><a href="#权限控制" class="headerlink" title="权限控制"></a>权限控制</h3><p>前面使用nginx支持http方式访问文件，但所有人都能直接访问这个文件服务器了，所以做一下权限控制。</p>
+<p>FastDFS的权限控制是在服务端开启token验证，客户端根据文件名、当前unix时间戳、秘钥获取token，在地址中带上token参数即可通过http方式访问文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line">服务端开启token验证</div><div class="line"></div><div class="line">修改http.conf</div><div class="line"># vim /etc/fdfs/http.conf</div><div class="line"></div><div class="line">设置为true表示开启token验证</div><div class="line">http.anti_steal.check_token=true</div><div class="line"></div><div class="line">设置token失效的时间单位为秒(s)</div><div class="line">http.anti_steal.token_ttl=1800</div><div class="line"></div><div class="line">密钥，跟客户端配置文件的fastdfs.http_secret_key保持一致</div><div class="line">http.anti_steal.secret_key=FASTDFS1234567890</div><div class="line"></div><div class="line">如果token检查失败，返回的页面</div><div class="line">http.anti_steal.token_check_fail=/ljzsg/fastdfs/page/403.html</div><div class="line"></div><div class="line">记得重启服务。</div><div class="line"></div><div class="line">配置客户端</div><div class="line"></div><div class="line">客户端只需要设置如下两个参数即可，两边的密钥保持一致。</div><div class="line"></div><div class="line"># token 防盗链功能</div><div class="line">fastdfs.http_anti_steal_token=true</div><div class="line"># 密钥</div><div class="line">fastdfs.http_secret_key=FASTDFS1234567890</div><div class="line">客户端生成token</div><div class="line"></div><div class="line">访问文件需要带上生成的token以及unix时间戳，所以返回的token是token和时间戳的拼接。</div><div class="line"></div><div class="line">之后，将token拼接在地址后即可访问：file.ljzsg.com/group1/M00/00/00/wKgzgFnkaXqAIfXyAAEoRmXZPp878.jpeg?token=078d370098b03e9020b82c829c205e1f&amp;ts=1508141521</div><div class="line"></div><div class="line"></div><div class="line"> 1     /**</div><div class="line"> 2      * 获取访问服务器的token，拼接到地址后面</div><div class="line"> 3      *</div><div class="line"> 4      * @param filepath 文件路径 group1/M00/00/00/wKgzgFnkTPyAIAUGAAEoRmXZPp876.jpeg</div><div class="line"> 5      * @param httpSecretKey 密钥</div><div class="line"> 6      * @return 返回token，如： token=078d370098b03e9020b82c829c205e1f&amp;ts=1508141521</div><div class="line"> 7      */</div><div class="line"> 8     public static String getToken(String filepath, String httpSecretKey)&#123;</div><div class="line"> 9         // unix seconds</div><div class="line">10         int ts = (int) Instant.now().getEpochSecond();</div><div class="line">11         // token</div><div class="line">12         String token = &quot;null&quot;;</div><div class="line">13         try &#123;</div><div class="line">14             token = ProtoCommon.getToken(getFilename(filepath), ts, httpSecretKey);</div><div class="line">15         &#125; catch (UnsupportedEncodingException e) &#123;</div><div class="line">16             e.printStackTrace();</div><div class="line">17         &#125; catch (NoSuchAlgorithmException e) &#123;</div><div class="line">18             e.printStackTrace();</div><div class="line">19         &#125; catch (MyException e) &#123;</div><div class="line">20             e.printStackTrace();</div><div class="line">21         &#125;</div><div class="line">22 </div><div class="line">23         StringBuilder sb = new StringBuilder();</div><div class="line">24         sb.append(&quot;token=&quot;).append(token);</div><div class="line">25         sb.append(&quot;&amp;ts=&quot;).append(ts);</div><div class="line">26 </div><div class="line">27         return sb.toString();</div><div class="line">28     &#125;</div><div class="line"></div><div class="line"></div><div class="line">注意事项</div><div class="line"></div><div class="line">如果生成的token验证无法通过，请进行如下两项检查：</div><div class="line">　　A. 确认调用token生成函数(ProtoCommon.getToken)，传递的文件ID中没有包含group name。传递的文件ID格式形如：M00/00/00/wKgzgFnkTPyAIAUGAAEoRmXZPp876.jpeg</div><div class="line">　　B. 确认服务器时间基本是一致的，注意服务器时间不能相差太多，不要相差到分钟级别。</div><div class="line"></div><div class="line">对比下发现，如果系统文件隐私性较高，可以直接通过fastdfs-client提供的API去访问即可，不用再配置Nginx走http访问。配置Nginx的主要目的是为了快速访问服务器的文件(如图片)，如果还要加权限验证，则需要客户端生成token，其实已经没有多大意义。</div><div class="line"></div><div class="line">关键是，这里我没找到FastDFS如何对部分资源加token验证，部分开放。有知道的还请留言。</div><div class="line"></div><div class="line">OK，以上就是单机中使用FastDFS搭建文件系统并上传下载的过程。</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/FastDFS/" rel="tag"># FastDFS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/18/Nginx/" rel="next" title="Nginx使用">
+                <i class="fa fa-chevron-left"></i> Nginx使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/07/OAuth/" rel="prev" title="OAuth学习">
+                OAuth学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/08/21/FastDFS 使用/"
+           data-title="FastDFS学习总结" data-url="http://guilongyue.github.io/2019/08/21/FastDFS 使用/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FastDFS学习总结"><span class="nav-number">1.</span> <span class="nav-text">FastDFS学习总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FastDFS介绍"><span class="nav-number">1.1.</span> <span class="nav-text">FastDFS介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FastDFS的存储策略"><span class="nav-number">1.1.2.</span> <span class="nav-text">FastDFS的存储策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FastDFS的上传过程"><span class="nav-number">1.1.3.</span> <span class="nav-text">FastDFS的上传过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FastDFS的文件同步"><span class="nav-number">1.1.4.</span> <span class="nav-text">FastDFS的文件同步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装FastDFS环境"><span class="nav-number">1.2.</span> <span class="nav-text">安装FastDFS环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.2.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载安装-libfastcommon"><span class="nav-number">1.2.2.</span> <span class="nav-text">下载安装 libfastcommon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载安装FastDFS"><span class="nav-number">1.2.3.</span> <span class="nav-text">下载安装FastDFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置FastDFS跟踪器-Tracker"><span class="nav-number">1.2.4.</span> <span class="nav-text">配置FastDFS跟踪器(Tracker)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-FastDFS-存储-Storage"><span class="nav-number">1.2.5.</span> <span class="nav-text">配置 FastDFS 存储 (Storage)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件上传测试"><span class="nav-number">1.2.6.</span> <span class="nav-text">文件上传测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Nginx"><span class="nav-number">1.3.</span> <span class="nav-text">安装Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FastDFS-配置-Nginx-模块"><span class="nav-number">1.3.1.</span> <span class="nav-text">FastDFS 配置 Nginx 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java客户端"><span class="nav-number">1.3.2.</span> <span class="nav-text">Java客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先需要搭建-FastDFS-客户端Java开发环境"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">首先需要搭建 FastDFS 客户端Java开发环境</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#权限控制"><span class="nav-number">1.3.3.</span> <span class="nav-text">权限控制</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
