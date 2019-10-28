@@ -2,6 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://guilongyue.github.io/2019/09/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E7%89%A9/</loc>
+    
+    <lastmod>2019-10-28T02:42:58.255Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://guilongyue.github.io/2019/02/03/HTTP%20%E4%B8%8EHTTPS%20/</loc>
+    
+    <lastmod>2019-10-24T01:27:48.903Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://guilongyue.github.io/2018/10/07/SpringBoot%20%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2019-10-21T11:19:50.185Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://guilongyue.github.io/2018/10/07/Redis/</loc>
+    
+    <lastmod>2019-10-21T11:06:55.277Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://guilongyue.github.io/2017/07/11/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2019-10-17T11:52:04.271Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://guilongyue.github.io/2019/08/11/Zuul%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2019-10-17T01:28:59.198Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://guilongyue.github.io/2019/08/21/FastDFS%20%E4%BD%BF%E7%94%A8/</loc>
     
     <lastmod>2019-09-30T09:21:43.174Z</lastmod>
@@ -9,23 +51,9 @@
   </url>
   
   <url>
-    <loc>http://guilongyue.github.io/2018/10/07/Redis/</loc>
-    
-    <lastmod>2019-09-30T07:17:45.255Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://guilongyue.github.io/2019/07/11/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E9%94%81/</loc>
     
     <lastmod>2019-09-30T03:06:26.775Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://guilongyue.github.io/2017/07/11/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2019-09-25T02:29:01.181Z</lastmod>
     
   </url>
   
@@ -51,13 +79,6 @@
   </url>
   
   <url>
-    <loc>http://guilongyue.github.io/2018/10/07/SpringBoot%20%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2019-09-18T03:10:37.650Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://guilongyue.github.io/2019/07/28/maven%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2019-09-11T11:08:49.765Z</lastmod>
@@ -68,13 +89,6 @@
     <loc>http://guilongyue.github.io/2019/03/03/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84Linux%20%E5%91%BD%E4%BB%A4/</loc>
     
     <lastmod>2019-09-02T09:17:28.158Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://guilongyue.github.io/2019/08/11/Zuul%E4%BD%BF%E7%94%A8/</loc>
-    
-    <lastmod>2019-08-21T06:14:27.542Z</lastmod>
     
   </url>
   
@@ -180,13 +194,6 @@
     <loc>http://guilongyue.github.io/2019/02/04/%E5%8D%95%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95session%20/</loc>
     
     <lastmod>2019-02-21T11:58:49.558Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://guilongyue.github.io/2019/02/03/HTTP%20%E4%B8%8EHTTPS%20/</loc>
-    
-    <lastmod>2019-02-19T09:27:43.658Z</lastmod>
     
   </url>
   
@@ -702,14 +709,14 @@
   </url>
   
   <url>
-    <loc>http://guilongyue.github.io/2017/03/25/java%20Collection/</loc>
+    <loc>http://guilongyue.github.io/2017/03/25/java%20%E6%88%90%E5%91%98%E7%9A%84/</loc>
     
     <lastmod>2017-03-31T03:41:24.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://guilongyue.github.io/2017/03/25/java%20%E6%88%90%E5%91%98%E7%9A%84/</loc>
+    <loc>http://guilongyue.github.io/2017/03/25/java%20Collection/</loc>
     
     <lastmod>2017-03-31T03:41:24.000Z</lastmod>
     

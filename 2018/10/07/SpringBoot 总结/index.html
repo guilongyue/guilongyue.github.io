@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://guilongyue.github.io/2018/10/07/SpringBoot 总结/index.html">
 <meta property="og:site_name" content="沉默的风">
 <meta property="og:description" content="SpringBoot 相关知识总结如果如果mapper类没有在Spring Boot主程序可以扫描的包或者子包下面，可以使用如下方式进行配置1234567@SpringBootApplication  @MapperScan(&amp;#123;&amp;quot;com.kfit.*.mapper&amp;quot;,&amp;quot;org.kfit.*.mapper&amp;quot;&amp;#125;)  public class">
-<meta property="og:updated_time" content="2019-09-18T03:10:37.650Z">
+<meta property="og:updated_time" content="2019-10-21T11:19:50.185Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot 相关知识总结">
 <meta name="twitter:description" content="SpringBoot 相关知识总结如果如果mapper类没有在Spring Boot主程序可以扫描的包或者子包下面，可以使用如下方式进行配置1234567@SpringBootApplication  @MapperScan(&amp;#123;&amp;quot;com.kfit.*.mapper&amp;quot;,&amp;quot;org.kfit.*.mapper&amp;quot;&amp;#125;)  public class">
@@ -359,7 +359,16 @@
       
         <h1 id="SpringBoot-相关知识总结"><a href="#SpringBoot-相关知识总结" class="headerlink" title="SpringBoot 相关知识总结"></a>SpringBoot 相关知识总结</h1><p>如果如果mapper类没有在Spring Boot主程序可以扫描的包或者子包下面，可以使用如下方式进行配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication  </div><div class="line">@MapperScan(&#123;&quot;com.kfit.*.mapper&quot;,&quot;org.kfit.*.mapper&quot;&#125;)  </div><div class="line">public class App &#123;  </div><div class="line">    public static void main(String[] args) &#123;  </div><div class="line">       SpringApplication.run(App.class, args);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <a id="more"></a>
-<h3 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h3><ul>
+<h3 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h3><p>-Import 注解<br>先看Spring对它的注释 (文档贴过来的）， 总结下来作用就是和xml配置的 <import>标签作用一样，允许通过它引入 @Configuration 注解的类 (java config)， 引入ImportSelector接口(这个比较重要， 因为要通过它去判定要引入哪些@Configuration) 和 ImportBeanDefinitionRegistrar 接口的实现，也包括 @Component注解的普通类。</import></p>
+<p>ImportSelector</p>
+<p>因为 @Import 的实现有很多时候需要借助 ImportSelector 接口， 所以我们再看下这个接口的描述, 总结下来就是需要通过这个接口的实现去决定要引入哪些 @Configuration。 它如果实现了以下四个Aware 接口， 那么spring保证会在调用它之前先调用Aware接口的方法。</p>
+<p>至于为什么要保证调用Aware， 我个人觉得应该是你可以通过这些Aware去感知系统里边所有的环境变量， 从而决定你具体的选择逻辑。</p>
+<p>Springboot对注解的处理都发生在AbstractApplicationContext -&gt; refresh() -&gt; invokeBeanFactoryPostProcessors(beanFactory) -&gt; ConfigurationClassPostProcessor -&gt; postProcessBeanDefinitionRegistry()方法中。 </p>
+<p>(稍微说下也免得我自己忘了， springboot初始化的普通context(非web) 是AnnotationConfigApplicationContext, 在初始化的时候会初始化两个工具类， AnnotatedBeanDefinitionReader 和 ClassPathBeanDefinitionScanner 分别用来从 annotation driven 的配置和xml的配置中读取beanDefinition并向context注册, 那么在初始化 AnnotatedBeanDefinitionReader 的时候， 会向BeanFactory注册一个ConfigurationClassPostProcessor 用来处理所有的基于annotation的bean, 这个ConfigurationClassPostProcessor 是 BeanFactoryPostProcessor 的一个实现，springboot会保证在  invokeBeanFactoryPostProcessors(beanFactory) 方法中调用注册到它上边的所有的BeanFactoryPostProcessor)</p>
+<p>首先， 判断如果被import的是 ImportSelector.class 接口的实现， 那么初始化这个被Import的类， 然后调用它的selectImports方法去获得所需要的引入的configuration， 然后递归处理</p>
+<p>其次， 判断如果被import的是 ImportBeanDefinitionRegistrar 接口的实现， 那么初始化后将对当前对象的处理委托给这个ImportBeanDefinitionRegistrar (不是特别明白， 只是我的猜测）</p>
+<p>最后， 将import引入的类作为一个正常的类来处理 ( 调用最外层的doProcessConfigurationClass())<br>所以， 从这里我们知道， 如果你引入的是一个正常的component， 那么会作为@Compoent或者@Configuration来处理， 这样在BeanFactory里边可以通过getBean拿到， 但如果你是 ImportSelector 或者 ImportBeanDefinitionRegistrar 接口的实现， 那么spring并不会将他们注册到beanFactory中，而只是调用他们的方法。</p>
+<ul>
 <li>RequestMapping 的注解属性</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">value:  指定请求的实际地址， 比如 /action/info之类。</div><div class="line">method：  指定请求的method类型， GET、POST、PUT、DELETE等</div><div class="line">consumes： 指定处理请求的提交内容类型（Content-Type），例如application/json, text/html;</div><div class="line">produces:    指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回</div><div class="line">params： 指定request中必须包含某些参数值是，才让该方法处理</div><div class="line">headers： 指定request中必须包含某些指定的header值，才能让该方法处理请求</div><div class="line">其中，consumes， produces使用content-typ信息进行过滤信息；headers中可以使用content-type进行过滤和判断</div></pre></td></tr></table></figure>
@@ -489,8 +498,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/22/linux环境安装/" rel="next" title="Linux环境安装">
-                <i class="fa fa-chevron-left"></i> Linux环境安装
+              <a href="/2018/10/07/Redis/" rel="next" title="Redis 相关知识总结">
+                <i class="fa fa-chevron-left"></i> Redis 相关知识总结
               </a>
             
           </div>
@@ -499,8 +508,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/10/07/Redis/" rel="prev" title="Redis 相关知识总结">
-                Redis 相关知识总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/02/03/Spring 多数据源学习/" rel="prev" title="Spring 多数据源配置学习">
+                Spring 多数据源配置学习 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -575,7 +584,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">116</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -593,7 +602,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">116</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -92,7 +92,7 @@ Zuul是Netflix的一个基于JVM路由以及服务端负载均衡的框架。">
 <meta property="og:site_name" content="沉默的风">
 <meta property="og:description" content="Zuul使用路由功能是微服务框架中一个不可或缺的部分。例如：/可以映射到一个web应用中，/api/users会被映射到用户服务；/api/shop会被映射到商品服务……
 Zuul是Netflix的一个基于JVM路由以及服务端负载均衡的框架。">
-<meta property="og:updated_time" content="2019-08-21T06:14:27.542Z">
+<meta property="og:updated_time" content="2019-10-17T01:28:59.198Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zuul使用">
 <meta name="twitter:description" content="Zuul使用路由功能是微服务框架中一个不可或缺的部分。例如：/可以映射到一个web应用中，/api/users会被映射到用户服务；/api/shop会被映射到商品服务……
@@ -386,6 +386,11 @@ Zuul是Netflix的一个基于JVM路由以及服务端负载均衡的框架。">
 <li>结果</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">http://localhost:33333/web/test   直接访问system模块</div><div class="line"></div><div class="line">http://localhost:22222/api/system/web/test  访问成功</div><div class="line"></div><div class="line">zuul配置注释掉serviceId  仍然可以成功访问</div><div class="line"></div><div class="line">zuul配置增加    prefix: /cloud</div><div class="line">http://localhost:22222/cloud/api/system/web/test 才能正常访问</div><div class="line"></div><div class="line">zuul.stripPrefix只会对zuul.prefix的前缀起作用。对于path指定的前缀不会起作用</div></pre></td></tr></table></figure>
+<ul>
+<li>后来工作中发现zuul 的默认配置<br>会自动去匹配对应模块的配置</li>
+</ul>
+<p>/system/test   会自动去 匹配system模块的 test 接口</p>
+
       
     </div>
 
@@ -503,7 +508,7 @@ Zuul是Netflix的一个基于JVM路由以及服务端负载均衡的框架。">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">116</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -521,7 +526,7 @@ Zuul是Netflix的一个基于JVM路由以及服务端负载均衡的框架。">
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">116</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
