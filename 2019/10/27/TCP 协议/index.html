@@ -1,0 +1,797 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="TCP," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="TCP 协议TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议。
+我们知道了上述了解到了 TCP 的定义，通俗一点的讲，TCP 就是一个双方通信的一个规范标准（协议）。
+我们在学习 TCP 握手过程之前，首先必须了解 TCP 报文头部的一些标志信息。因为在 TCP 握手的过程中，会使用到这些报文信息，如果没有掌握这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP 协议">
+<meta property="og:url" content="http://guilongyue.github.io/2019/10/27/TCP 协议/index.html">
+<meta property="og:site_name" content="沉默的风">
+<meta property="og:description" content="TCP 协议TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议。
+我们知道了上述了解到了 TCP 的定义，通俗一点的讲，TCP 就是一个双方通信的一个规范标准（协议）。
+我们在学习 TCP 握手过程之前，首先必须了解 TCP 报文头部的一些标志信息。因为在 TCP 握手的过程中，会使用到这些报文信息，如果没有掌握这">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp1.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp2.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/sn.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/ack.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/syn.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/fin.png">
+<meta property="og:updated_time" content="2019-10-29T01:24:29.382Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP 协议">
+<meta name="twitter:description" content="TCP 协议TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议。
+我们知道了上述了解到了 TCP 的定义，通俗一点的讲，TCP 就是一个双方通信的一个规范标准（协议）。
+我们在学习 TCP 握手过程之前，首先必须了解 TCP 报文头部的一些标志信息。因为在 TCP 握手的过程中，会使用到这些报文信息，如果没有掌握这">
+<meta name="twitter:image" content="http://guilongyue.github.io/images/tcp1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://guilongyue.github.io/2019/10/27/TCP 协议/"/>
+
+
+
+
+
+  <title> TCP 协议 | 沉默的风 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">沉默的风</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://guilongyue.github.io/2019/10/27/TCP 协议/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="guilong yue">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="沉默的风">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="沉默的风" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                TCP 协议
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-27T18:33:39+08:00">
+                2019-10-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/27/TCP 协议/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/27/TCP 协议/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="TCP-协议"><a href="#TCP-协议" class="headerlink" title="TCP 协议"></a>TCP 协议</h1><p>TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<p>我们知道了上述了解到了 TCP 的定义，通俗一点的讲，TCP 就是一个双方通信的一个规范标准（协议）。</p>
+<p>我们在学习 TCP 握手过程之前，首先必须了解 TCP 报文头部的一些标志信息。<br>因为在 TCP 握手的过程中，会使用到这些报文信息，如果没有掌握这些信息，在学习握手过程中，整个人处于懵逼状态，也是为了能够深入 TCP 三次握手的原理。</p>
+<a id="more"></a>
+<p>导图如下</p>
+<p><img src="/images/tcp1.png" alt=""></p>
+<h2 id="TCP-头部报文"><a href="#TCP-头部报文" class="headerlink" title="TCP 头部报文"></a>TCP 头部报文</h2><p><img src="/images/tcp2.png" alt=""></p>
+<ul>
+<li>Source Port 和  Distination Port</li>
+</ul>
+<p>两者分别为「源端口号」和「目的端口号」。源端口号就是指本地端口，目的端口就是远程端口。</p>
+<p>一个数据包（Pocket）被解封装成数据段（Segment）后就会涉及到连接上层协议的端口问题。</p>
+<p>可以这么理解，我们可以想象发送方很多的窗户，接收方也有很多的窗户，这些窗口都标有不同的端口号，源端口号和目的端口号就分别代表从哪个规定的串口发送到对方接收的窗口。</p>
+<p>不同的应用程度都有着不同的端口，之前网络分层的文章中有提到过。<br>扩展：应用程序的端口号和应用程序所在主机的 IP 地址统称为 Socket（套接字），IP：端口号，在互联网上 Socket 唯一标识每一个应用程序。<br>源端口+源 IP+目的端口+目的 IP 称为“套接字对”，一对套接字就是一个连接，一个客户端与服务器之间的连接。</p>
+<ul>
+<li>Sequence Number</li>
+</ul>
+<p>称为「序列号」。用于 TCP 通信过程中某一传输方向上字节流的每个字节的编号，为了确保数据通信的有序性，避免网络中乱序的问题。</p>
+<p>接收端根据这个编号进行确认，保证分割的数据段在原始数据包的位置。</p>
+<p>再通俗一点的讲，每个字段在传送中用序列号来标记自己位置的，而这个字段就是用来完成双方传输中确保字段原始位置是按照传输顺序的。（发送方是数据是怎样一个顺序，到了接受方也要确保是这个顺序）</p>
+<p>PS：初始序列号由自己定，而后绪的序列号由对端的 ACK 决定：SN_x = ACK_y（x 的序列号 = y 发给 x 的 ACK），这里后边会讲到。<br><img src="/images/sn.png" alt=""></p>
+<ul>
+<li>Acknowledgment Number</li>
+</ul>
+<p>称为「确认序列号」。确认序列号是接收确认端所期望收到的下一序列号。确认序号应当是上次已成功收到数据字节序号加 1，只有当标志位中的 ACK 标志为 1 时该确认序列号的字段才有效，主要用来解决不丢包的问题。<br>若确认号=N，则表明：到序号 N-1 为止的所有数据都已正确收到。</p>
+<p>在这里，现在我们只需知道它的作用是什么，就是在数据传输的时候是一段一段的，都是由序列号进行标识的，所以说，接收端每接收一段，之后就想要的下一段的序列号就称为「确认序列号」。</p>
+<p><img src="/images/ack.png" alt=""></p>
+<ul>
+<li>TCP Flag<br>TCP 首部中有 6 个标志比特，它们中的多个可同时被设置为 1，主要是用于操控 TCP 的状态机的，依次为 URG，ACK，PSH，RST，SYN，FIN。</li>
+</ul>
+<p>不要求初学者全部掌握，在这里只讲三个重点的标志：</p>
+<p>ACK：这个标识可以理解为发送端发送数据到接收端，发送的时候 ACK 为 0，标识接收端还未应答，一旦接收端接收数据之后，就将 ACK 置为 1，发送端接收到之后，就知道了接收端已经接收了数据。</p>
+<p>此标志表示「应答域有效」，就是说前面所说的 TCP 应答号将会包含在 TCP 数据包中；有两个取值：0 和 1，为 1 的时候表示应答域有效，反之为 0。</p>
+<p>SYN：表示「同步序列号」，是 TCP 握手的发送的第一个数据包。</p>
+<p>用来建立 TCP 的连接。SYN 标志位和 ACK 标志位搭配使用，当连接请求的时候，SYN=1，ACK=0 连接被响应的时候，SYN=1，ACK=1；这个标志的数据包经常被用来进行端口扫描。<br>扫描者发送一个只有 SYN 的数据包，如果对方主机响应了一个数据包回来 ，就表明这台主机存在这个端口。<br><img src="/images/syn.png" alt=""></p>
+<p>FIN：表示发送端已经达到数据末尾，也就是说双方的数据传送完成，没有数据可以传送了，发送 FIN 标志位的 TCP 数据包后，连接将被断开。这个标志的数据包也经常被用于进行端口扫描。</p>
+<p>这个很好理解，就是说，发送端只剩最后的一段数据了，同时要告诉接收端后边没有数据可以接受了，所以用 FIN 标识一下，接收端看到这个 FIN 之后，哦！这是接受的最后的数据，接受完就关闭了。</p>
+<p><img src="/images/fin.png" alt=""></p>
+<ul>
+<li>Window Size：称为滑动窗口大小。所说的滑动窗口，用来进行流量控制。</li>
+</ul>
+<h2 id="为什么进行-TCP-三次握手"><a href="#为什么进行-TCP-三次握手" class="headerlink" title="为什么进行 TCP 三次握手"></a>为什么进行 TCP 三次握手</h2><p>原因如下：<br>为了确认双方的接收与发送能力是否正常。<br>指定自己的初始化序列号，为后面的可靠传送做准备。<br>如果是 HTTPS 协议的话，三次握手这个过程，还会进行数字证书的验证以及加密密钥的生成到。 </p>
+<p>如果你了解 UDP 的话，TCP 的出现正式弥补了 UDP 不可靠传输的缺点。但是 TCP 的诞生，也必然增加了连接的复杂性。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/TCP/" rel="tag"># TCP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/07/OAuth/" rel="next" title="OAuth学习">
+                <i class="fa fa-chevron-left"></i> OAuth学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/10/27/TCP 协议/"
+           data-title="TCP 协议" data-url="http://guilongyue.github.io/2019/10/27/TCP 协议/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar" >
+    <div class="sidebar-inner" >
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel" >
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="guilong yue" />
+          <p class="site-author-name" itemprop="name">guilong yue</p>
+          <p class="site-description motion-element" itemprop="description">一点浩然气，千里快哉风</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">117</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">117</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/guilongyue" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052005322093" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/longshao1988" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+		<br/>
+		<div>
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330px height=86px src="//music.163.com/outchain/player?type=2&id=29713754&auto=0&height=66"></iframe>
+        </div>
+		
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-协议"><span class="nav-number">1.</span> <span class="nav-text">TCP 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-头部报文"><span class="nav-number">1.1.</span> <span class="nav-text">TCP 头部报文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么进行-TCP-三次握手"><span class="nav-number">1.2.</span> <span class="nav-text">为什么进行 TCP 三次握手</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">guilong yue</span>
+</div>
+
+
+<div class="powered-by">
+   <a class="theme-link" href="https://guilongyue.github.io">guilong yue</a> 个人专属
+</div>
+
+<div class="theme-info">
+  博客 -
+  龙
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"long1111"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
