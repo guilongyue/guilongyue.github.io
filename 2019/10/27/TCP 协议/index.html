@@ -100,7 +100,17 @@
 <meta property="og:image" content="http://guilongyue.github.io/images/ack.png">
 <meta property="og:image" content="http://guilongyue.github.io/images/syn.png">
 <meta property="og:image" content="http://guilongyue.github.io/images/fin.png">
-<meta property="og:updated_time" content="2019-10-29T01:24:29.382Z">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp3.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp4.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp5.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp6.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp7.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp8.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp9.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp10.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp11.png">
+<meta property="og:image" content="http://guilongyue.github.io/images/tcp12.png">
+<meta property="og:updated_time" content="2019-10-31T10:23:26.415Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP 协议">
 <meta name="twitter:description" content="TCP 协议TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议。
@@ -413,6 +423,49 @@
 </ul>
 <h2 id="为什么进行-TCP-三次握手"><a href="#为什么进行-TCP-三次握手" class="headerlink" title="为什么进行 TCP 三次握手"></a>为什么进行 TCP 三次握手</h2><p>原因如下：<br>为了确认双方的接收与发送能力是否正常。<br>指定自己的初始化序列号，为后面的可靠传送做准备。<br>如果是 HTTPS 协议的话，三次握手这个过程，还会进行数字证书的验证以及加密密钥的生成到。 </p>
 <p>如果你了解 UDP 的话，TCP 的出现正式弥补了 UDP 不可靠传输的缺点。但是 TCP 的诞生，也必然增加了连接的复杂性。</p>
+<h3 id="3次握手过程"><a href="#3次握手过程" class="headerlink" title="3次握手过程"></a>3次握手过程</h3><p>TCP 三次握手的过程掌握最重要的两点就是客户端和服务端状态的变化，另一个是三次握手过程标志信息的变化，那么掌握 TCP 的三次握手就简单多了。</p>
+<p><img src="/images/tcp3.png" alt=""></p>
+<p>初始状态：客户端处于 Closed（关闭）状态，服务器处于 Listen（监听）状态。</p>
+<p><img src="/images/tcp4.png" alt=""></p>
+<p>第一次握手：客户端发送请求报文将 SYN=j（1）初始化序列号发送给客户端，发送完之后客户端处于 SYN_Send 状态。</p>
+<p><img src="/images/tcp5.png" alt=""></p>
+<p>第二次握手：服务端受到 SYN 请求报文之后，如果同意连接，会以自己的SYN（服务端）=K（0）和 ack（1）=SYN（客户端）+1（ACK=1）报文作为应答，服务器为 SYN_Receive 状态。</p>
+<p>第三次握手：客户端接收到服务端的 SYN+ACK，然后发送 ack=SYN（服务端）+1（ACK=1）确认包作为应答，客户端转为 Established 状态。</p>
+<p><img src="/images/tcp6.png" alt=""></p>
+<h3 id="什么不是一次、两次握手"><a href="#什么不是一次、两次握手" class="headerlink" title="什么不是一次、两次握手"></a>什么不是一次、两次握手</h3><p>防止了服务器端的一直等待而浪费资源。为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误。</p>
+<p>如果此时客户端发送的延迟的握手信息服务器收到，然后服务器进行响应，认为客户端要和它建立连接，此时客户端并没有这个意思。</p>
+<p>但 Server 却以为新的运输连接已经建立，并一直等待 Client 发来数据。这样，Server 的很多资源就白白浪费掉了。</p>
+<h2 id="TCP-四次分手"><a href="#TCP-四次分手" class="headerlink" title="TCP 四次分手"></a>TCP 四次分手</h2><p>导图如下<br><img src="/images/tcp7.png" alt=""></p>
+<p>为何要 TCP 三次握手/四次分手</p>
+<h3 id="为什么要进行三次握手？"><a href="#为什么要进行三次握手？" class="headerlink" title="为什么要进行三次握手？"></a>为什么要进行三次握手？</h3><p>在谢希仁著《计算机网络》第四版中讲“三次握手”的目的是“为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误”。</p>
+<p>举个简单易懂的例子，你在微信对一个女孩表白，这条信息由于网络问题延迟发送了。<br>然后此时你不耐烦了，去和微信另一个女孩表白，然后另一个女孩告诉你同意了，然后你心里很高兴，把高兴的心情分享给了女孩，女孩知道了你和她在一起很高兴，此时三次握手完毕，你恋爱了。</p>
+<p>突然，到了第二天，发给第一个女孩的信息才收到，女孩认为你要和他表白，此时你已经和另一个女孩恋爱了，然后第一个女孩给你发微信同意了你的表白，但是你不理睬，那个女孩还在苦苦等待你给她分享此时的高兴心情。</p>
+<p>现在我们发现如果没有分享高兴的心情给女孩（也就是第三次握手过程），那么那个女孩一直等待，白白浪费了心思，所谓的千年都等不了一回。</p>
+<p>如果你是客户端，女孩是服务端，服务端收到延迟的报文，以为你要和它连接，所以会给你发送确认同意连接，但你一直不搭理它，所以服务端的资源也就这么白白浪费掉了。所以知道为什么要进行三次握手了吧。</p>
+<p>在《计算机网络》书中讲“三次握手”的目的是为了解决“网络中存在延迟的重复分组”的问题。</p>
+<h3 id="为什么要-TCP-四次分手"><a href="#为什么要-TCP-四次分手" class="headerlink" title="为什么要 TCP 四次分手"></a>为什么要 TCP 四次分手</h3><p>我们知道，TCP协议是一种面向连接的、可靠的、基于字节流的运输层通信协议，而且 TCP 是全双工模式。</p>
+<p>对于初学者来说，定义太枯燥、无味，其实意思就是你和你女朋友聊天是面向连接的，只有连接起来才可以通信的。</p>
+<p>可靠就是你发送的信息可以保证送达到对方，全双工意思就是你不仅可以给你女朋友发消息，而且她也可以给你发信息。</p>
+<p>为什么非要进行 TCP 四次分手？我们接着上回说到，你现在和第二个女孩子恋爱了，突然有一天发现第一个女孩子是因为没有收到你的表白而错过了在一起的时机，那么你要和第二个女孩子分手。</p>
+<p>那过程对应在 TCP 四次分手是怎么样子的？</p>
+<p>你要给第二个女孩子微信发消息，我们分手吧，此时第二个女孩子收到消息知道了，非常伤心，就屏蔽了你。</p>
+<p>但是，此时你还没有屏蔽她，她完全可以给你继续发消息，她给你发消息说，好吧，此时你收到了确认消息，此时是第二次分手过程。那么女孩又给你发送消息，渣男，永远不要来找我。</p>
+<p>此时你又接收到消息，看到消息之后发了一个拜拜，然后你就直接屏蔽拉黑了对方，此时女孩微信显示你删除了对方，然后就把你也拉黑删除了。那么四次分手到此为止，恭喜你，成功获得下一个女孩子。</p>
+<p>上述过程就阐述了为什么要进行 TCP 四次分手，为了能够让对方屏蔽你直至最后双方互相删除掉，然后你又可以和另一个女孩三次握手了。</p>
+<h2 id="TCP-四次分手过程"><a href="#TCP-四次分手过程" class="headerlink" title="TCP 四次分手过程"></a>TCP 四次分手过程</h2><p>初始化状态：客户端和服务端都在连接状态，接下来开始进行四次分手断开连接操作。<br><img src="/images/tcp8.png" alt=""></p>
+<p>第一次分手：第一次分手无论是客户端还是服务端都可以发起，因为 TCP 是全双工的。</p>
+<p>假如客户端发送的数据已经发送完毕，发送 FIN=1 告诉服务端，客户端所有数据已经全发完了，服务端你可以关闭接收了，但是如果你们服务端有数据要发给客户端，客户端照样可以接收的。</p>
+<p>此时客户端处于 FIN=1 等待服务端确认释放连接状态。<br><img src="/images/tcp9.png" alt=""></p>
+<p>第二次分手：服务端接收到客户端的释放请求连接之后，知道客户端没有数据要发给自己了，然后服务端发送 ACK=1 告诉客户端受到你发给我的信息，此时服务端处于 CLOSE_WAIT 等待关闭状态。<br><img src="/images/tcp10.png" alt=""></p>
+<p>第三次分手：此时服务端向客户端把所有的数据发送完了，然后发送一个 FIN=1，用于告诉客户端，服务端的所有数据发送完毕，客户端你也可以关闭接受数据连接了。</p>
+<p>此时服务端状态处于 LAT_ACK 状态，来等待确认客户端是否收到了自己的请求。<br><img src="/images/tcp11.png" alt=""><br>第四次分手：此时如果客户端收到了服务端发送完的信息之后，就发送 ACK=1，告诉服务端，客户端已经收到了你的信息。但是我们发现上图中有一个 2 MSL 的延迟等待。</p>
+<h3 id="为什要有-2MSL-等待延迟"><a href="#为什要有-2MSL-等待延迟" class="headerlink" title="为什要有 2MSL 等待延迟"></a>为什要有 2MSL 等待延迟</h3><p>对应这样一种情况，最后客户端发送的 ACK=1 给服务端的过程中丢失了，服务端没收到，服务端怎么认为的？我已经发送完数据了，怎么客户端没回应我？是不是中途丢失了？</p>
+<p>然后服务端再次发起断开连接的请求，一个来回就是 2MSL，这里的两个来回由那一个来回组成的？</p>
+<p>客户端给服务端发送的 ACK=1 丢失，服务端等待 1MSL 没收到，然后重新发送消息需要 1MSL。</p>
+<p>如果再次接收到服务端的消息，则重启 2MSL 计时器，发送确认请求。客户端只需等待 2MSL，如果没有再次收到服务端的消息，就说明服务端已经接收到自己确认消息；此时双方都关闭的连接，TCP 四次分手完毕。</p>
+<h3 id="如果双方建立连接，一方出问题"><a href="#如果双方建立连接，一方出问题" class="headerlink" title="如果双方建立连接，一方出问题"></a>如果双方建立连接，一方出问题</h3><p>如果双方建立连接，一方出问题怎么办？为了防止出现上述恋爱故事中千年等一回的情况，已经建立连接，但是服务端一直等待接收，发送端出现问题一直不能发送。</p>
+<p>所以设计一个保活的计时器，如果一方出现问题，另一方过了这个计时器的时间，就发送试探报文，以后每隔 75 秒发送一次。若一连发送 10 个探测报文仍然没反应，服务器就认为客户端出了故障，接着就关闭连接。</p>
+<p><img src="/images/tcp12.png" alt=""></p>
 
       
     </div>
@@ -621,7 +674,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-协议"><span class="nav-number">1.</span> <span class="nav-text">TCP 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-头部报文"><span class="nav-number">1.1.</span> <span class="nav-text">TCP 头部报文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么进行-TCP-三次握手"><span class="nav-number">1.2.</span> <span class="nav-text">为什么进行 TCP 三次握手</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-协议"><span class="nav-number">1.</span> <span class="nav-text">TCP 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-头部报文"><span class="nav-number">1.1.</span> <span class="nav-text">TCP 头部报文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么进行-TCP-三次握手"><span class="nav-number">1.2.</span> <span class="nav-text">为什么进行 TCP 三次握手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3次握手过程"><span class="nav-number">1.2.1.</span> <span class="nav-text">3次握手过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么不是一次、两次握手"><span class="nav-number">1.2.2.</span> <span class="nav-text">什么不是一次、两次握手</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-四次分手"><span class="nav-number">1.3.</span> <span class="nav-text">TCP 四次分手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要进行三次握手？"><span class="nav-number">1.3.1.</span> <span class="nav-text">为什么要进行三次握手？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要-TCP-四次分手"><span class="nav-number">1.3.2.</span> <span class="nav-text">为什么要 TCP 四次分手</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-四次分手过程"><span class="nav-number">1.4.</span> <span class="nav-text">TCP 四次分手过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什要有-2MSL-等待延迟"><span class="nav-number">1.4.1.</span> <span class="nav-text">为什要有 2MSL 等待延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如果双方建立连接，一方出问题"><span class="nav-number">1.4.2.</span> <span class="nav-text">如果双方建立连接，一方出问题</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
